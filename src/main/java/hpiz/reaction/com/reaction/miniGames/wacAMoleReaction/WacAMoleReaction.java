@@ -1,5 +1,7 @@
 package hpiz.reaction.com.reaction.miniGames.wacAMoleReaction;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -9,8 +11,10 @@ import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.Random;
@@ -42,11 +46,15 @@ public class WacAMoleReaction extends Activity {
     private ImageView tImage;
     private ImageView bImage;
     private ConstraintLayout cContainer;
-    private int askingFor;
+    private int randomMole;
     private int topsMoleImageView;
     private int bottomsSelectedMole;
     private ImageView topMole;
     private ImageView bottomMole;
+    private float textSize;
+    private RelativeLayout bottomHalfLayout;
+    private RelativeLayout topHalfLayout;
+    private long backgroundFlashSpeed = 1000;
 
     public WacAMoleReaction() {
     }
@@ -54,10 +62,11 @@ public class WacAMoleReaction extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        run();
+
+        start();
     }
 
-    public void run() {
+    public void start() {
 
         setContentView(R.layout.minigame_wacamolereaction);
 
@@ -145,6 +154,7 @@ public class WacAMoleReaction extends Activity {
 
     public void startWinningWacListeners() {
 
+
         Log.v(TAG, "Setup Listeners");
 
         topMole.setOnTouchListener(new View.OnTouchListener() {
@@ -154,10 +164,7 @@ public class WacAMoleReaction extends Activity {
                 int action = event.getAction() & MotionEvent.ACTION_MASK;
                 if (action == MotionEvent.ACTION_UP) {
                     Log.v(TAG, "topMole released");
-                    topScore++;
-
-                    updateScores();
-                    killWinListeners();
+                    topPoint();
                     return true;
                 } else if (action == MotionEvent.ACTION_POINTER_UP) {
                     bottomScore++;
@@ -175,9 +182,7 @@ public class WacAMoleReaction extends Activity {
                 int action = event.getAction() & MotionEvent.ACTION_MASK;
                 if (action == MotionEvent.ACTION_UP) {
                     Log.v(TAG, "bottomMole released");
-                    bottomScore++;
-                    updateScores();
-                    killWinListeners();
+                    bottomPoint();
                     return true;
                 } else if (action == MotionEvent.ACTION_POINTER_UP) {
                     topScore++;
@@ -188,6 +193,178 @@ public class WacAMoleReaction extends Activity {
             }
         });
 
+    }
+
+    private void bottomPoint() {
+
+        bottomScore++;
+
+        bottomMole.setImageResource(R.drawable.pow);
+        ValueAnimator va = ValueAnimator.ofFloat(0F, 1.0F);
+        va.setDuration(backgroundFlashSpeed);
+        va.setInterpolator(new AccelerateDecelerateInterpolator());
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                //Log.v(TAG,"Text Size: " + String.valueOf(textSize) + " Animated Value: "+ String.valueOf((Float)animation.getAnimatedValue()));
+                bottomHalfLayout.setAlpha((Float) animation.getAnimatedValue());
+                topHalfLayout.setAlpha((Float) animation.getAnimatedValue());
+                //bottomScoreText.setScaleY((Float) animation.getAnimatedValue());
+            }
+        });
+
+
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                topHalfLayout.setBackgroundColor(Color.BLUE);
+                bottomHalfLayout.setBackgroundColor(Color.BLUE);
+                topHalfLayout.setAlpha(0F);
+                bottomHalfLayout.setAlpha(0F);
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                ValueAnimator va2 = ValueAnimator.ofFloat(1.0F, 0F);
+                va2.setDuration(backgroundFlashSpeed);
+                va2.setInterpolator(new AccelerateDecelerateInterpolator());
+                va2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        bottomHalfLayout.setAlpha((Float) animation.getAnimatedValue());
+                        topHalfLayout.setAlpha((Float) animation.getAnimatedValue());
+
+                        // bottomScoreText.setScaleX((Float) animation.getAnimatedValue());
+                        //  bottomScoreText.setScaleY((Float) animation.getAnimatedValue());
+                    }
+                });
+                va2.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        topHalfLayout.setBackgroundColor(Color.TRANSPARENT);
+                        bottomHalfLayout.setBackgroundColor(Color.TRANSPARENT);
+                        topHalfLayout.setAlpha(1F);
+                        bottomHalfLayout.setAlpha(1F);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                va2.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        va.start();
+
+        updateScores();
+        killWinListeners();
+    }
+
+    private void topPoint() {
+        topScore++;
+        topMole.setImageResource(R.drawable.pow);
+        ValueAnimator va = ValueAnimator.ofFloat(0F, 1.0F);
+        va.setDuration(backgroundFlashSpeed);
+        va.setInterpolator(new AccelerateDecelerateInterpolator());
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                //Log.v(TAG,"Text Size: " + String.valueOf(textSize) + " Animated Value: "+ String.valueOf((Float)animation.getAnimatedValue()));
+                bottomHalfLayout.setAlpha((Float) animation.getAnimatedValue());
+                topHalfLayout.setAlpha((Float) animation.getAnimatedValue());
+                //bottomScoreText.setScaleY((Float) animation.getAnimatedValue());
+            }
+        });
+
+
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                topHalfLayout.setBackgroundColor(Color.RED);
+                bottomHalfLayout.setBackgroundColor(Color.RED);
+                topHalfLayout.setAlpha(0F);
+                bottomHalfLayout.setAlpha(0F);
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                ValueAnimator va2 = ValueAnimator.ofFloat(1.0F, 0F);
+                va2.setDuration(backgroundFlashSpeed);
+                va2.setInterpolator(new AccelerateDecelerateInterpolator());
+                va2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        bottomHalfLayout.setAlpha((Float) animation.getAnimatedValue());
+                        topHalfLayout.setAlpha((Float) animation.getAnimatedValue());
+
+                        // bottomScoreText.setScaleX((Float) animation.getAnimatedValue());
+                        //  bottomScoreText.setScaleY((Float) animation.getAnimatedValue());
+                    }
+                });
+                va2.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        topHalfLayout.setBackgroundColor(Color.TRANSPARENT);
+                        bottomHalfLayout.setBackgroundColor(Color.TRANSPARENT);
+                        topHalfLayout.setAlpha(1F);
+                        bottomHalfLayout.setAlpha(1F);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                va2.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        va.start();
+
+        updateScores();
+        killWinListeners();
     }
 
     public void runGameAgain() {
@@ -252,7 +429,8 @@ public class WacAMoleReaction extends Activity {
         tImage = (ImageView) findViewById(R.id.topImage);
         bImage = (ImageView) findViewById(R.id.bottomImage);
         bToMainMenuButton = (Button) findViewById(backToMainMenuButton);
-
+        bottomHalfLayout = (RelativeLayout) findViewById(R.id.bottomHalfRelativeLayout);
+        topHalfLayout = (RelativeLayout) findViewById(R.id.topHalfRelativeLayout);
         bToMainMenuButton.setVisibility(View.GONE);
         bToMainMenuButton.setOnClickListener(null);
         topHalf = (TextView) findViewById(R.id.topHalf);
@@ -264,9 +442,17 @@ public class WacAMoleReaction extends Activity {
         topScoreText.setBackgroundColor(Color.RED);
         bottomScoreText.setBackgroundColor(Color.BLUE);
         cContainer.setBackgroundColor(Color.WHITE);
+        textSize = bottomScoreText.getTextSize() / 3;
+
     }
 
     public void hideSelectedMoles() {
+        if (topMole != null) {
+            topMole.setImageResource(R.drawable.mole);
+        }
+        if (bottomMole != null) {
+            bottomMole.setImageResource(R.drawable.mole);
+        }
         topMole.setVisibility(View.INVISIBLE);
         bottomMole.setVisibility(View.INVISIBLE);
     }
@@ -293,10 +479,10 @@ public class WacAMoleReaction extends Activity {
 
         // nextInt is normally exclusive of the top value,
         // so add 1 to make it inclusive
-        askingFor = rand.nextInt((6 - 1) + 1) + 1;
+        randomMole = rand.nextInt((6 - 1) + 1) + 1;
 
 
-        switch (askingFor) {
+        switch (randomMole) {
             case 1:
                 topsMoleImageView = R.id.topMole1;
                 bottomsSelectedMole = R.id.bottomMole1;
