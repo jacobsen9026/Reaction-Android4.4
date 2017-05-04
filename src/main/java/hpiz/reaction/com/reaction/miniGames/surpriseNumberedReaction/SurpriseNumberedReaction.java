@@ -425,9 +425,11 @@ public class SurpriseNumberedReaction extends Activity {
     }
 
     public void pickNumber() {
-        Random r = new Random();
-        r.setSeed((long) 15);
-        askingFor = 2;
+        Random rand = new Random();
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+        askingFor = rand.nextInt((3 - 1) + 1) + 1;
         switch (askingFor) {
             case 1:
                 askingForImage = R.drawable.onefinger;
