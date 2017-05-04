@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="hpiz.reaction.com.reaction">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true">
+        <activity
+            android:name=".MainMenuActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".GameActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_game"
+            android:parentActivityName=".MainMenuActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hpiz.reaction.com.reaction.MainMenuActivity" />
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainMenuActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hpiz.reaction.com.reaction.MainMenuActivity" />
+        </activity>
+        <activity
+            android:name=".miniGames.surpriseReaction.SurpriseReaction"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="Surprise Reaction"
+            android:parentActivityName=".GameActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hpiz.reaction.com.reaction.miniGames.surpriseReaction.SurpriseReaction" />
+        </activity>
+        <activity
+            android:name=".miniGames.surpriseNumberedReaction.SurpriseNumberedReaction"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="Surprise Numbered Reaction"
+            android:parentActivityName=".GameActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hpiz.reaction.com.reaction.miniGames.surpriseNumberedReaction.SurpriseNumberedReaction" />
+        </activity>
+        <activity
+            android:name=".miniGames.dropReaction.DropReaction"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="Surprise Numbered Reaction"
+            android:parentActivityName=".GameActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hpiz.reaction.com.reaction.miniGames.dropReaction.DropReaction" />
+        </activity>
+        <activity
+            android:name=".miniGames.wacAMoleReaction.WacAMoleReaction"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="WacAMole"
+            android:parentActivityName=".GameActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hpiz.reaction.com.reaction.miniGames.wacAMoleReaction.WacAMoleReaction" />
+        </activity>
+        <activity
+            android:name=".miniGames.catchReaction.CatchReaction"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="CatchReaction"
+            android:parentActivityName=".GameActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hpiz.reaction.com.reaction.miniGames.catchReaction.CatchReaction" />
+        </activity>
+    </application>
+
+</manifest>

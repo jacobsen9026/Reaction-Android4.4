@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contentContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/redScoreText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|left"
+            android:rotation="180"
+            android:text="Red Score: "
+            android:textColor="@android:color/white"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            android:layout_weight="1">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="50dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/topMole6"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:rotation="180"
+                        android:visibility="invisible"
+                        android:src="@drawable/mole" />
+
+                    <ImageView
+                        android:id="@+id/topMole5"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:rotation="180"
+                        android:visibility="invisible"
+                        android:src="@drawable/mole" />
+
+                    <ImageView
+                        android:id="@+id/topMole4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:rotation="180"
+                        android:visibility="invisible"
+                        android:src="@drawable/mole" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/topMole3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:rotation="180"
+                        android:visibility="invisible"
+                        android:src="@drawable/mole" />
+
+                    <ImageView
+                        android:id="@+id/topMole2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:rotation="180"
+                        android:visibility="invisible"
+                        android:src="@drawable/mole" />
+
+                    <ImageView
+                        android:id="@+id/topMole1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:rotation="180"
+                        android:visibility="invisible"
+                        android:src="@drawable/mole" />
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/topHalf"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:rotation="180"
+                android:textSize="50dp"
+                android:visibility="visible"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_constraintLeft_creator="1"
+                tools:layout_constraintRight_creator="1"
+                tools:layout_constraintTop_creator="1" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/buttonContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/playAgainButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Play Again"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/backToMainMenuButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Continue"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="50dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/bottomMole1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        android:src="@drawable/mole" />
+
+                    <ImageView
+                        android:id="@+id/bottomMole2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        android:src="@drawable/mole" />
+
+                    <ImageView
+                        android:id="@+id/bottomMole3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        android:src="@drawable/mole" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/bottomMole4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        android:src="@drawable/mole" />
+
+                    <ImageView
+                        android:id="@+id/bottomMole5"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        android:src="@drawable/mole" />
+
+                    <ImageView
+                        android:id="@+id/bottomMole6"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        android:src="@drawable/mole" />
+                </TableRow>
+
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/bottomHalf"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:textSize="50dp"
+                android:visibility="visible" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/blueScoreText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|left"
+            android:text="Blue Score: " />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

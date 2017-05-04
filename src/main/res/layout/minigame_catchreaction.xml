@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/contentContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipChildren="false"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/redScoreText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|left"
+            android:rotation="180"
+            android:text="Red Score: "
+            android:textColor="@android:color/white" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipChildren="false">
+
+            <TextView
+                android:id="@+id/topMessageBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clipChildren="false"
+
+                android:focusable="false"
+                android:gravity="center_vertical|center_horizontal"
+                android:rotation="180"
+                android:text="TextView" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:clipChildren="false"
+                    android:orientation="horizontal">
+
+                    <FrameLayout
+                        android:id="@+id/topTriggerZone"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                    </FrameLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:clipChildren="false"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:clipChildren="false"
+                    android:orientation="horizontal"></LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:clipChildren="false"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/topBall5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|left"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="false"
+
+                        android:filterTouchesWhenObscured="false"
+                        android:fitsSystemWindows="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+
+                        android:rotation="180"
+                        android:src="@drawable/pingpongball" />
+
+                    <ImageView
+                        android:id="@+id/topBall4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|left"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="false"
+
+                        android:filterTouchesWhenObscured="false"
+                        android:fitsSystemWindows="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:rotation="180"
+                        android:src="@drawable/pingpongball" />
+
+                    <ImageView
+                        android:id="@+id/topBall3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|left"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="false"
+                        android:filterTouchesWhenObscured="false"
+                        android:fitsSystemWindows="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:rotation="180"
+                        android:src="@drawable/pingpongball" />
+
+                    <ImageView
+                        android:id="@+id/topBall2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|left"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="false"
+                        android:filterTouchesWhenObscured="false"
+                        android:fitsSystemWindows="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:rotation="180"
+                        android:src="@drawable/pingpongball" />
+
+                    <ImageView
+                        android:id="@+id/topBall1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|left"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="false"
+                        android:filterTouchesWhenObscured="false"
+                        android:fitsSystemWindows="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:rotation="180"
+                        android:src="@drawable/pingpongball" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:clipChildren="false"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:clipChildren="false"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/buttonContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipChildren="false"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/playAgainButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Play Again"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/backToMainMenuButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Continue"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipChildren="false">
+
+            <TextView
+                android:id="@+id/bottomMessageBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="false"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="TextView" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <FrameLayout
+                        android:id="@+id/bottomTriggerZone"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                    </FrameLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:clipChildren="false"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/bottomBall1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|right"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="false"
+                        android:filterTouchesWhenObscured="false"
+                        android:fitsSystemWindows="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:src="@drawable/pingpongball" />
+
+                    <ImageView
+                        android:id="@+id/bottomBall2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|right"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="false"
+                        android:filterTouchesWhenObscured="false"
+                        android:fitsSystemWindows="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:src="@drawable/pingpongball" />
+
+                    <ImageView
+                        android:id="@+id/bottomBall3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|right"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="false"
+                        android:filterTouchesWhenObscured="false"
+                        android:fitsSystemWindows="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:src="@drawable/pingpongball" />
+
+                    <ImageView
+                        android:id="@+id/bottomBall4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|right"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="false"
+                        android:filterTouchesWhenObscured="false"
+                        android:fitsSystemWindows="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:src="@drawable/pingpongball" />
+
+                    <ImageView
+                        android:id="@+id/bottomBall5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|right"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="false"
+                        android:filterTouchesWhenObscured="false"
+                        android:fitsSystemWindows="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:src="@drawable/pingpongball" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/blueScoreText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|left"
+            android:text="Blue Score: " />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
