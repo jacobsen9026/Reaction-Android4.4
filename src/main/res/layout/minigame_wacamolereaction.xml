@@ -23,13 +23,15 @@
             android:rotation="180"
             android:text="Red Score: "
             android:textColor="@android:color/white"
+            android:textSize="18sp"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="0dp" />
 
         <RelativeLayout
+            android:id="@+id/topHalfRelativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
 
+            android:layout_height="0dp"
             android:layout_weight="1">
 
             <TableLayout
@@ -48,8 +50,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:rotation="180"
-                        android:visibility="invisible"
-                        android:src="@drawable/mole" />
+                        android:src="@drawable/mole"
+                        android:visibility="invisible" />
 
                     <ImageView
                         android:id="@+id/topMole5"
@@ -57,8 +59,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:rotation="180"
-                        android:visibility="invisible"
-                        android:src="@drawable/mole" />
+                        android:src="@drawable/mole"
+                        android:visibility="invisible" />
 
                     <ImageView
                         android:id="@+id/topMole4"
@@ -66,8 +68,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:rotation="180"
-                        android:visibility="invisible"
-                        android:src="@drawable/mole" />
+                        android:src="@drawable/mole"
+                        android:visibility="invisible" />
                 </TableRow>
 
                 <TableRow
@@ -81,8 +83,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:rotation="180"
-                        android:visibility="invisible"
-                        android:src="@drawable/mole" />
+                        android:src="@drawable/mole"
+                        android:visibility="invisible" />
 
                     <ImageView
                         android:id="@+id/topMole2"
@@ -90,8 +92,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:rotation="180"
-                        android:visibility="invisible"
-                        android:src="@drawable/mole" />
+                        android:src="@drawable/mole"
+                        android:visibility="invisible" />
 
                     <ImageView
                         android:id="@+id/topMole1"
@@ -99,8 +101,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:rotation="180"
-                        android:visibility="invisible"
-                        android:src="@drawable/mole" />
+                        android:src="@drawable/mole"
+                        android:visibility="invisible" />
                 </TableRow>
             </TableLayout>
 
@@ -148,6 +150,7 @@
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/bottomHalfRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
@@ -167,24 +170,24 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:visibility="invisible"
-                        android:src="@drawable/mole" />
+                        android:src="@drawable/mole"
+                        android:visibility="invisible" />
 
                     <ImageView
                         android:id="@+id/bottomMole2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:visibility="invisible"
-                        android:src="@drawable/mole" />
+                        android:src="@drawable/mole"
+                        android:visibility="invisible" />
 
                     <ImageView
                         android:id="@+id/bottomMole3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:visibility="invisible"
-                        android:src="@drawable/mole" />
+                        android:src="@drawable/mole"
+                        android:visibility="invisible" />
                 </TableRow>
 
                 <TableRow
@@ -197,24 +200,24 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:visibility="invisible"
-                        android:src="@drawable/mole" />
+                        android:src="@drawable/mole"
+                        android:visibility="invisible" />
 
                     <ImageView
                         android:id="@+id/bottomMole5"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:visibility="invisible"
-                        android:src="@drawable/mole" />
+                        android:src="@drawable/mole"
+                        android:visibility="invisible" />
 
                     <ImageView
                         android:id="@+id/bottomMole6"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:visibility="invisible"
-                        android:src="@drawable/mole" />
+                        android:src="@drawable/mole"
+                        android:visibility="invisible" />
                 </TableRow>
 
             </TableLayout>
@@ -238,7 +241,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="top|left"
-            android:text="Blue Score: " />
+            android:text="Blue Score: "
+            android:textSize="18sp" />
 
     </LinearLayout>
 
