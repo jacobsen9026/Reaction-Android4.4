@@ -289,9 +289,13 @@ public class WacAMoleReaction extends Activity {
     }
 
     public void pickMole() {
-        Random r = new Random();
-        r.setSeed((long) 15);
-        askingFor = 3;
+        Random rand = new Random();
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+        askingFor = rand.nextInt((6 - 1) + 1) + 1;
+
+
         switch (askingFor) {
             case 1:
                 topsMoleImageView = R.id.topMole1;
