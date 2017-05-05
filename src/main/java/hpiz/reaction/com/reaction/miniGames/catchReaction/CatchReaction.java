@@ -56,7 +56,7 @@ public class CatchReaction extends Activity {
     private ValueAnimator va;
     private boolean cancelled;
     private int randomBall;
-    private long riseFallTime = 800;
+    private long riseFallTime = 300;
 
     public CatchReaction() {
 
