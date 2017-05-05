@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/contentContainer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clipChildren="false">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -19,6 +20,7 @@
             android:id="@+id/redScoreText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clipChildren="false"
             android:gravity="top|left"
             android:rotation="180"
             android:text="Red Score: "
@@ -107,7 +109,8 @@
                         android:focusableInTouchMode="false"
 
                         android:rotation="180"
-                        android:src="@drawable/pingpongball" />
+                        android:src="@drawable/pingpongball"
+                        android:visibility="invisible" />
 
                     <ImageView
                         android:id="@+id/topBall4"
@@ -122,7 +125,8 @@
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:rotation="180"
-                        android:src="@drawable/pingpongball" />
+                        android:src="@drawable/pingpongball"
+                        android:visibility="invisible" />
 
                     <ImageView
                         android:id="@+id/topBall3"
@@ -136,7 +140,8 @@
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:rotation="180"
-                        android:src="@drawable/pingpongball" />
+                        android:src="@drawable/pingpongball"
+                        android:visibility="invisible" />
 
                     <ImageView
                         android:id="@+id/topBall2"
@@ -150,7 +155,8 @@
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:rotation="180"
-                        android:src="@drawable/pingpongball" />
+                        android:src="@drawable/pingpongball"
+                        android:visibility="invisible" />
 
                     <ImageView
                         android:id="@+id/topBall1"
@@ -164,7 +170,8 @@
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:rotation="180"
-                        android:src="@drawable/pingpongball" />
+                        android:src="@drawable/pingpongball"
+                        android:visibility="invisible" />
 
                 </LinearLayout>
 
@@ -299,7 +306,8 @@
                         android:fitsSystemWindows="false"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:src="@drawable/pingpongball" />
+                        android:src="@drawable/pingpongball"
+                        android:visibility="invisible" />
 
                     <ImageView
                         android:id="@+id/bottomBall2"
@@ -312,7 +320,8 @@
                         android:fitsSystemWindows="false"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:src="@drawable/pingpongball" />
+                        android:src="@drawable/pingpongball"
+                        android:visibility="invisible" />
 
                     <ImageView
                         android:id="@+id/bottomBall3"
@@ -325,7 +334,8 @@
                         android:fitsSystemWindows="false"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:src="@drawable/pingpongball" />
+                        android:src="@drawable/pingpongball"
+                        android:visibility="invisible" />
 
                     <ImageView
                         android:id="@+id/bottomBall4"
@@ -338,7 +348,8 @@
                         android:fitsSystemWindows="false"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:src="@drawable/pingpongball" />
+                        android:src="@drawable/pingpongball"
+                        android:visibility="invisible" />
 
                     <ImageView
                         android:id="@+id/bottomBall5"
@@ -351,7 +362,8 @@
                         android:fitsSystemWindows="false"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:src="@drawable/pingpongball" />
+                        android:src="@drawable/pingpongball"
+                        android:visibility="invisible" />
 
                 </LinearLayout>
 
@@ -363,6 +375,7 @@
             android:id="@+id/blueScoreText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clipChildren="false"
             android:gravity="top|left"
             android:text="Blue Score: " />
 
