@@ -1,14 +1,18 @@
 package hpiz.reaction.com.reaction.miniGames.wacAMoleReaction;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -51,7 +55,9 @@ public class WacAMoleReaction extends Activity {
     private float textSize;
     private RelativeLayout bottomHalfLayout;
     private RelativeLayout topHalfLayout;
-    private long backgroundFlashSpeed = 400000;
+    private long backgroundFlashSpeed = 160;
+    private boolean bottomHit;
+    private boolean topHit;
 
     public WacAMoleReaction() {
     }
@@ -193,10 +199,11 @@ public class WacAMoleReaction extends Activity {
     }
 
     private void bottomPoint() {
+        bottomHit = true;
         bottomScore++;
 
         bottomMole.setImageResource(R.drawable.pow);
-        /*
+
         ValueAnimator va = ValueAnimator.ofFloat(0F, 1.0F);
         va.setDuration(backgroundFlashSpeed);
         va.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -274,22 +281,24 @@ public class WacAMoleReaction extends Activity {
             }
         });
         va.start();
-*/
+
         updateScores();
         killWinListeners();
     }
 
     private void topPoint() {
+        topHit = true;
         topScore++;
         topMole.setImageResource(R.drawable.pow);
-        /*
+
+
         ValueAnimator va = ValueAnimator.ofFloat(0F, 1.0F);
         va.setDuration(backgroundFlashSpeed);
         va.setInterpolator(new AccelerateDecelerateInterpolator());
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                //Log.v(TAG,"Text Size: " + String.valueOf(textSize) + " Animated Value: "+ String.valueOf((Float)animation.getAnimatedValue()));
+                Log.v(TAG, "Animated Value: " + String.valueOf(animation.getAnimatedValue()));
                 bottomHalfLayout.setAlpha((Float) animation.getAnimatedValue());
                 topHalfLayout.setAlpha((Float) animation.getAnimatedValue());
                 //bottomScoreText.setScaleY((Float) animation.getAnimatedValue());
@@ -360,7 +369,7 @@ public class WacAMoleReaction extends Activity {
             }
         });
         va.start();
-*/
+
         updateScores();
         killWinListeners();
     }
@@ -445,15 +454,46 @@ public class WacAMoleReaction extends Activity {
     }
 
     public void hideSelectedMoles() {
+        killWinListeners();
+        if (topHit) {
+            Handler h = new Handler();
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Log.v(TAG, "Run delayed thread");
+                    topMole = (ImageView) findViewById(topsMoleImageView);
+                    bottomMole = (ImageView) findViewById(bottomsSelectedMole);
+                    topMole.setImageResource(R.drawable.mole);
 
 
-        topMole.setImageResource(R.drawable.mole);
+                    bottomMole.setImageResource(R.drawable.mole);
+                    topMole.setVisibility(View.INVISIBLE);
+                    bottomMole.setVisibility(View.INVISIBLE);
+                }
+            }, 800);
+        } else if (bottomHit) {
+            Handler h = new Handler();
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Log.v(TAG, "Run delayed thread");
+                    topMole = (ImageView) findViewById(topsMoleImageView);
+                    bottomMole = (ImageView) findViewById(bottomsSelectedMole);
+                    topMole.setImageResource(R.drawable.mole);
 
 
+                    bottomMole.setImageResource(R.drawable.mole);
+                    topMole.setVisibility(View.INVISIBLE);
+                    bottomMole.setVisibility(View.INVISIBLE);
+                }
+            }, 800);
+        } else {
+            topMole.setImageResource(R.drawable.mole);
             bottomMole.setImageResource(R.drawable.mole);
 
-        topMole.setVisibility(View.INVISIBLE);
-        bottomMole.setVisibility(View.INVISIBLE);
+            topMole.setVisibility(View.INVISIBLE);
+            bottomMole.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void killWinListeners() {
@@ -474,6 +514,8 @@ public class WacAMoleReaction extends Activity {
     }
 
     public void pickMole() {
+        topHit = false;
+        bottomHit = false;
         Random rand = new Random();
 
         // nextInt is normally exclusive of the top value,
@@ -507,6 +549,8 @@ public class WacAMoleReaction extends Activity {
                 bottomsSelectedMole = R.id.bottomMole6;
                 break;
         }
+
+
         topMole = (ImageView) findViewById(topsMoleImageView);
         bottomMole = (ImageView) findViewById(bottomsSelectedMole);
         topMole.setImageResource(R.drawable.mole);
