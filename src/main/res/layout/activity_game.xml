@@ -4,6 +4,7 @@
     android:id="@+id/contentContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:keepScreenOn="true"
     tools:context="hpiz.reaction.com.reaction.GameActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
