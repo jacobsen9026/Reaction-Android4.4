@@ -56,6 +56,7 @@ public class CatchReaction extends Activity {
     private ValueAnimator va;
     private boolean cancelled;
     private int randomBall;
+    private long riseFallTime = 800;
 
     public CatchReaction() {
 
@@ -362,7 +363,7 @@ public class CatchReaction extends Activity {
         topPosition = topBall.getY();
         bottomPosition = bottomBall.getY();
         va = ValueAnimator.ofFloat(0, screenHeight + 410);
-        va.setDuration(1000);
+        va.setDuration(riseFallTime);
         va.setInterpolator(new DecelerateInterpolator(1.5F));
         // va.setInterpolator(new AccelerateInterpolator());
         /*
@@ -430,7 +431,7 @@ public class CatchReaction extends Activity {
         topPosition = topBall.getY();
         bottomPosition = bottomBall.getY();
         va = ValueAnimator.ofFloat(screenHeight + 410, 0);
-        va.setDuration(1000);
+        va.setDuration(riseFallTime);
         va.setInterpolator(new AccelerateInterpolator(1.5F));
         // va.setInterpolator(new AccelerateInterpolator());
         /*
