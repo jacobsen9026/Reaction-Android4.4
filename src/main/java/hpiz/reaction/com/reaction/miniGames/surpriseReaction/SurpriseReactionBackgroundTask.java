@@ -67,7 +67,16 @@ public class SurpriseReactionBackgroundTask extends AsyncTask<String, Integer, S
             if (this.isCancelled()) {
                 return "CANCEL";
             }
+            Random rand = new Random();
 
+            // nextInt is normally exclusive of the top value,
+            // so add 1 to make it inclusive
+            long randomTime = rand.nextInt((5000 - 1) + 1) + 1;
+            try {
+                Thread.sleep(randomTime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             if (this.isCancelled()) {
                 return "CANCEL";
             }
