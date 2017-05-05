@@ -15,6 +15,8 @@ public class WacAMoleReactionBackgroundTask extends AsyncTask<String, Integer, S
     private final WacAMoleReaction gActivity;
     private final WeakReference<WacAMoleReaction> gameActivity;
     private ConstraintLayout contentContainer;
+    private long showTime = 400;
+    private long waitTime = 1200;
 
     public WacAMoleReactionBackgroundTask(WacAMoleReaction a) {
         gameActivity = new WeakReference<WacAMoleReaction>(a);
@@ -45,7 +47,7 @@ public class WacAMoleReactionBackgroundTask extends AsyncTask<String, Integer, S
                 return "CANCEL";
             }
             try {
-                Thread.sleep(500);
+                Thread.sleep(showTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -61,7 +63,7 @@ public class WacAMoleReactionBackgroundTask extends AsyncTask<String, Integer, S
             Log.v(TAG, "Running background game wait");
 
             try {
-                Thread.sleep(1200);
+                Thread.sleep(waitTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
