@@ -13,9 +13,12 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.Random;
 
 import hpiz.reaction.com.reaction.GameActivity;
 import hpiz.reaction.com.reaction.R;
@@ -38,7 +41,7 @@ public class CatchReaction extends Activity {
     private Button bToMainMenuButton;
     private TextView bScoreText;
     private TextView rScoreText;
-    private ImageView topRulerImage;
+    private ImageView topBall;
     private int winningScore = 10;
     private int bFloor;
     private int tFloor;
@@ -47,9 +50,12 @@ public class CatchReaction extends Activity {
     private float tVel;
     private float bVel;
     private int screenHeight;
-    private ImageView bottomRulerImage;
+    private ImageView bottomBall;
     private float topPosition;
     private float bottomPosition;
+    private ValueAnimator va;
+    private boolean cancelled;
+    private int randomBall;
 
     public CatchReaction() {
 
@@ -59,7 +65,7 @@ public class CatchReaction extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sp = getSharedPreferences("runningPreferences", MODE_PRIVATE);
-
+        cancelled = false;
         run();
     }
 
@@ -72,8 +78,8 @@ public class CatchReaction extends Activity {
         hide();
 
         initializeButtonReactionObjects();
-
-        runSingleRound();
+        pickNextBall();
+        throwUp();
     }
 
     public void hide() {
@@ -97,20 +103,17 @@ public class CatchReaction extends Activity {
 
     }
 
-    protected void runSingleRound() {
-
+    protected void checkForWinner() {
         if (redScore < winningScore) {
             if (blueScore < winningScore) {
                 updateScores();
-                topRulerImage.setTranslationY(0);
-                bottomRulerImage.setTranslationY(0);
+                pickNextBall();
+
 
                 //setEarlyListeners();
-                if (runGame != null) {
-                    runGame.cancel(true);
-                }
-                runGame = new CatchReactionBackgroundTask(this);
-                runGame.execute("RUN");
+
+                //Log.v(TAG,"Run Game");
+
             } else {
                 blueWonGame();
             }
@@ -120,9 +123,37 @@ public class CatchReaction extends Activity {
 
     }
 
-    private void clearScreen() {
+    private void pickNextBall() {
+        Random rand = new Random();
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+        randomBall = rand.nextInt((5 - 1) + 1) + 1;
+        switch (randomBall) {
+            case 1:
+                topBall = (ImageView) findViewById(R.id.topBall1);
+                bottomBall = (ImageView) findViewById(R.id.bottomBall1);
+                break;
+            case 2:
+                topBall = (ImageView) findViewById(R.id.topBall2);
+                bottomBall = (ImageView) findViewById(R.id.bottomBall2);
+                break;
+            case 3:
+                topBall = (ImageView) findViewById(R.id.topBall3);
+                bottomBall = (ImageView) findViewById(R.id.bottomBall3);
+                break;
+            case 4:
+                topBall = (ImageView) findViewById(R.id.topBall4);
+                bottomBall = (ImageView) findViewById(R.id.bottomBall4);
+                break;
+            case 5:
+                topBall = (ImageView) findViewById(R.id.topBall5);
+                bottomBall = (ImageView) findViewById(R.id.bottomBall5);
+                break;
+        }
 
     }
+
 
     public void setEarlyListeners() {
         topHalf.setOnClickListener(new View.OnClickListener() {
@@ -179,7 +210,7 @@ public class CatchReaction extends Activity {
         pAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                runGame();
+                run();
             }
         });
         bToMainMenuButton.setVisibility(View.VISIBLE);
@@ -201,10 +232,9 @@ public class CatchReaction extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (runGame != null) {
-            runGame.cancel(true);
-            runGame = null;
-        }
+        Log.v(TAG, "BACK PRESSED");
+        cancelled = true;
+        va.cancel();
         Intent i = new Intent(CatchReaction.this, GameActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
@@ -235,14 +265,6 @@ public class CatchReaction extends Activity {
         });
     }
 
-    public void runGame() {
-        setContentView(R.layout.minigame_surprisereaction);
-        Log.v(TAG, " setting game layout");
-        hide();
-        initializeButtonReactionObjects();
-        runSingleRound();
-
-    }
 
     public void setTopRed() {
         topHalf.setBackgroundColor(Color.RED);
@@ -253,14 +275,6 @@ public class CatchReaction extends Activity {
         bottomHalf.setBackgroundColor(Color.BLUE);
     }
 
-    public void setTopBlack() {
-        topHalf.setBackgroundColor(Color.BLACK);
-    }
-
-    public void setBottomBlack() {
-        bottomHalf.setBackgroundColor(Color.BLACK);
-    }
-
 
     public void blueWonGame() {
         runGame.cancel(true);
@@ -268,7 +282,7 @@ public class CatchReaction extends Activity {
         pAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                runGame();
+                run();
             }
         });
         bToMainMenuButton.setVisibility(View.VISIBLE);
@@ -319,8 +333,8 @@ public class CatchReaction extends Activity {
         pAgainButton = (Button) findViewById(R.id.playAgainButton);
         pAgainButton.setVisibility(View.GONE);
         pAgainButton.setOnClickListener(null);
-        topRulerImage = (ImageView) findViewById(R.id.topBall1);
-        bottomRulerImage = (ImageView) findViewById(R.id.bottomBall1);
+        topBall = (ImageView) findViewById(R.id.topBall1);
+        bottomBall = (ImageView) findViewById(R.id.bottomBall1);
         bToMainMenuButton = (Button) findViewById(R.id.backToMainMenuButton);
 
         bToMainMenuButton.setVisibility(View.GONE);
@@ -338,14 +352,19 @@ public class CatchReaction extends Activity {
         runGame.execute("SLEEP:1000");
     }
 
-    public void drop() {
+    public void throwUp() {
         tVel = 0;
         bVel = 0;
-        topPosition = 0;
-        bottomPosition = 0;
-        ValueAnimator va = ValueAnimator.ofFloat(0, screenHeight + 150);
-        va.setDuration(5000);
-        va.setInterpolator(new AccelerateInterpolator(1.99999F));
+        topBall.setTranslationY(410 * -1);
+        bottomBall.setTranslationY(410);
+        topBall.setVisibility(View.VISIBLE);
+        bottomBall.setVisibility(View.VISIBLE);
+        topPosition = topBall.getY();
+        bottomPosition = bottomBall.getY();
+        va = ValueAnimator.ofFloat(0, screenHeight + 410);
+        va.setDuration(3000);
+        va.setInterpolator(new DecelerateInterpolator(1.5F));
+        // va.setInterpolator(new AccelerateInterpolator());
         /*
         va.setInterpolator(new TimeInterpolator() {
             @Override
@@ -359,22 +378,19 @@ public class CatchReaction extends Activity {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 //Log.v(TAG, "Moving ruler to y=" + animation.getAnimatedValue());
-                tVel = (250 - ((Float) animation.getAnimatedValue()));
-                tVel = tVel * 0.5F;
-                bVel = (-250 + ((Float) animation.getAnimatedValue()));
-                bVel = bVel * 0.5F;
+                //Log.v(TAG, "Bottom Position=" + String.valueOf(bottomPosition));
+                //Log.v(TAG, "bVel=" + String.valueOf(bVel));
+
+                tVel = (500 - ((Float) animation.getAnimatedValue()));
+                tVel = tVel * 0.18F;
+                bVel = (-500 + ((Float) animation.getAnimatedValue()));
+                bVel = bVel * 0.18F;
                 topPosition = topPosition + tVel;
                 bottomPosition = bottomPosition + bVel;
-                Log.v(TAG, "Bottom Position=" + String.valueOf(bottomPosition));
 
-                if (bottomPosition > 0) {
 
-                    attemptCatch();
-
-                }
-
-                topRulerImage.setTranslationY(topPosition);
-                bottomRulerImage.setTranslationY(bottomPosition);
+                topBall.setTranslationY(topPosition);
+                bottomBall.setTranslationY(bottomPosition);
 
             }
         });
@@ -382,16 +398,22 @@ public class CatchReaction extends Activity {
             @Override
             public void onAnimationStart(Animator animation) {
 
+
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                noOneCaught();
+                fallDown();
+
+
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
-
+                topBall.setTranslationY(410 * -1);
+                bottomBall.setTranslationY(410);
+                topBall.setVisibility(View.INVISIBLE);
+                bottomBall.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -402,9 +424,105 @@ public class CatchReaction extends Activity {
         va.start();
     }
 
-    private void attemptCatch() {
+    public void fallDown() {
+        tVel = 0;
+        bVel = 0;
+        topPosition = topBall.getY();
+        bottomPosition = bottomBall.getY();
+        va = ValueAnimator.ofFloat(screenHeight + 410, 0);
+        va.setDuration(3000);
+        va.setInterpolator(new AccelerateInterpolator(1.5F));
+        // va.setInterpolator(new AccelerateInterpolator());
+        /*
+        va.setInterpolator(new TimeInterpolator() {
+            @Override
+            public float getInterpolation(float input) {
+                return (float) (0.098*input*input);
+            }
+        });
+        */
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                //Log.v(TAG, "Moving ruler to y=" + animation.getAnimatedValue());
+                //Log.v(TAG, "Bottom Position=" + String.valueOf(bottomPosition));
+                //Log.v(TAG, "bVel=" + String.valueOf(bVel));
+
+                tVel = (500 - ((Float) animation.getAnimatedValue()));
+                tVel = tVel * 0.18F;
+                bVel = (-500 + ((Float) animation.getAnimatedValue()));
+                bVel = bVel * 0.18F;
+                topPosition = topPosition - tVel;
+                bottomPosition = bottomPosition - bVel;
+
+
+                topBall.setTranslationY(topPosition);
+                bottomBall.setTranslationY(bottomPosition);
+
+            }
+        });
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                setBallsInvisible();
+
+                if (!cancelled) {
+                    pickNextBall();
+                    throwUp();
+                }
+
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                topBall.setTranslationY(410 * -1);
+                bottomBall.setTranslationY(410);
+                topBall.setVisibility(View.INVISIBLE);
+                bottomBall.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        va.start();
+    }
+
+    private void setBallsInvisible() {
+        Log.v(TAG, "Set Balls Invisible");
+        ImageView t1 = (ImageView) findViewById(R.id.topBall1);
+        t1.setVisibility(View.INVISIBLE);
+        ImageView b1 = (ImageView) findViewById(R.id.bottomBall1);
+        b1.setVisibility(View.INVISIBLE);
+        ImageView t2 = (ImageView) findViewById(R.id.topBall2);
+        t2.setVisibility(View.INVISIBLE);
+        ImageView b2 = (ImageView) findViewById(R.id.bottomBall2);
+        b2.setVisibility(View.INVISIBLE);
+        ImageView t3 = (ImageView) findViewById(R.id.topBall3);
+        t3.setVisibility(View.INVISIBLE);
+        ImageView b3 = (ImageView) findViewById(R.id.bottomBall3);
+        b3.setVisibility(View.INVISIBLE);
+        ImageView t4 = (ImageView) findViewById(R.id.topBall4);
+        t4.setVisibility(View.INVISIBLE);
+        ImageView b4 = (ImageView) findViewById(R.id.bottomBall4);
+        b4.setVisibility(View.INVISIBLE);
+        ImageView t5 = (ImageView) findViewById(R.id.topBall5);
+        t5.setVisibility(View.INVISIBLE);
+        ImageView b5 = (ImageView) findViewById(R.id.bottomBall5);
+        b5.setVisibility(View.INVISIBLE);
+
 
     }
+
 
     private void noOneCaught() {
 
@@ -437,11 +555,12 @@ public class CatchReaction extends Activity {
         tVel = 0;
         bVel = 0;
 
-        //ObjectAnimator oa = ObjectAnimator.ofInt(topRulerImage,"y",screenHeight);
+        //ObjectAnimator oa = ObjectAnimator.ofInt(topBall,"y",screenHeight);
         //oa.setDuration(1000);
         //oa.start();
-//        topRulerImage.animate().translationY((screenHeight/2)).withLayer();
+//        topBall.animate().translationY((screenHeight/2)).withLayer();
 
 
     }
+
 }
