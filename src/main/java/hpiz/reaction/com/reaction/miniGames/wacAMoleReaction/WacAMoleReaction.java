@@ -447,12 +447,13 @@ public class WacAMoleReaction extends Activity {
     }
 
     public void hideSelectedMoles() {
-        if (topMole != null) {
-            topMole.setImageResource(R.drawable.mole);
-        }
-        if (bottomMole != null) {
+
+
+        topMole.setImageResource(R.drawable.mole);
+
+
             bottomMole.setImageResource(R.drawable.mole);
-        }
+
         topMole.setVisibility(View.INVISIBLE);
         bottomMole.setVisibility(View.INVISIBLE);
     }
@@ -510,6 +511,10 @@ public class WacAMoleReaction extends Activity {
         }
         topMole = (ImageView) findViewById(topsMoleImageView);
         bottomMole = (ImageView) findViewById(bottomsSelectedMole);
+        topMole.setImageResource(R.drawable.mole);
+
+
+        bottomMole.setImageResource(R.drawable.mole);
 
     }
 
