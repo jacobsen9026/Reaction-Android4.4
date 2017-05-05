@@ -5,7 +5,6 @@ import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
-import java.util.Random;
 
 /**
  * Created by cjacobsen on 5/1/2017.
@@ -62,7 +61,7 @@ public class WacAMoleReactionBackgroundTask extends AsyncTask<String, Integer, S
             Log.v(TAG, "Running background game wait");
 
             try {
-                Thread.sleep(400);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
