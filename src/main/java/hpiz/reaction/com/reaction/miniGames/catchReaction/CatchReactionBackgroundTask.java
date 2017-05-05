@@ -5,7 +5,6 @@ import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
-import java.util.Random;
 
 /**
  * Created by cjacobsen on 5/1/2017.
@@ -40,20 +39,29 @@ public class CatchReactionBackgroundTask extends AsyncTask<String, Integer, Stri
             return "";
         }
 */
-
+        if (isCancelled()) {
+            return "CANCEL";
+        }
         if (params[0].equals("SLEEP:1000")) {
             Log.v("DropBackgroundTask", "Running background sleep");
-            try {
-                Thread.sleep(1500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return "SLEPT";
-        } else {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            }
+            if (isCancelled()) {
+                return "CANCEL";
+            }
+            return "SLEPT";
+        } else {
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (isCancelled()) {
+                return "CANCEL";
             }
 
 
@@ -66,17 +74,23 @@ public class CatchReactionBackgroundTask extends AsyncTask<String, Integer, Stri
     }
 
     protected void onPostExecute(String result) {
+        if (isCancelled()) {
+            return;
+        }
 
-        Log.v("backgroundTask", "Setting white");
         if (result.equals("GAME:NEXTSTEP")) {
-            gActivity.drop();
+            Log.v("CatchReactionBackground", "throw ball");
+            gActivity.throwUp();
+            gActivity.checkForWinner();
             //gActivity.setTopRed();
             //gActivity.setBottomBlue();
             //gActivity.startWinningWacListeners();
         } else if (result.equals("SLEPT")) {
-            gActivity.runSingleRound();
+            Log.v("CatchReactionBackground", "runagain");
+            gActivity.checkForWinner();
 
         }
+
         // topHalf.setBackgroundColor(Color.WHITE);
 
         //gActivity.runSimonSaysGame();
