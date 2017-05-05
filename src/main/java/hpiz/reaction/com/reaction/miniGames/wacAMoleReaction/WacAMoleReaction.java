@@ -1,7 +1,5 @@
 package hpiz.reaction.com.reaction.miniGames.wacAMoleReaction;
 
-import android.animation.Animator;
-import android.animation.ValueAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +9,6 @@ import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -54,7 +51,7 @@ public class WacAMoleReaction extends Activity {
     private float textSize;
     private RelativeLayout bottomHalfLayout;
     private RelativeLayout topHalfLayout;
-    private long backgroundFlashSpeed = 1000;
+    private long backgroundFlashSpeed = 400000;
 
     public WacAMoleReaction() {
     }
@@ -196,10 +193,10 @@ public class WacAMoleReaction extends Activity {
     }
 
     private void bottomPoint() {
-
         bottomScore++;
 
         bottomMole.setImageResource(R.drawable.pow);
+        /*
         ValueAnimator va = ValueAnimator.ofFloat(0F, 1.0F);
         va.setDuration(backgroundFlashSpeed);
         va.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -277,7 +274,7 @@ public class WacAMoleReaction extends Activity {
             }
         });
         va.start();
-
+*/
         updateScores();
         killWinListeners();
     }
@@ -285,6 +282,7 @@ public class WacAMoleReaction extends Activity {
     private void topPoint() {
         topScore++;
         topMole.setImageResource(R.drawable.pow);
+        /*
         ValueAnimator va = ValueAnimator.ofFloat(0F, 1.0F);
         va.setDuration(backgroundFlashSpeed);
         va.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -362,7 +360,7 @@ public class WacAMoleReaction extends Activity {
             }
         });
         va.start();
-
+*/
         updateScores();
         killWinListeners();
     }

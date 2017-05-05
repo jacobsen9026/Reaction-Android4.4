@@ -45,7 +45,7 @@ public class WacAMoleReactionBackgroundTask extends AsyncTask<String, Integer, S
                 return "CANCEL";
             }
             try {
-                Thread.sleep(400);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -61,7 +61,7 @@ public class WacAMoleReactionBackgroundTask extends AsyncTask<String, Integer, S
             Log.v(TAG, "Running background game wait");
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
