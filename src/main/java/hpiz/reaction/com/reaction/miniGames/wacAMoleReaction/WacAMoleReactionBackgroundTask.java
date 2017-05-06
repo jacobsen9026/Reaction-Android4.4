@@ -15,7 +15,7 @@ public class WacAMoleReactionBackgroundTask extends AsyncTask<String, Integer, S
     private final WacAMoleReaction gActivity;
     private final WeakReference<WacAMoleReaction> gameActivity;
     private ConstraintLayout contentContainer;
-    private long showTime = 400;
+    private long showTime = 600;
     private long waitTime = 1200;
 
     public WacAMoleReactionBackgroundTask(WacAMoleReaction a) {
