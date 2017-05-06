@@ -11,10 +11,12 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -57,6 +59,12 @@ public class CatchReaction extends Activity {
     private boolean cancelled;
     private int randomBall;
     private long riseFallTime = 300;
+    private FrameLayout tTriggerZone;
+    private FrameLayout bTriggerZone;
+    private ImageView tCup;
+    private ImageView bCup;
+    private int cupWidth;
+    private int cupHeight;
 
     public CatchReaction() {
 
@@ -79,8 +87,90 @@ public class CatchReaction extends Activity {
         hide();
 
         initializeButtonReactionObjects();
+        startCupPositionListener();
         pickNextBall();
         throwUp();
+    }
+
+    private void startCupPositionListener() {
+
+
+        tTriggerZone.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction() & MotionEvent.ACTION_MASK;
+                if (action == MotionEvent.ACTION_UP) {
+                    tCup.setVisibility(View.INVISIBLE);
+                    return true;
+                }
+                if (action == MotionEvent.ACTION_POINTER_UP) {
+                    tCup.setVisibility(View.INVISIBLE);
+                    return true;
+                }
+                tCup.setVisibility(View.VISIBLE);
+                cupWidth = tCup.getWidth();
+                cupHeight = tCup.getHeight();
+                Log.v(TAG, "cupWidth:" + String.valueOf(cupWidth));
+                Log.v(TAG, "cupHeight:" + String.valueOf(cupHeight));
+                tCup.setY(event.getY() - (cupHeight * 1.5F));
+                tCup.setX(event.getX() - (cupWidth / 2));
+                return true;
+            }
+
+        });
+        bTriggerZone.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction() & MotionEvent.ACTION_MASK;
+                if (action == MotionEvent.ACTION_UP) {
+                    //bCup.setVisibility(View.INVISIBLE);
+                    continueBottomListener();
+                    return false;
+                }
+                if (action == MotionEvent.ACTION_POINTER_UP) {
+                    //bCup.setVisibility(View.INVISIBLE);
+                    continueBottomListener();
+                    return false;
+                }
+                bCup.setVisibility(View.VISIBLE);
+                cupWidth = bCup.getWidth();
+                cupHeight = bCup.getHeight();
+                Log.v(TAG, "cupWidth:" + String.valueOf(cupWidth));
+                Log.v(TAG, "cupHeight:" + String.valueOf(cupHeight));
+                bCup.setY(event.getY() + (cupHeight / 2));
+                bCup.setX(event.getX() - (cupWidth / 2));
+                return true;
+            }
+
+        });
+    }
+
+    private void continueBottomListener() {
+        Log.v(TAG, "Continue Bottom Listener");
+        bTriggerZone.setOnTouchListener(null);
+        bCup.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction() & MotionEvent.ACTION_MASK;
+                if (action == MotionEvent.ACTION_UP) {
+                    //bCup.setVisibility(View.INVISIBLE);
+                    //continueBottomListener();
+                    return true;
+                }
+                if (action == MotionEvent.ACTION_POINTER_UP) {
+                    //bCup.setVisibility(View.INVISIBLE);
+                    return true;
+                }
+                bCup.setVisibility(View.VISIBLE);
+                cupWidth = bCup.getWidth();
+                cupHeight = bCup.getHeight();
+                Log.v(TAG, "cupWidth:" + String.valueOf(cupWidth));
+                Log.v(TAG, "cupHeight:" + String.valueOf(cupHeight));
+                bCup.setY(event.getY() + (cupHeight / 2));
+                bCup.setX(event.getX() - (cupWidth / 2));
+                return true;
+            }
+        });
     }
 
     public void hide() {
@@ -337,7 +427,10 @@ public class CatchReaction extends Activity {
         topBall = (ImageView) findViewById(R.id.topBall1);
         bottomBall = (ImageView) findViewById(R.id.bottomBall1);
         bToMainMenuButton = (Button) findViewById(R.id.backToMainMenuButton);
-
+        bTriggerZone = (FrameLayout) findViewById(R.id.bottomTriggerZone);
+        tCup = (ImageView) findViewById(R.id.topCup);
+        bCup = (ImageView) findViewById(R.id.bottomCup);
+        tTriggerZone = (FrameLayout) findViewById(R.id.topTriggerZone);
         bToMainMenuButton.setVisibility(View.GONE);
         bToMainMenuButton.setOnClickListener(null);
         rScoreText = (TextView) findViewById(R.id.redScoreText);
@@ -499,7 +592,7 @@ public class CatchReaction extends Activity {
     }
 
     private void setBallsInvisible() {
-        Log.v(TAG, "Set Balls Invisible");
+        //Log.v(TAG, "Set Balls Invisible");
         ImageView t1 = (ImageView) findViewById(R.id.topBall1);
         t1.setVisibility(View.INVISIBLE);
         ImageView b1 = (ImageView) findViewById(R.id.bottomBall1);
