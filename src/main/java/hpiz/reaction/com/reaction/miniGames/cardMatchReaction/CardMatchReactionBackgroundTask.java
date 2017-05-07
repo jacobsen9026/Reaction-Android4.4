@@ -5,7 +5,6 @@ import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
-import java.util.Random;
 
 /**
  * Created by cjacobsen on 5/1/2017.
@@ -60,13 +59,14 @@ public class CardMatchReactionBackgroundTask extends AsyncTask<String, Integer, 
                 return "CANCEL";
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(600);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             if (this.isCancelled()) {
                 return "CANCEL";
             }
+            /*
             Random rand = new Random();
 
             // nextInt is normally exclusive of the top value,
@@ -77,6 +77,7 @@ public class CardMatchReactionBackgroundTask extends AsyncTask<String, Integer, 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            */
             if (this.isCancelled()) {
                 return "CANCEL";
             }
@@ -90,10 +91,10 @@ public class CardMatchReactionBackgroundTask extends AsyncTask<String, Integer, 
 
     protected void onPostExecute(String result) {
 
-        Log.v("backgroundTask", "Setting white");
+        Log.v("CardMatchReactionBgTask", "Setting white");
         if (result.equals("GAME:NEXTSTEP")) {
             gActivity.showACard();
-            gActivity.startButtonListeners();
+            //gActivity.startButtonListeners();
         } else if (result.equals("SLEPT")) {
             gActivity.runSingleCard();
 
