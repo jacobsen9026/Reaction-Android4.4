@@ -10,7 +10,7 @@ import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.View;
 
-import hpiz.reaction.com.reaction.miniGames.catchReaction.CatchReaction;
+import hpiz.reaction.com.reaction.miniGames.cardMatchReaction.CardMatchReaction;
 import hpiz.reaction.com.reaction.miniGames.surpriseNumberedReaction.SurpriseNumberedReaction;
 import hpiz.reaction.com.reaction.miniGames.surpriseReaction.SurpriseReaction;
 import hpiz.reaction.com.reaction.miniGames.wacAMoleReaction.WacAMoleReaction;
@@ -72,14 +72,21 @@ public class GameActivity extends Activity {
                 //sp.edit().putInt("gameProgress",gameProgress).commit();
                 startActivity(i);
                 break;
-
+/*
             case 0:
                 i = new Intent(GameActivity.this, CatchReaction.class);
                 gameProgress++;
                 //sp.edit().putInt("gameProgress",gameProgress).commit();
                 startActivity(i);
                 break;
-
+                */
+            case 0:
+                i = new Intent(GameActivity.this, CardMatchReaction.class);
+                gameProgress++;
+                Log.v(TAG, "GameProgress=" + String.valueOf(gameProgress));
+                //sp.edit().putInt("gameProgress",gameProgress).commit();
+                startActivity(i);
+                break;
             case 4:
                 i = new Intent(GameActivity.this, MainMenuActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
