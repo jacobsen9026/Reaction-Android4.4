@@ -7,53 +7,43 @@
     android:id="@+id/contentContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipChildren="false"
     android:keepScreenOn="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipChildren="false"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:clipChildren="false"
             android:orientation="horizontal"></LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:clipChildren="false"
 
             android:orientation="horizontal">
 
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:id="@+id/leftCard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="0dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ace_of_spades2" />
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:clipChildren="false">
 
             </FrameLayout>
 
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:clipChildren="false">
 
                 <ImageView
                     android:id="@+id/rightCard"
@@ -62,7 +52,25 @@
                     android:layout_margin="0dp"
                     android:rotation="180"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ace_of_spades2" />
+                    android:src="@drawable/ace_of_spades2"
+                    android:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/leftCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ace_of_spades2"
+                    android:visibility="visible" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+
+                android:layout_weight="1">
+
             </FrameLayout>
         </LinearLayout>
 
