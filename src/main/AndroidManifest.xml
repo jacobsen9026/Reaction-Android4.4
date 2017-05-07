@@ -80,6 +80,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hpiz.reaction.com.reaction.miniGames.catchReaction.CatchReaction" />
         </activity>
+        <activity
+            android:name=".miniGames.cardMatchReaction.CardMatchReaction"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="CardMatchReaction"
+            android:parentActivityName=".GameActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hpiz.reaction.com.reaction.miniGames.cardMatchReaction.CardMatchReaction" />
+        </activity>
     </application>
 
 </manifest>
