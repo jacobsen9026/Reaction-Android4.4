@@ -37,7 +37,7 @@
     <string-array name="winners_messages">
         <item>Your faster than a speeding ticket!</item>
         <item>Nice one!</item>
-        <item>Don't break the screen!</item>
+        <item>Don\'t break the screen!</item>
         <item>Winner winner chicken dinner.</item>
     </string-array>
     <string-array name="losers_messages">
