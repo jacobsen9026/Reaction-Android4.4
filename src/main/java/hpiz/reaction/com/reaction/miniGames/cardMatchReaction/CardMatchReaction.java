@@ -101,6 +101,33 @@ public class CardMatchReaction extends Activity {
         runSingleCard();
     }
 
+    public void runGame() {
+        setContentView(R.layout.minigame_surprisereaction);
+        Log.v(TAG, " setting game layout");
+        hide();
+        initializeButtonReactionObjects();
+        runSingleCard();
+
+    }
+
+    protected void runSingleCard() {
+        if (redScore < winningScore) {
+            if (blueScore < winningScore) {
+                //updateScores();
+                //clearScreen();
+
+                //setEarlyListeners();
+                runGame = new CardMatchReactionBackgroundTask(this);
+                runGame.execute("RUN");
+            } else {
+                blueWonGame();
+            }
+        } else {
+            redWonGame();
+        }
+
+    }
+
     public void hide() {
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
@@ -124,23 +151,102 @@ public class CardMatchReaction extends Activity {
 
     }
 
-
-    protected void runSingleCard() {
-        if (redScore < winningScore) {
-            if (blueScore < winningScore) {
-                //updateScores();
-                //clearScreen();
-
-                //setEarlyListeners();
-                runGame = new CardMatchReactionBackgroundTask(this);
-                runGame.execute("RUN");
-            } else {
-                blueWonGame();
-            }
-        } else {
-            redWonGame();
+    @Override
+    public void onBackPressed() {
+        if (runGame != null) {
+            runGame.cancel(true);
+            runGame = null;
         }
+        Intent i = new Intent(CardMatchReaction.this, GameActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+    }
 
+    public void startButtonListeners() {
+        topHalf.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                topHalf.setOnClickListener(null);
+                runGame.cancel(true);
+                if (valueHistory[0] == valueHistory[1]) {
+
+
+                    topWon();
+                }
+                animateCardHistoryExpand();
+                if (bottomHalf.hasOnClickListeners()) {
+                    bottomHalf.setOnClickListener(null);
+                }
+                //nextRound();
+            }
+        });
+        bottomHalf.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                bottomHalf.setOnClickListener(null);
+                runGame.cancel(true);
+                if (valueHistory[0] == valueHistory[1]) {
+
+
+                    bottomWon();
+                }
+                animateCardHistoryExpand();
+                if (topHalf.hasOnClickListeners()) {
+                    topHalf.setOnClickListener(null);
+                }
+                // nextRound();
+            }
+        });
+    }
+
+    private void initializeButtonReactionObjects() {
+
+        left = true;
+        redScore = 0;
+        blueScore = 0;
+        pAgainButton = (Button) super.findViewById(playAgainButton);
+        pAgainButton.setVisibility(View.GONE);
+        pAgainButton.setOnClickListener(null);
+
+        bToMainMenuButton = (Button) findViewById(backToMainMenuButton);
+
+        bToMainMenuButton.setVisibility(View.GONE);
+        bToMainMenuButton.setOnClickListener(null);
+        topHalf = (TextView) findViewById(R.id.topHalf);
+        bottomHalf = (TextView) findViewById(R.id.bottomHalf);
+        rScoreText = (TextView) findViewById(redScoreText);
+        rCardText_Top = (TextView) findViewById(rightCardText_Top);
+        rCardText_Bottom = (TextView) findViewById(rightCardText_Bottom);
+        lCardText_Bottom = (TextView) findViewById(leftCardText_Bottom);
+        lCardText_Top = (TextView) findViewById(leftCardText_Top);
+        cCardText_Top = (TextView) findViewById(centerCardText_Top);
+        cCardText_Bottom = (TextView) findViewById(centerCardText_Bottom);
+        bScoreText = (TextView) findViewById(blueScoreText);
+        rScoreText.setTextColor(Color.WHITE);
+        bScoreText.setTextColor(Color.WHITE);
+        rScoreText.setBackgroundColor(Color.RED);
+        bScoreText.setBackgroundColor(Color.BLUE);
+        lCard = (ImageView) findViewById(R.id.leftCard);
+        rCard = (ImageView) findViewById(R.id.rightCard);
+        lCardPlaceHolder = (ImageView) findViewById(R.id.rightCardPlaceHolder);
+        rCardPlaceHolder = (ImageView) findViewById(R.id.leftCardPlaceHolder);
+        cCard = (ImageView) findViewById(R.id.centerCard);
+        lCard.setTranslationX(9000);
+        //rCard.setTranslationX(9000);
+        cCard.setTranslationX(9000);
+        lCardText_Bottom.setAlpha(0);
+        lCardText_Top.setAlpha(0);
+        rCardText_Bottom.setAlpha(0);
+        rCardText_Top.setAlpha(0);
+        cCardText_Bottom.setAlpha(0);
+        cCardText_Top.setAlpha(0);
+        bottomHalf.setAlpha(0);
+        topHalf.setAlpha(0);
+
+        // lCard.setVisibility(View.INVISIBLE);
+        //  rCard.setVisibility(View.INVISIBLE);
     }
 
 
@@ -253,83 +359,6 @@ public class CardMatchReaction extends Activity {
         topHalf.setText("You beat Blue " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
     }
 
-    @Override
-    public void onBackPressed() {
-        if (runGame != null) {
-            runGame.cancel(true);
-            runGame = null;
-        }
-        Intent i = new Intent(CardMatchReaction.this, GameActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
-    }
-
-    public void startButtonListeners() {
-        topHalf.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                topHalf.setOnClickListener(null);
-                runGame.cancel(true);
-                if (valueHistory[0] == valueHistory[1]) {
-
-
-                    topWon();
-                }
-                animateCardHistoryExpand();
-                if (bottomHalf.hasOnClickListeners()) {
-                    bottomHalf.setOnClickListener(null);
-                }
-                //nextRound();
-            }
-        });
-        bottomHalf.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                bottomHalf.setOnClickListener(null);
-                runGame.cancel(true);
-                if (valueHistory[0] == valueHistory[1]) {
-
-
-                    bottomWon();
-                }
-                animateCardHistoryExpand();
-                if (topHalf.hasOnClickListeners()) {
-                    topHalf.setOnClickListener(null);
-                }
-                // nextRound();
-            }
-        });
-    }
-
-    public void runGame() {
-        setContentView(R.layout.minigame_surprisereaction);
-        Log.v(TAG, " setting game layout");
-        hide();
-        initializeButtonReactionObjects();
-        runSingleCard();
-
-    }
-
-    public void setTopRed() {
-        topHalf.setBackgroundColor(Color.RED);
-    }
-
-
-    public void setBottomBlue() {
-        bottomHalf.setBackgroundColor(Color.BLUE);
-    }
-
-    public void setTopBlack() {
-        topHalf.setBackgroundColor(Color.BLACK);
-    }
-
-    public void setBottomBlack() {
-        bottomHalf.setBackgroundColor(Color.BLACK);
-    }
-
-
     public void blueWonGame() {
         runGame.cancel(true);
         pAgainButton.setVisibility(View.VISIBLE);
@@ -357,63 +386,13 @@ public class CardMatchReaction extends Activity {
     }
 
 
+
+
     private void updateScores() {
         rScoreText.setText("Red Score: " + String.valueOf(redScore));
         bScoreText.setText("Blue Score: " + String.valueOf(blueScore));
     }
 
-    private void initializeButtonReactionObjects() {
-
-        left = true;
-        redScore = 0;
-        blueScore = 0;
-        pAgainButton = (Button) super.findViewById(playAgainButton);
-        pAgainButton.setVisibility(View.GONE);
-        pAgainButton.setOnClickListener(null);
-
-        bToMainMenuButton = (Button) findViewById(backToMainMenuButton);
-
-        bToMainMenuButton.setVisibility(View.GONE);
-        bToMainMenuButton.setOnClickListener(null);
-        topHalf = (TextView) findViewById(R.id.topHalf);
-        bottomHalf = (TextView) findViewById(R.id.bottomHalf);
-        rScoreText = (TextView) findViewById(redScoreText);
-        rCardText_Top = (TextView) findViewById(rightCardText_Top);
-        rCardText_Bottom = (TextView) findViewById(rightCardText_Bottom);
-        lCardText_Bottom = (TextView) findViewById(leftCardText_Bottom);
-        lCardText_Top = (TextView) findViewById(leftCardText_Top);
-        cCardText_Top = (TextView) findViewById(centerCardText_Top);
-        cCardText_Bottom = (TextView) findViewById(centerCardText_Bottom);
-        bScoreText = (TextView) findViewById(blueScoreText);
-        rScoreText.setTextColor(Color.WHITE);
-        bScoreText.setTextColor(Color.WHITE);
-        rScoreText.setBackgroundColor(Color.RED);
-        bScoreText.setBackgroundColor(Color.BLUE);
-        lCard = (ImageView) findViewById(R.id.leftCard);
-        rCard = (ImageView) findViewById(R.id.rightCard);
-        lCardPlaceHolder = (ImageView) findViewById(R.id.rightCardPlaceHolder);
-        rCardPlaceHolder = (ImageView) findViewById(R.id.leftCardPlaceHolder);
-        cCard = (ImageView) findViewById(R.id.centerCard);
-        lCard.setTranslationX(9000);
-        //rCard.setTranslationX(9000);
-        cCard.setTranslationX(9000);
-        lCardText_Bottom.setAlpha(0);
-        lCardText_Top.setAlpha(0);
-        rCardText_Bottom.setAlpha(0);
-        rCardText_Top.setAlpha(0);
-        cCardText_Bottom.setAlpha(0);
-        cCardText_Top.setAlpha(0);
-        bottomHalf.setAlpha(0);
-        topHalf.setAlpha(0);
-
-        // lCard.setVisibility(View.INVISIBLE);
-        //  rCard.setVisibility(View.INVISIBLE);
-    }
-
-    public void nextRound() {
-        runGame = new CardMatchReactionBackgroundTask(this);
-        runGame.execute("SLEEP:1000");
-    }
 
 
     public void showACard() {
