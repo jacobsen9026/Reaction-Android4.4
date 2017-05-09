@@ -8,22 +8,31 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Random;
+
 import hpiz.reaction.com.reaction.GameActivity;
 import hpiz.reaction.com.reaction.R;
 
-import static android.R.attr.value;
 import static hpiz.reaction.com.reaction.R.id.backToMainMenuButton;
 import static hpiz.reaction.com.reaction.R.id.blueScoreText;
+import static hpiz.reaction.com.reaction.R.id.centerCardText_Bottom;
+import static hpiz.reaction.com.reaction.R.id.centerCardText_Top;
+import static hpiz.reaction.com.reaction.R.id.leftCardText_Bottom;
+import static hpiz.reaction.com.reaction.R.id.leftCardText_Top;
 import static hpiz.reaction.com.reaction.R.id.playAgainButton;
 import static hpiz.reaction.com.reaction.R.id.redScoreText;
+import static hpiz.reaction.com.reaction.R.id.rightCardText_Bottom;
+import static hpiz.reaction.com.reaction.R.id.rightCardText_Top;
 
 /**
  * Created by Chris on 5/2/2017.
@@ -46,14 +55,22 @@ public class CardMatchReaction extends Activity {
     private PlayingCard lastPlayingCard;
     private ImageView lCard;
     private ImageView rCard;
-    private int imageResourceId;
+    private ImageView lCardPlaceHolder;
+    private TextView lCardText_Top;
+    private TextView rCardText_Top;
+    private TextView cCardText_Top;
+    private TextView cCardText_Bottom;
+    private TextView rCardText_Bottom;
+    private TextView lCardText_Bottom;
+    private ImageView rCardPlaceHolder;
+    private ImageView cCard;
     private ValueAnimator va;
     private boolean left;
-    private boolean firstCard;
     private long flyInDuration = 200;
-    private int[] valueHistory;
-    private String[] suiteHistory;
+    private int[] valueHistory = new int[3];
+    private String[] suiteHistory = new String[3];
     private String TAG = "CardMatchReaction";
+    private ValueAnimator va2;
 
     public CardMatchReaction() {
 
@@ -76,6 +93,7 @@ public class CardMatchReaction extends Activity {
         hide();
 
         initializeButtonReactionObjects();
+        startButtonListeners();
 
         runSingleCard();
     }
@@ -124,12 +142,12 @@ public class CardMatchReaction extends Activity {
 
 
     private void topWon() {
-        topHalf.setOnClickListener(null);
-        bottomHalf.setOnClickListener(null);
-        bottomHalf.setBackgroundColor(Color.RED);
-        bottomHalf.setText("You Lost");
+        //topHalf.setOnClickListener(null);
+        //bottomHalf.setOnClickListener(null);
+        //bottomHalf.setBackgroundColor(Color.RED);
+        bottomHalf.setText(getLoseText());
 
-        topHalf.setText("You Won");
+        topHalf.setText(getWinText());
         redScore++;
         runGame.cancel(true);
         updateScores();
@@ -141,6 +159,68 @@ public class CardMatchReaction extends Activity {
         }
         Log.v(TAG, "Blue Score: " + String.valueOf(blueScore));
         Log.v(TAG, "Red Score: " + String.valueOf(redScore));
+    }
+
+    private void bottomWon() {
+        //topHalf.setOnClickListener(null);
+        //bottomHalf.setOnClickListener(null);
+        //bottomHalf.setBackgroundColor(Color.RED);
+        bottomHalf.setText(getWinText());
+
+        topHalf.setText(getLoseText());
+        blueScore++;
+        runGame.cancel(true);
+        updateScores();
+        if (redScore > (winningScore - 1)) {
+            redWonGame();
+        }
+        if (blueScore > (winningScore - 1)) {
+            blueWonGame();
+        }
+        Log.v(TAG, "Blue Score: " + String.valueOf(blueScore));
+        Log.v(TAG, "Red Score: " + String.valueOf(redScore));
+    }
+
+    private String getWinText() {
+        Random rand = new Random();
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+        int r = rand.nextInt((4 - 1) + 1) + 1;
+        switch (r) {
+            case 1:
+                return "Your faster than a speeding ticket!";
+            case 2:
+                return "Nice one!";
+            case 3:
+                return "Don't break the screen!";
+            case 4:
+                return "Winner winner chicken dinner.";
+            default:
+                return "Nice one!";
+        }
+
+    }
+
+    private String getLoseText() {
+        Random rand = new Random();
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+        int r = rand.nextInt((4 - 1) + 1) + 1;
+        switch (r) {
+            case 1:
+                return "Go drink some coffee.";
+            case 2:
+                return "Pick up the pace!";
+            case 3:
+                return "Not quick enough.";
+            case 4:
+                return "Are you awake over there.";
+            default:
+                return "Not quick enough.";
+        }
+
     }
 
     public void redWonGame() {
@@ -186,22 +266,36 @@ public class CardMatchReaction extends Activity {
 
             @Override
             public void onClick(View v) {
-                topWon();
+                topHalf.setOnClickListener(null);
+                runGame.cancel(true);
+                if (valueHistory[0] == valueHistory[1]) {
+
+
+                    topWon();
+                }
+                animateCardHistoryExpand();
                 if (bottomHalf.hasOnClickListeners()) {
                     bottomHalf.setOnClickListener(null);
                 }
-                nextRound();
+                //nextRound();
             }
         });
         bottomHalf.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                bottomWon();
+                bottomHalf.setOnClickListener(null);
+                runGame.cancel(true);
+                if (valueHistory[0] == valueHistory[1]) {
+
+
+                    bottomWon();
+                }
+                animateCardHistoryExpand();
                 if (topHalf.hasOnClickListeners()) {
                     topHalf.setOnClickListener(null);
                 }
-                nextRound();
+                // nextRound();
             }
         });
     }
@@ -259,24 +353,6 @@ public class CardMatchReaction extends Activity {
         topHalf.setText("You lost to Blue " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
     }
 
-    private void bottomWon() {
-        topHalf.setOnClickListener(null);
-        bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.BLUE);
-        bottomHalf.setText("You Won");
-        topHalf.setText("You Lost");
-        blueScore++;
-        runGame.cancel(true);
-        updateScores();
-        if (redScore > (winningScore - 1)) {
-            redWonGame();
-        }
-        if (blueScore > (winningScore - 1)) {
-            blueWonGame();
-        }
-        Log.v(TAG, "Blue Score: " + String.valueOf(blueScore));
-        Log.v(TAG, "Red Score: " + String.valueOf(redScore));
-    }
 
     private void updateScores() {
         rScoreText.setText("Red Score: " + String.valueOf(redScore));
@@ -284,7 +360,7 @@ public class CardMatchReaction extends Activity {
     }
 
     private void initializeButtonReactionObjects() {
-        firstCard = true;
+
         left = true;
         redScore = 0;
         blueScore = 0;
@@ -299,6 +375,12 @@ public class CardMatchReaction extends Activity {
         topHalf = (TextView) findViewById(R.id.topHalf);
         bottomHalf = (TextView) findViewById(R.id.bottomHalf);
         rScoreText = (TextView) findViewById(redScoreText);
+        rCardText_Top = (TextView) findViewById(rightCardText_Top);
+        rCardText_Bottom = (TextView) findViewById(rightCardText_Bottom);
+        lCardText_Bottom = (TextView) findViewById(leftCardText_Bottom);
+        lCardText_Top = (TextView) findViewById(leftCardText_Top);
+        cCardText_Top = (TextView) findViewById(centerCardText_Top);
+        cCardText_Bottom = (TextView) findViewById(centerCardText_Bottom);
         bScoreText = (TextView) findViewById(blueScoreText);
         rScoreText.setTextColor(Color.WHITE);
         bScoreText.setTextColor(Color.WHITE);
@@ -306,6 +388,21 @@ public class CardMatchReaction extends Activity {
         bScoreText.setBackgroundColor(Color.BLUE);
         lCard = (ImageView) findViewById(R.id.leftCard);
         rCard = (ImageView) findViewById(R.id.rightCard);
+        lCardPlaceHolder = (ImageView) findViewById(R.id.rightCardPlaceHolder);
+        rCardPlaceHolder = (ImageView) findViewById(R.id.leftCardPlaceHolder);
+        cCard = (ImageView) findViewById(R.id.centerCard);
+        lCard.setTranslationX(9000);
+        //rCard.setTranslationX(9000);
+        cCard.setTranslationX(9000);
+        lCardText_Bottom.setAlpha(0);
+        lCardText_Top.setAlpha(0);
+        rCardText_Bottom.setAlpha(0);
+        rCardText_Top.setAlpha(0);
+        cCardText_Bottom.setAlpha(0);
+        cCardText_Top.setAlpha(0);
+        bottomHalf.setAlpha(0);
+        topHalf.setAlpha(0);
+
         // lCard.setVisibility(View.INVISIBLE);
         //  rCard.setVisibility(View.INVISIBLE);
     }
@@ -318,32 +415,31 @@ public class CardMatchReaction extends Activity {
 
     public void showACard() {
         if (newPlayingCard != null) {
-            lastPlayingCard = newPlayingCard;
-        }
-        newPlayingCard = new PlayingCard();
+            Random rand = new Random();
 
-        int id = getImageResourceId();
+            // nextInt is normally exclusive of the top value,
+            // so add 1 to make it inclusive
+            int randomNumber = rand.nextInt((20 - 1) + 1) + 1;
+            int randomSuite = rand.nextInt((4 - 1) + 1) + 1;
+            if (randomNumber == 1) {
+                PlayingCard holder = newPlayingCard;
+                newPlayingCard = new PlayingCard(holder.getValue(), randomSuite);
+            } else {
+                newPlayingCard = new PlayingCard();
 
+            }
 
-        if (valueHistory == null) {
-            valueHistory = new int[3];
         } else {
-            valueHistory[1] = valueHistory[0];
-            valueHistory[2] = valueHistory[1];
-            valueHistory[0] = newPlayingCard.getValue();
+            newPlayingCard = new PlayingCard();
         }
-        if (suiteHistory == null) {
-            suiteHistory = new String[3];
-        } else {
-            suiteHistory[1] = suiteHistory[0];
-            suiteHistory[2] = suiteHistory[1];
-            suiteHistory[0] = newPlayingCard.getSuite();
-        }
+
+        Log.v(TAG, String.valueOf(valueHistory[0]) + " of " + suiteHistory[0]);
+        Log.v(TAG, String.valueOf(valueHistory[1]) + " of " + suiteHistory[1]);
+        Log.v(TAG, String.valueOf(valueHistory[2]) + " of " + suiteHistory[2]);
+/*
         Log.d(TAG, "History addition=" + String.valueOf(valueHistory[0]));
         Log.d(TAG, "History addition=" + String.valueOf(suiteHistory[0]));
-
-
-        Log.d(TAG, "newPlayingCard local Image Resource=" + String.valueOf(id));
+*/
         Log.d(TAG, "newPlayingCard objects Image Resource=" + String.valueOf(newPlayingCard.getImageResource()));
         Log.d(TAG, "newPlayingCard value=" + String.valueOf(newPlayingCard.getValue()) + " of " + newPlayingCard.getSuite());
 
@@ -360,29 +456,311 @@ public class CardMatchReaction extends Activity {
         runSingleCard();
     }
 
-    private void animateRightCardIn(int imageResource) {
-        rCard.bringToFront();
-        va = ValueAnimator.ofFloat(2000, 0);
-        va.setDuration(flyInDuration);
-        va.setInterpolator(new DecelerateInterpolator(1.5F));
-        // va.setInterpolator(new AccelerateInterpolator());
-        /*
-        va.setInterpolator(new TimeInterpolator() {
+    private void updateHistory() {
+
+        if (valueHistory == null) {
+
+        } else {
+            valueHistory[2] = valueHistory[1];
+            valueHistory[1] = valueHistory[0];
+
+            valueHistory[0] = newPlayingCard.getValue();
+        }
+        if (suiteHistory == null) {
+
+        } else {
+            suiteHistory[2] = suiteHistory[1];
+            suiteHistory[1] = suiteHistory[0];
+
+            suiteHistory[0] = newPlayingCard.getSuite();
+        }
+    }
+
+    private void animateCardHistoryExpand() {
+        if (va != null) {
+            va.cancel();
+        }
+        Log.v(TAG, "Invoke animateCardHistoryExpand");
+        Log.v(TAG, "cCard Position:" + String.valueOf(cCard.getWidth()));
+        Log.v(TAG, "lCardPlaceHolder Position:" + String.valueOf(lCardPlaceHolder.getX()));
+        float translationDistance = cCard.getWidth() * 0.66F;
+        Log.v(TAG, "Translation Distance = " + String.valueOf(translationDistance));
+        va2 = ValueAnimator.ofFloat(0, 1);
+        va2.setDuration(1000);
+        va2.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        va2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
             @Override
-            public float getInterpolation(float input) {
-                return (float) (0.098*input*input);
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+
+                float value = (float) animation.getAnimatedValue();
+                rCardText_Top.setAlpha(value);
+                //lCardText_Top.setAlpha(value);
+                cCardText_Top.setAlpha(value);
+                rCardText_Bottom.setAlpha(value);
+                //lCardText_Bottom.setAlpha(value);
+                cCardText_Bottom.setAlpha(value);
+                topHalf.setAlpha(value);
+                bottomHalf.setAlpha(value);
+
+
             }
         });
-        */
+        va2.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                Handler h = new Handler();
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        animateCardHistoryContract();
+                    }
+                }, 1000);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+
+        va = ValueAnimator.ofFloat(0, translationDistance);
+        va.setDuration(1000);
+        va.setInterpolator(new AccelerateDecelerateInterpolator());
+
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
 
 
-                //Log.v(TAG, "Moving ruler to y=" + animation.getAnimatedValue());
-                //Log.v(TAG, "Bottom Position=" + String.valueOf(bottomPosition));
-                //Log.v(TAG, "bVel=" + String.valueOf(bVel));
+                float value = (float) animation.getAnimatedValue();
+                rCard.setTranslationX(value);
+                cCard.setTranslationX(-value);
+
+                rCardText_Top.setTranslationX(value);
+                cCardText_Top.setTranslationX(-value);
+                rCardText_Bottom.setTranslationX(value);
+                cCardText_Bottom.setTranslationX(-value);
+
+
+            }
+        });
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                lCard.setTranslationX(10000);
+                cCard.setTranslationX(0);
+                rCard.setTranslationX(0);
+                if (suiteHistory[2] != null) {
+                    Log.v(TAG, String.valueOf(valueHistory[0]) + " of " + suiteHistory[0]);
+                    Log.v(TAG, String.valueOf(valueHistory[1]) + " of " + suiteHistory[1]);
+                    Log.v(TAG, String.valueOf(valueHistory[2]) + " of " + suiteHistory[2]);
+                    PlayingCard firstCard = new PlayingCard(valueHistory[0], suiteHistory[0]);
+                    PlayingCard secondCard = new PlayingCard(valueHistory[1], suiteHistory[1]);
+                    PlayingCard thirdCard = new PlayingCard(valueHistory[2], suiteHistory[2]);
+                    lCard.setImageResource(thirdCard.getImageResource());
+                    lCard.bringToFront();
+                    cCard.setImageResource(secondCard.getImageResource());
+                    cCard.bringToFront();
+                    rCard.setImageResource(firstCard.getImageResource());
+                    rCard.bringToFront();
+
+                    cCard.setVisibility(View.VISIBLE);
+                } else if (suiteHistory[1] != null) {
+                    Log.v(TAG, suiteHistory[0]);
+                    Log.v(TAG, suiteHistory[1]);
+                    PlayingCard firstCard = new PlayingCard(valueHistory[0], suiteHistory[0]);
+                    PlayingCard secondCard = new PlayingCard(valueHistory[1], suiteHistory[1]);
+                    lCard.setImageResource(R.drawable.playing_card_back);
+                    lCard.bringToFront();
+                    cCard.setImageResource(secondCard.getImageResource());
+                    cCard.bringToFront();
+                    rCard.setImageResource(firstCard.getImageResource());
+                    rCard.bringToFront();
+
+
+                } else if (suiteHistory[0] != null) {
+                    Log.v(TAG, suiteHistory[0]);
+                    PlayingCard firstCard = new PlayingCard(valueHistory[0], suiteHistory[0]);
+                    lCard.setImageResource(R.drawable.playing_card_back);
+                    lCard.bringToFront();
+                    cCard.setImageResource(R.drawable.playing_card_back);
+                    cCard.bringToFront();
+                    rCard.setImageResource(firstCard.getImageResource());
+                    rCard.bringToFront();
+
+                } else {
+                    lCard.setImageResource(R.drawable.playing_card_back);
+                    lCard.bringToFront();
+                    cCard.setImageResource(R.drawable.playing_card_back);
+                    cCard.bringToFront();
+                    rCard.setImageResource(R.drawable.playing_card_back);
+                    rCard.bringToFront();
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        va.start();
+        va2.start();
+
+    }
+
+    private void animateCardHistoryContract() {
+        Log.v(TAG, "Invoke animateCardHistoryExpand");
+        Log.v(TAG, "cCard Position:" + String.valueOf(cCard.getWidth()));
+        Log.v(TAG, "lCardPlaceHolder Position:" + String.valueOf(lCardPlaceHolder.getX()));
+        float translationDistance = cCard.getWidth() * 0.66F;
+        Log.v(TAG, "Translation Distance = " + String.valueOf(translationDistance));
+        va2 = ValueAnimator.ofFloat(1, 0);
+        va2.setDuration(1000);
+        va2.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        va2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+
+                float value = (float) animation.getAnimatedValue();
+                rCardText_Top.setAlpha(value);
+                //lCardText_Top.setAlpha(value);
+                cCardText_Top.setAlpha(value);
+                rCardText_Bottom.setAlpha(value);
+                //lCardText_Bottom.setAlpha(value);
+                cCardText_Bottom.setAlpha(value);
+                topHalf.setAlpha(value);
+                bottomHalf.setAlpha(value);
+
+
+            }
+        });
+        va2.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (suiteHistory[0] != null) {
+                    PlayingCard lastCard = new PlayingCard(valueHistory[0], suiteHistory[0]);
+                    rCard.setImageResource(lastCard.getImageResource());
+
+                } else {
+                    rCard.setImageResource(R.drawable.playing_card_back);
+                }
+
+                left = true;
+                bottomHalf.setText("");
+                topHalf.setText("");
+                startButtonListeners();
+                runSingleCard();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+
+        va = ValueAnimator.ofFloat(translationDistance, 0);
+        va.setDuration(1000);
+        va.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+
+                float value = (float) animation.getAnimatedValue();
+                rCard.setTranslationX(value);
+                cCard.setTranslationX(-value);
+
+                rCardText_Top.setTranslationX(value);
+                cCardText_Top.setTranslationX(-value);
+                rCardText_Bottom.setTranslationX(value);
+                cCardText_Bottom.setTranslationX(-value);
+
+
+            }
+        });
+        va.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        va.start();
+        va2.start();
+
+    }
+
+    private void animateRightCardIn(int imageResource) {
+
+        va = ValueAnimator.ofFloat(2000, 0);
+        va.setDuration(flyInDuration);
+        va.setInterpolator(new DecelerateInterpolator(1.5F));
+
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+
                 float value = (float) animation.getAnimatedValue();
                 rCard.setTranslationX(value);
 
@@ -391,29 +769,21 @@ public class CardMatchReaction extends Activity {
         va.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
+                rCard.setTranslationX(10000);
+                rCard.bringToFront();
 
                 rCard.setImageResource(newPlayingCard.getImageResource());
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                // setBallsInvisible();
-
-                // if (!cancelled) {
-                //     pickNextBall();
-                //     throwUp();
-                // }
+                updateHistory();
 
 
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
-                // topBall.setTranslationY(410 * -1);
-                // bottomBall.setTranslationY(410);
-                // topBall.setVisibility(View.INVISIBLE);
-                // bottomBall.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -424,13 +794,8 @@ public class CardMatchReaction extends Activity {
         va.start();
     }
 
-    private void waitAndRunAgain() {
-        runGame = new CardMatchReactionBackgroundTask(this);
-        runGame.execute("SLEEP:1000");
-    }
-
     private void animateLeftCardIn(int imageResource) {
-        lCard.bringToFront();
+
         va = ValueAnimator.ofFloat(2000, 0);
         va.setDuration(flyInDuration);
         va.setInterpolator(new DecelerateInterpolator(1.5F));
@@ -458,7 +823,8 @@ public class CardMatchReaction extends Activity {
         va.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
+                lCard.setTranslationX(10000);
+                lCard.bringToFront();
                 lCard.setImageResource(View.VISIBLE);
                 lCard.setImageResource(newPlayingCard.getImageResource());
 
@@ -466,6 +832,7 @@ public class CardMatchReaction extends Activity {
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                updateHistory();
                 // setBallsInvisible();
 
                 // if (!cancelled) {
@@ -493,129 +860,4 @@ public class CardMatchReaction extends Activity {
     }
 
 
-    private int getImageResourceId() {
-        switch (newPlayingCard.getSuite()) {
-            case "Diamonds":
-                switch (newPlayingCard.getValue()) {
-                    case 1:
-                        return R.drawable.ace_of_diamonds;
-                    case 2:
-                        return R.drawable.two_of_diamonds;
-                    case 3:
-                        return R.drawable.three_of_diamonds;
-                    case 4:
-                        return R.drawable.four_of_diamonds;
-                    case 5:
-                        return R.drawable.five_of_diamonds;
-                    case 6:
-                        return R.drawable.six_of_diamonds;
-                    case 7:
-                        return R.drawable.seven_of_diamonds;
-                    case 8:
-                        return R.drawable.eight_of_diamonds;
-                    case 9:
-                        return R.drawable.nine_of_diamonds;
-                    case 10:
-                        return R.drawable.ten_of_diamonds;
-                    case 11:
-                        return R.drawable.jack_of_diamonds;
-                    case 12:
-                        return R.drawable.queen_of_diamonds;
-                    case 13:
-                        return R.drawable.king_of_diamonds;
-                }
-                break;
-            case "Hearts":
-                switch (value) {
-                    case 1:
-                        return R.drawable.ace_of_hearts;
-                    case 2:
-                        return R.drawable.two_of_hearts;
-                    case 3:
-                        return R.drawable.three_of_hearts;
-                    case 4:
-                        return R.drawable.four_of_hearts;
-                    case 5:
-                        return R.drawable.five_of_hearts;
-                    case 6:
-                        return R.drawable.six_of_hearts;
-                    case 7:
-                        return R.drawable.seven_of_hearts;
-                    case 8:
-                        return R.drawable.eight_of_hearts;
-                    case 9:
-                        return R.drawable.nine_of_hearts;
-                    case 10:
-                        return R.drawable.ten_of_hearts;
-                    case 11:
-                        return R.drawable.jack_of_hearts;
-                    case 12:
-                        return R.drawable.queen_of_hearts;
-                    case 13:
-                        return R.drawable.king_of_hearts;
-                }
-                break;
-            case "Clubs":
-                switch (value) {
-                    case 1:
-                        return R.drawable.ace_of_clubs;
-                    case 2:
-                        return R.drawable.two_of_clubs;
-                    case 3:
-                        return R.drawable.three_of_clubs;
-                    case 4:
-                        return R.drawable.four_of_clubs;
-                    case 5:
-                        return R.drawable.five_of_clubs;
-                    case 6:
-                        return R.drawable.six_of_clubs;
-                    case 7:
-                        return R.drawable.seven_of_clubs;
-                    case 8:
-                        return R.drawable.eight_of_clubs;
-                    case 9:
-                        return R.drawable.nine_of_clubs;
-                    case 10:
-                        return R.drawable.ten_of_clubs;
-                    case 11:
-                        return R.drawable.jack_of_clubs;
-                    case 12:
-                        return R.drawable.queen_of_clubs;
-                    case 13:
-                        return R.drawable.king_of_clubs;
-                }
-                break;
-            case "Spades":
-                switch (value) {
-                    case 1:
-                        return R.drawable.ace_of_spades;
-                    case 2:
-                        return R.drawable.two_of_spades;
-                    case 3:
-                        return R.drawable.three_of_spades;
-                    case 4:
-                        return R.drawable.four_of_spades;
-                    case 5:
-                        return R.drawable.five_of_spades;
-                    case 6:
-                        return R.drawable.six_of_spades;
-                    case 7:
-                        return R.drawable.seven_of_spades;
-                    case 8:
-                        return R.drawable.eight_of_spades;
-                    case 9:
-                        return R.drawable.nine_of_spades;
-                    case 10:
-                        return R.drawable.ten_of_spades;
-                    case 11:
-                        return R.drawable.jack_of_spades;
-                    case 12:
-                        return R.drawable.queen_of_spades;
-                    case 13:
-                        return R.drawable.king_of_spades;
-                }
-                break;
-        }
-        return 0;
-    }
 }
