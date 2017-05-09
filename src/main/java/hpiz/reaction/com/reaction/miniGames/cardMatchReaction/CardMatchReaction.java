@@ -66,11 +66,14 @@ public class CardMatchReaction extends Activity {
     private ImageView cCard;
     private ValueAnimator va;
     private boolean left;
-    private long flyInDuration = 200;
+    private long flyInDuration = 300;
     private int[] valueHistory = new int[3];
     private String[] suiteHistory = new String[3];
     private String TAG = "CardMatchReaction";
     private ValueAnimator va2;
+    private ValueAnimator rightCardAnimator;
+    private boolean rightCardAnimatorCanceled;
+    private boolean leftCardAnimatorCanceled;
 
     public CardMatchReaction() {
 
@@ -477,8 +480,8 @@ public class CardMatchReaction extends Activity {
     }
 
     private void animateCardHistoryExpand() {
-        if (va != null) {
-            va.cancel();
+        if (rightCardAnimator != null) {
+            rightCardAnimator.cancel();
         }
         Log.v(TAG, "Invoke animateCardHistoryExpand");
         Log.v(TAG, "cCard Position:" + String.valueOf(cCard.getWidth()));
@@ -565,6 +568,7 @@ public class CardMatchReaction extends Activity {
                 lCard.setTranslationX(10000);
                 cCard.setTranslationX(0);
                 rCard.setTranslationX(0);
+                lCard.setVisibility(View.INVISIBLE);
                 if (suiteHistory[2] != null) {
                     Log.v(TAG, String.valueOf(valueHistory[0]) + " of " + suiteHistory[0]);
                     Log.v(TAG, String.valueOf(valueHistory[1]) + " of " + suiteHistory[1]);
@@ -573,6 +577,8 @@ public class CardMatchReaction extends Activity {
                     PlayingCard secondCard = new PlayingCard(valueHistory[1], suiteHistory[1]);
                     PlayingCard thirdCard = new PlayingCard(valueHistory[2], suiteHistory[2]);
                     lCard.setImageResource(thirdCard.getImageResource());
+
+
                     lCard.bringToFront();
                     cCard.setImageResource(secondCard.getImageResource());
                     cCard.bringToFront();
@@ -581,6 +587,7 @@ public class CardMatchReaction extends Activity {
 
                     cCard.setVisibility(View.VISIBLE);
                 } else if (suiteHistory[1] != null) {
+                    Log.v(TAG, suiteHistory[0]);
                     Log.v(TAG, suiteHistory[0]);
                     Log.v(TAG, suiteHistory[1]);
                     PlayingCard firstCard = new PlayingCard(valueHistory[0], suiteHistory[0]);
@@ -731,7 +738,7 @@ public class CardMatchReaction extends Activity {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-
+                lCard.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -751,11 +758,11 @@ public class CardMatchReaction extends Activity {
 
     private void animateRightCardIn(int imageResource) {
 
-        va = ValueAnimator.ofFloat(2000, 0);
-        va.setDuration(flyInDuration);
-        va.setInterpolator(new DecelerateInterpolator(1.5F));
+        rightCardAnimator = ValueAnimator.ofFloat(2000, 0);
+        rightCardAnimator.setDuration(flyInDuration);
+        rightCardAnimator.setInterpolator(new DecelerateInterpolator(1.5F));
 
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        rightCardAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -766,24 +773,27 @@ public class CardMatchReaction extends Activity {
 
             }
         });
-        va.addListener(new Animator.AnimatorListener() {
+        rightCardAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
                 rCard.setTranslationX(10000);
                 rCard.bringToFront();
 
                 rCard.setImageResource(newPlayingCard.getImageResource());
+                rightCardAnimatorCanceled = false;
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                updateHistory();
-
+                if (!rightCardAnimatorCanceled) {
+                    updateHistory();
+                }
 
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
+                rightCardAnimatorCanceled = true;
             }
 
             @Override
@@ -791,7 +801,7 @@ public class CardMatchReaction extends Activity {
 
             }
         });
-        va.start();
+        rightCardAnimator.start();
     }
 
     private void animateLeftCardIn(int imageResource) {
@@ -827,12 +837,15 @@ public class CardMatchReaction extends Activity {
                 lCard.bringToFront();
                 lCard.setImageResource(View.VISIBLE);
                 lCard.setImageResource(newPlayingCard.getImageResource());
-
+                leftCardAnimatorCanceled = false;
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                updateHistory();
+                if (!leftCardAnimatorCanceled) {
+                    updateHistory();
+                }
+                //updateHistory();
                 // setBallsInvisible();
 
                 // if (!cancelled) {
@@ -845,7 +858,7 @@ public class CardMatchReaction extends Activity {
 
             @Override
             public void onAnimationCancel(Animator animation) {
-                // topBall.setTranslationY(410 * -1);
+                leftCardAnimatorCanceled = true;                // topBall.setTranslationY(410 * -1);
                 // bottomBall.setTranslationY(410);
                 // topBall.setVisibility(View.INVISIBLE);
                 // bottomBall.setVisibility(View.INVISIBLE);
