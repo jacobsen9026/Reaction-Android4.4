@@ -59,7 +59,7 @@ public class CardMatchReactionBackgroundTask extends AsyncTask<String, Integer, 
                 return "CANCEL";
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(800);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
