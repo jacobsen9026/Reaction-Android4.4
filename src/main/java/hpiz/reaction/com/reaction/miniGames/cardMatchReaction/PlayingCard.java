@@ -4,6 +4,7 @@ import java.util.Random;
 
 import hpiz.reaction.com.reaction.R;
 
+
 /**
  * Created by Chris on 5/6/2017.
  */
@@ -12,6 +13,7 @@ public class PlayingCard {
     private String suite;
     private int value;
     private int imageResourceId;
+    private String TAG = "PlayingCard";
 
 
     public PlayingCard() {
@@ -37,6 +39,33 @@ public class PlayingCard {
                 suite = "Spades";
                 break;
         }
+        setImageResourceId();
+    }
+
+    public PlayingCard(int faceValue, String cardSuite) {
+        suite = cardSuite;
+
+        value = faceValue;
+        setImageResourceId();
+    }
+
+    public PlayingCard(int faceValue, int cardSuite) {
+        switch (cardSuite) {
+            case 1:
+                suite = "Diamonds";
+                break;
+            case 2:
+                suite = "Hearts";
+                break;
+            case 3:
+                suite = "Clubs";
+                break;
+            case 4:
+                suite = "Spades";
+                break;
+        }
+
+        value = faceValue;
         setImageResourceId();
     }
 
@@ -75,13 +104,13 @@ public class PlayingCard {
                         imageResourceId = R.drawable.ten_of_diamonds;
                         break;
                     case 11:
-                        imageResourceId = R.drawable.jack_of_diamonds;
+                        imageResourceId = R.drawable.jack_of_diamonds2;
                         break;
                     case 12:
-                        imageResourceId = R.drawable.queen_of_diamonds;
+                        imageResourceId = R.drawable.queen_of_diamonds2;
                         break;
                     case 13:
-                        imageResourceId = R.drawable.king_of_diamonds;
+                        imageResourceId = R.drawable.king_of_diamonds2;
                         break;
                 }
                 break;
@@ -118,13 +147,13 @@ public class PlayingCard {
                         imageResourceId = R.drawable.ten_of_hearts;
                         break;
                     case 11:
-                        imageResourceId = R.drawable.jack_of_hearts;
+                        imageResourceId = R.drawable.jack_of_hearts2;
                         break;
                     case 12:
-                        imageResourceId = R.drawable.queen_of_hearts;
+                        imageResourceId = R.drawable.queen_of_hearts2;
                         break;
                     case 13:
-                        imageResourceId = R.drawable.king_of_hearts;
+                        imageResourceId = R.drawable.king_of_hearts2;
                         break;
                 }
                 break;
@@ -161,13 +190,13 @@ public class PlayingCard {
                         imageResourceId = R.drawable.ten_of_clubs;
                         break;
                     case 11:
-                        imageResourceId = R.drawable.jack_of_clubs;
+                        imageResourceId = R.drawable.jack_of_clubs2;
                         break;
                     case 12:
-                        imageResourceId = R.drawable.queen_of_clubs;
+                        imageResourceId = R.drawable.queen_of_clubs2;
                         break;
                     case 13:
-                        imageResourceId = R.drawable.king_of_clubs;
+                        imageResourceId = R.drawable.king_of_clubs2;
                         break;
                 }
                 break;
@@ -204,13 +233,13 @@ public class PlayingCard {
                         imageResourceId = R.drawable.ten_of_spades;
                         break;
                     case 11:
-                        imageResourceId = R.drawable.jack_of_spades;
+                        imageResourceId = R.drawable.jack_of_spades2;
                         break;
                     case 12:
-                        imageResourceId = R.drawable.queen_of_spades;
+                        imageResourceId = R.drawable.queen_of_spades2;
                         break;
                     case 13:
-                        imageResourceId = R.drawable.king_of_spades;
+                        imageResourceId = R.drawable.king_of_spades2;
                         break;
                 }
                 break;
