@@ -21,48 +21,44 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:clipChildren="false"
-            android:orientation="horizontal"></LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:clipChildren="false"
-
             android:orientation="horizontal">
 
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clipChildren="false">
+                android:layout_weight="1">
 
             </FrameLayout>
 
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clipChildren="false">
 
-                <ImageView
-                    android:id="@+id/rightCard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="0dp"
-                    android:rotation="180"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ace_of_spades2"
-                    android:visibility="visible" />
+                android:layout_weight="1">
 
-                <ImageView
-                    android:id="@+id/leftCard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="0dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ace_of_spades2"
-                    android:visibility="visible" />
+                <TextView
+                    android:id="@+id/leftCardText_Top"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom|center"
+                    android:paddingBottom="15dp"
+                    android:text="Two Cards Ago" />
+
+                <TextView
+                    android:id="@+id/centerCardText_Top"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom|center"
+                    android:paddingBottom="15dp"
+                    android:text="Last Card" />
+
+                <TextView
+                    android:id="@+id/rightCardText_Top"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom|center"
+                    android:paddingBottom="15dp"
+                    android:text="Top Card" />
             </FrameLayout>
 
             <FrameLayout
@@ -78,8 +74,136 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:clipChildren="false"
 
-            android:orientation="horizontal"></LinearLayout>
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clipChildren="false">
+
+                <ImageView
+                    android:id="@+id/leftCardPlaceHolder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ace_of_hearts"
+                    android:visibility="invisible" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clipChildren="false">
+
+                <ImageView
+                    android:id="@+id/centerCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/playing_card_back"
+                    android:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/rightCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/playing_card_back"
+                    android:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/leftCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/playing_card_back"
+                    android:visibility="visible" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/rightCardPlaceHolder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:rotation="180"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ace_of_spades2"
+                    android:visibility="invisible" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipChildren="false"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clipChildren="false">
+
+                <TextView
+                    android:id="@+id/rightCardText_Bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom|center"
+                    android:paddingBottom="15dp"
+                    android:rotation="180"
+                    android:text="Top Card" />
+
+                <TextView
+                    android:id="@+id/centerCardText_Bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom|center"
+                    android:paddingBottom="15dp"
+                    android:rotation="180"
+                    android:text="Last Card" />
+
+                <TextView
+                    android:id="@+id/leftCardText_Bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom|center"
+                    android:paddingBottom="15dp"
+                    android:rotation="180"
+                    android:text="Two Cards Ago" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+
+                android:layout_weight="1">
+
+            </FrameLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
