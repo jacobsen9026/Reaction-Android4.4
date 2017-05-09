@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -292,43 +293,19 @@ public class CardMatchReaction extends Activity {
 
     private String getWinText() {
         Random rand = new Random();
-
-        // nextInt is normally exclusive of the top value,
-        // so add 1 to make it inclusive
-        int r = rand.nextInt((4 - 1) + 1) + 1;
-        switch (r) {
-            case 1:
-                return "Your faster than a speeding ticket!";
-            case 2:
-                return "Nice one!";
-            case 3:
-                return "Don't break the screen!";
-            case 4:
-                return "Winner winner chicken dinner.";
-            default:
-                return "Nice one!";
-        }
-
+        Resources res = getResources();
+        String[] winnerStrings = res.getStringArray(R.array.winners_messages);
+        int r = rand.nextInt(winnerStrings.length - 1);
+        return winnerStrings[r];
     }
 
     private String getLoseText() {
         Random rand = new Random();
+        Resources res = getResources();
+        String[] loserStrings = res.getStringArray(R.array.losers_messages);
+        int r = rand.nextInt(loserStrings.length - 1);
+        return loserStrings[r];
 
-        // nextInt is normally exclusive of the top value,
-        // so add 1 to make it inclusive
-        int r = rand.nextInt((4 - 1) + 1) + 1;
-        switch (r) {
-            case 1:
-                return "Go drink some coffee.";
-            case 2:
-                return "Pick up the pace!";
-            case 3:
-                return "Not quick enough.";
-            case 4:
-                return "Are you awake over there.";
-            default:
-                return "Not quick enough.";
-        }
 
     }
 
