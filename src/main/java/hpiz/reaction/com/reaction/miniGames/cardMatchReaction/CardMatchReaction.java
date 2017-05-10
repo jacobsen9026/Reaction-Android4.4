@@ -40,8 +40,8 @@ import static hpiz.reaction.com.reaction.R.id.rightCardText_Top;
  */
 
 public class CardMatchReaction extends Activity {
+    private static CardMatchReactionBackgroundTask runGame;
     private int redScore;
-    private CardMatchReactionBackgroundTask runGame;
     private int blueScore;
     private TextView topHalf;
     private TextView bottomHalf;
@@ -65,16 +65,20 @@ public class CardMatchReaction extends Activity {
     private TextView lCardText_Bottom;
     private ImageView rCardPlaceHolder;
     private ImageView cCard;
-    private ValueAnimator va;
+    private ValueAnimator motionAnimator;
     private boolean left;
     private long flyInDuration = 300;
     private int[] valueHistory = new int[3];
     private String[] suiteHistory = new String[3];
     private String TAG = "CardMatchReaction";
-    private ValueAnimator va2;
+    private ValueAnimator alphaAnimator;
     private ValueAnimator rightCardAnimator;
     private boolean rightCardAnimatorCanceled;
     private boolean leftCardAnimatorCanceled;
+    private ValueAnimator delayedHideWinLoseTextAnimator;
+    private long cardHistoryExpansionTime = 1000;
+    private long cardHistoryContractionTime = 1000;
+    private long hideWinLoseTextDelayTime = 500;
 
     public CardMatchReaction() {
 
@@ -188,6 +192,7 @@ public class CardMatchReaction extends Activity {
             public void onClick(View v) {
                 bottomHalf.setOnClickListener(null);
                 runGame.cancel(true);
+
                 if (valueHistory[0] == valueHistory[1]) {
 
 
@@ -279,7 +284,9 @@ public class CardMatchReaction extends Activity {
 
         topHalf.setText(getLoseText());
         blueScore++;
-        runGame.cancel(true);
+        if (runGame != null) {
+            runGame.cancel(true);
+        }
         updateScores();
         if (redScore > (winningScore - 1)) {
             redWonGame();
@@ -412,7 +419,7 @@ public class CardMatchReaction extends Activity {
             left = true;
         }
         //waitAndRunAgain();
-        runSingleCard();
+        //runSingleCard();
     }
 
     private void updateHistory() {
@@ -444,11 +451,11 @@ public class CardMatchReaction extends Activity {
         Log.v(TAG, "lCardPlaceHolder Position:" + String.valueOf(lCardPlaceHolder.getX()));
         float translationDistance = cCard.getWidth() * 0.66F;
         Log.v(TAG, "Translation Distance = " + String.valueOf(translationDistance));
-        va2 = ValueAnimator.ofFloat(0, 1);
-        va2.setDuration(1000);
-        va2.setInterpolator(new AccelerateDecelerateInterpolator());
+        alphaAnimator = ValueAnimator.ofFloat(0, 1);
+        alphaAnimator.setDuration(cardHistoryExpansionTime);
+        alphaAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
-        va2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        alphaAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -467,7 +474,7 @@ public class CardMatchReaction extends Activity {
 
             }
         });
-        va2.addListener(new Animator.AnimatorListener() {
+        alphaAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 
@@ -496,11 +503,11 @@ public class CardMatchReaction extends Activity {
         });
 
 
-        va = ValueAnimator.ofFloat(0, translationDistance);
-        va.setDuration(1000);
-        va.setInterpolator(new AccelerateDecelerateInterpolator());
+        motionAnimator = ValueAnimator.ofFloat(0, translationDistance);
+        motionAnimator.setDuration(1000);
+        motionAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        motionAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -518,7 +525,7 @@ public class CardMatchReaction extends Activity {
 
             }
         });
-        va.addListener(new Animator.AnimatorListener() {
+        motionAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
                 lCard.setTranslationX(10000);
@@ -595,8 +602,8 @@ public class CardMatchReaction extends Activity {
 
             }
         });
-        va.start();
-        va2.start();
+        motionAnimator.start();
+        alphaAnimator.start();
 
     }
 
@@ -606,11 +613,11 @@ public class CardMatchReaction extends Activity {
         Log.v(TAG, "lCardPlaceHolder Position:" + String.valueOf(lCardPlaceHolder.getX()));
         float translationDistance = cCard.getWidth() * 0.66F;
         Log.v(TAG, "Translation Distance = " + String.valueOf(translationDistance));
-        va2 = ValueAnimator.ofFloat(1, 0);
-        va2.setDuration(1000);
-        va2.setInterpolator(new AccelerateDecelerateInterpolator());
+        alphaAnimator = ValueAnimator.ofFloat(1, 0);
+        alphaAnimator.setDuration(cardHistoryContractionTime);
+        alphaAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
-        va2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        alphaAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -623,13 +630,11 @@ public class CardMatchReaction extends Activity {
                 rCardText_Bottom.setAlpha(value);
                 //lCardText_Bottom.setAlpha(value);
                 cCardText_Bottom.setAlpha(value);
-                topHalf.setAlpha(value);
-                bottomHalf.setAlpha(value);
 
 
             }
         });
-        va2.addListener(new Animator.AnimatorListener() {
+        alphaAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 
@@ -648,7 +653,7 @@ public class CardMatchReaction extends Activity {
                 left = true;
                 bottomHalf.setText("");
                 topHalf.setText("");
-                startButtonListeners();
+                //startButtonListeners();
                 runSingleCard();
             }
 
@@ -664,11 +669,11 @@ public class CardMatchReaction extends Activity {
         });
 
 
-        va = ValueAnimator.ofFloat(translationDistance, 0);
-        va.setDuration(1000);
-        va.setInterpolator(new AccelerateDecelerateInterpolator());
+        motionAnimator = ValueAnimator.ofFloat(translationDistance, 0);
+        motionAnimator.setDuration(1000);
+        motionAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        motionAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -686,7 +691,7 @@ public class CardMatchReaction extends Activity {
 
             }
         });
-        va.addListener(new Animator.AnimatorListener() {
+        motionAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 
@@ -707,8 +712,16 @@ public class CardMatchReaction extends Activity {
 
             }
         });
-        va.start();
-        va2.start();
+        motionAnimator.start();
+        alphaAnimator.start();
+        Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                delayedHideWinLoseText();
+            }
+        }, hideWinLoseTextDelayTime);
+
 
     }
 
@@ -762,19 +775,19 @@ public class CardMatchReaction extends Activity {
 
     private void animateLeftCardIn(int imageResource) {
 
-        va = ValueAnimator.ofFloat(2000, 0);
-        va.setDuration(flyInDuration);
-        va.setInterpolator(new DecelerateInterpolator(1.5F));
-        // va.setInterpolator(new AccelerateInterpolator());
+        motionAnimator = ValueAnimator.ofFloat(2000, 0);
+        motionAnimator.setDuration(flyInDuration);
+        motionAnimator.setInterpolator(new DecelerateInterpolator(1.5F));
+        // motionAnimator.setInterpolator(new AccelerateInterpolator());
         /*
-        va.setInterpolator(new TimeInterpolator() {
+        motionAnimator.setInterpolator(new TimeInterpolator() {
             @Override
             public float getInterpolation(float input) {
                 return (float) (0.098*input*input);
             }
         });
         */
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        motionAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -786,7 +799,7 @@ public class CardMatchReaction extends Activity {
 
             }
         });
-        va.addListener(new Animator.AnimatorListener() {
+        motionAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
                 lCard.setTranslationX(10000);
@@ -825,7 +838,61 @@ public class CardMatchReaction extends Activity {
 
             }
         });
-        va.start();
+        motionAnimator.start();
+    }
+
+    private void delayedHideWinLoseText() {
+        delayedHideWinLoseTextAnimator = ValueAnimator.ofFloat(1, 0);
+        delayedHideWinLoseTextAnimator.setDuration(1500);
+        delayedHideWinLoseTextAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        delayedHideWinLoseTextAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+
+                float value = (float) animation.getAnimatedValue();
+                topHalf.setAlpha(value);
+                bottomHalf.setAlpha(value);
+
+            }
+        });
+        delayedHideWinLoseTextAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (suiteHistory[0] != null) {
+                    PlayingCard lastCard = new PlayingCard(valueHistory[0], suiteHistory[0]);
+                    rCard.setImageResource(lastCard.getImageResource());
+
+                } else {
+                    rCard.setImageResource(R.drawable.playing_card_back);
+                }
+
+                //left = true;
+                bottomHalf.setText("");
+                topHalf.setText("");
+                //startButtonListeners();
+                //runSingleCard();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        delayedHideWinLoseTextAnimator.start();
+
     }
 
 

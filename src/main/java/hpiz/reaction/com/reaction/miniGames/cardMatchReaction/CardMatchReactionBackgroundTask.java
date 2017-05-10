@@ -1,8 +1,9 @@
 package hpiz.reaction.com.reaction.miniGames.cardMatchReaction;
 
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.constraint.ConstraintLayout;
-import android.util.Log;
 
 import java.lang.ref.WeakReference;
 
@@ -11,10 +12,12 @@ import java.lang.ref.WeakReference;
  */
 
 public class CardMatchReactionBackgroundTask extends AsyncTask<String, Integer, String> {
-    private final String TAG = "DropReactionBackgroundTask.java";
+    private final String TAG = "cardmach background";
     private final CardMatchReaction gActivity;
     private final WeakReference<CardMatchReaction> gameActivity;
     private ConstraintLayout contentContainer;
+    private Handler uiHandler = new Handler(Looper.getMainLooper());
+
 
     public CardMatchReactionBackgroundTask(CardMatchReaction a) {
         gameActivity = new WeakReference<CardMatchReaction>(a);
@@ -22,86 +25,56 @@ public class CardMatchReactionBackgroundTask extends AsyncTask<String, Integer, 
     }
 
     protected void onPreExecute() {
-
+        gActivity.startButtonListeners();
     }
-
     @Override
     protected String doInBackground(String... params) {
-        /*
-        if (gActivity.redScore>9){
-
-            gActivity.redWonGame();
-            return "";
+        if (isCancelled()) {
+            return null;
         }
-        if (gActivity.blueScore>9){
-            gActivity.blueWonGame();
-            return "";
-        }
-*/
-        Log.v("backgroundTask", "Running background task");
-        if (params[0].equals("SLEEP:1000")) {
-            if (this.isCancelled()) {
-                return "CANCEL";
-            }
-            Log.v("backgroundTask", "Running background sleep");
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (this.isCancelled()) {
-                return "CANCEL";
-            }
-            return "SLEPT";
-        } else {
-            Log.v("backgroundTask", "Running background game wait");
-            if (this.isCancelled()) {
-                return "CANCEL";
-            }
+        while (!isCancelled()) {
             try {
                 Thread.sleep(800);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (this.isCancelled()) {
-                return "CANCEL";
+            if (isCancelled()) {
+                return null;
+            } else {
+                onProgressUpdate(1);
+                //gActivity.showACard();
             }
-            /*
-            Random rand = new Random();
-
-            // nextInt is normally exclusive of the top value,
-            // so add 1 to make it inclusive
-            long randomTime = rand.nextInt((5000 - 1) + 1) + 1;
             try {
-                Thread.sleep(randomTime);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            */
-            if (this.isCancelled()) {
-                return "CANCEL";
+            if (isCancelled()) {
+                return null;
+            } else {
+                //gActivity.runSingleCard();
             }
-            return "GAME:NEXTSTEP";
+
+
         }
+        return null;
     }
 
     protected void onProgressUpdate(Integer progress) {
+        if (progress == 1) {
+            uiHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    gActivity.showACard();
+                }
+            });
 
+        }
     }
 
     protected void onPostExecute(String result) {
+        return;
 
-        Log.v("CardMatchReactionBgTask", "Setting white");
-        if (result.equals("GAME:NEXTSTEP")) {
-            gActivity.showACard();
-            //gActivity.startButtonListeners();
-        } else if (result.equals("SLEPT")) {
-            gActivity.runSingleCard();
-
-        } else if (result.equals("CANCEL")) {
-            this.cancel(true);
-
-        }
         // topHalf.setBackgroundColor(Color.WHITE);
 
         //gActivity.runSimonSaysGame();
