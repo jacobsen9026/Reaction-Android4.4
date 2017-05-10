@@ -83,6 +83,7 @@ public class CardMatchReaction extends Activity {
 
     private ImageView rGlow;
     private ImageView bGlow;
+    private ValueAnimator showGameWinLoseTextAnimator;
 
     public CardMatchReaction() {
 
@@ -360,6 +361,8 @@ public class CardMatchReaction extends Activity {
         bottomHalf.setBackgroundColor(Color.RED);
         bottomHalf.setText("You lost to Red " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
         topHalf.setText("You beat Blue " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
+        showGameWinLoseText();
+
     }
 
     public void blueWonGame() {
@@ -386,6 +389,8 @@ public class CardMatchReaction extends Activity {
         bottomHalf.setBackgroundColor(Color.BLUE);
         bottomHalf.setText("You beat Red " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
         topHalf.setText("You lost to Blue " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
+        showGameWinLoseText();
+
     }
 
 
@@ -730,6 +735,9 @@ public class CardMatchReaction extends Activity {
         });
         motionAnimator.start();
         alphaAnimator.start();
+        if (delayedHideWinLoseTextAnimator != null) {
+            delayedHideWinLoseTextAnimator.cancel();
+        }
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
             @Override
@@ -967,6 +975,48 @@ public class CardMatchReaction extends Activity {
         blueGlowAnimator.start();
     }
 
+    private void showGameWinLoseText() {
+        showGameWinLoseTextAnimator = ValueAnimator.ofFloat(0, 1);
+        showGameWinLoseTextAnimator.setDuration(1500);
+        showGameWinLoseTextAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        showGameWinLoseTextAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+
+                float value = (float) animation.getAnimatedValue();
+                topHalf.setAlpha(value);
+                bottomHalf.setAlpha(value);
+
+            }
+        });
+        showGameWinLoseTextAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        showGameWinLoseTextAnimator.start();
+
+    }
+
     private void delayedHideWinLoseText() {
         delayedHideWinLoseTextAnimator = ValueAnimator.ofFloat(1, 0);
         delayedHideWinLoseTextAnimator.setDuration(1500);
@@ -1001,6 +1051,7 @@ public class CardMatchReaction extends Activity {
                 }
 
                 //left = true;
+                Log.v(TAG, "delayed animator ended");
                 bottomHalf.setText("");
                 topHalf.setText("");
                 //startButtonListeners();
@@ -1009,7 +1060,8 @@ public class CardMatchReaction extends Activity {
 
             @Override
             public void onAnimationCancel(Animator animation) {
-
+                topHalf.setAlpha(0);
+                bottomHalf.setAlpha(0);
             }
 
             @Override
