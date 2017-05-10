@@ -180,11 +180,18 @@ public class CardMatchReaction extends Activity {
                 runGame.cancel(true);
                 redGlowAnimation();
                 if (valueHistory[0] == valueHistory[1]) {
-
-
                     topWon();
+                    if (redScore > (winningScore - 1)) {
+                        redWonGame();
+                    } else if (blueScore > (winningScore - 1)) {
+                        blueWonGame();
+                    } else {
+                        animateCardHistoryExpand();
+                    }
+                } else {
+                    animateCardHistoryExpand();
                 }
-                animateCardHistoryExpand();
+
                 if (bottomHalf.hasOnClickListeners()) {
                     bottomHalf.setOnClickListener(null);
                 }
@@ -202,8 +209,17 @@ public class CardMatchReaction extends Activity {
 
 
                     bottomWon();
+                    if (redScore > (winningScore - 1)) {
+                        redWonGame();
+                    } else if (blueScore > (winningScore - 1)) {
+                        blueWonGame();
+                    } else {
+                        animateCardHistoryExpand();
+                    }
+                } else {
+                    animateCardHistoryExpand();
                 }
-                animateCardHistoryExpand();
+
                 if (topHalf.hasOnClickListeners()) {
                     topHalf.setOnClickListener(null);
                 }
@@ -274,12 +290,7 @@ public class CardMatchReaction extends Activity {
         redScore++;
         runGame.cancel(true);
         updateScores();
-        if (redScore > (winningScore - 1)) {
-            redWonGame();
-        }
-        if (blueScore > (winningScore - 1)) {
-            blueWonGame();
-        }
+
         Log.v(TAG, "Blue Score: " + String.valueOf(blueScore));
         Log.v(TAG, "Red Score: " + String.valueOf(redScore));
     }
@@ -378,13 +389,10 @@ public class CardMatchReaction extends Activity {
     }
 
 
-
-
     private void updateScores() {
         rScoreText.setText("Red Score: " + String.valueOf(redScore));
         bScoreText.setText("Blue Score: " + String.valueOf(blueScore));
     }
-
 
 
     public void showACard() {
