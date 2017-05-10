@@ -778,7 +778,11 @@ public class CardMatchReaction extends Activity {
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                if (!topHalf.hasOnClickListeners()) {
+                    startButtonListeners();
+                }
                 if (!rightCardAnimatorCanceled) {
+
                     updateHistory();
                 }
 
@@ -831,11 +835,16 @@ public class CardMatchReaction extends Activity {
                 lCard.setImageResource(View.VISIBLE);
                 lCard.setImageResource(newPlayingCard.getImageResource());
                 leftCardAnimatorCanceled = false;
+
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                if (!topHalf.hasOnClickListeners()) {
+                    startButtonListeners();
+                }
                 if (!leftCardAnimatorCanceled) {
+
                     updateHistory();
                 }
                 //updateHistory();
