@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -79,6 +80,9 @@ public class CardMatchReaction extends Activity {
     private long cardHistoryExpansionTime = 1000;
     private long cardHistoryContractionTime = 1000;
     private long hideWinLoseTextDelayTime = 500;
+
+    private ImageView rGlow;
+    private ImageView bGlow;
 
     public CardMatchReaction() {
 
@@ -174,6 +178,7 @@ public class CardMatchReaction extends Activity {
             public void onClick(View v) {
                 topHalf.setOnClickListener(null);
                 runGame.cancel(true);
+                redGlowAnimation();
                 if (valueHistory[0] == valueHistory[1]) {
 
 
@@ -192,7 +197,7 @@ public class CardMatchReaction extends Activity {
             public void onClick(View v) {
                 bottomHalf.setOnClickListener(null);
                 runGame.cancel(true);
-
+                blueGlowAnimation();
                 if (valueHistory[0] == valueHistory[1]) {
 
 
@@ -206,6 +211,7 @@ public class CardMatchReaction extends Activity {
             }
         });
     }
+
 
     private void initializeButtonReactionObjects() {
 
@@ -239,6 +245,8 @@ public class CardMatchReaction extends Activity {
         lCardPlaceHolder = (ImageView) findViewById(R.id.rightCardPlaceHolder);
         rCardPlaceHolder = (ImageView) findViewById(R.id.leftCardPlaceHolder);
         cCard = (ImageView) findViewById(R.id.centerCard);
+        rGlow = (ImageView) findViewById(R.id.redGlow);
+        bGlow = (ImageView) findViewById(R.id.blueGlow);
         lCard.setTranslationX(9000);
         //rCard.setTranslationX(9000);
         cCard.setTranslationX(9000);
@@ -839,6 +847,116 @@ public class CardMatchReaction extends Activity {
             }
         });
         motionAnimator.start();
+    }
+
+    private void redGlowAnimation() {
+        ValueAnimator redGlowAnimator = ValueAnimator.ofFloat(0, 1);
+        redGlowAnimator.setDuration(100);
+        redGlowAnimator.setInterpolator(new AccelerateInterpolator());
+
+        redGlowAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+
+                float value = (float) animation.getAnimatedValue();
+                rGlow.setAlpha(value);
+
+            }
+        });
+        redGlowAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                ValueAnimator redGlowEndAnimator = ValueAnimator.ofFloat(1, 0);
+                redGlowEndAnimator.setDuration(100);
+                redGlowEndAnimator.setInterpolator(new DecelerateInterpolator());
+                redGlowEndAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+
+
+                        float value = (float) animation.getAnimatedValue();
+                        rGlow.setAlpha(value);
+
+                    }
+                });
+                redGlowEndAnimator.start();
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        redGlowAnimator.start();
+    }
+
+    private void blueGlowAnimation() {
+        ValueAnimator blueGlowAnimator = ValueAnimator.ofFloat(0, 1);
+        blueGlowAnimator.setDuration(100);
+        blueGlowAnimator.setInterpolator(new AccelerateInterpolator());
+
+        blueGlowAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+
+                float value = (float) animation.getAnimatedValue();
+                bGlow.setAlpha(value);
+
+            }
+        });
+        blueGlowAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                ValueAnimator blueGlowEndAnimator = ValueAnimator.ofFloat(1, 0);
+                blueGlowEndAnimator.setDuration(100);
+                blueGlowEndAnimator.setInterpolator(new DecelerateInterpolator());
+                blueGlowEndAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+
+
+                        float value = (float) animation.getAnimatedValue();
+                        bGlow.setAlpha(value);
+
+                    }
+                });
+                blueGlowEndAnimator.start();
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        blueGlowAnimator.start();
     }
 
     private void delayedHideWinLoseText() {
