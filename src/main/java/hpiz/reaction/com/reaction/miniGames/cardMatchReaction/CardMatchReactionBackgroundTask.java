@@ -25,7 +25,7 @@ public class CardMatchReactionBackgroundTask extends AsyncTask<String, Integer, 
     }
 
     protected void onPreExecute() {
-        gActivity.startButtonListeners();
+
     }
     @Override
     protected String doInBackground(String... params) {
