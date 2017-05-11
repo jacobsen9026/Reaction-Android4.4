@@ -148,8 +148,8 @@ public class WacAMoleReaction extends Activity {
         });
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.RED);
-        bottomHalf.setBackgroundColor(Color.RED);
+        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
+        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
 
         bottomHalf.setText("You lost to Red " + String.valueOf(topScore) + " to " + String.valueOf(bottomScore) + ".");
         topHalf.setText("You beat Blue " + String.valueOf(topScore) + " to " + String.valueOf(bottomScore) + ".");
@@ -221,8 +221,8 @@ public class WacAMoleReaction extends Activity {
         va.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                topHalfLayout.setBackgroundColor(Color.BLUE);
-                bottomHalfLayout.setBackgroundColor(Color.BLUE);
+                topHalfLayout.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+                bottomHalfLayout.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
                 topHalfLayout.setAlpha(0F);
                 bottomHalfLayout.setAlpha(0F);
 
@@ -309,8 +309,8 @@ public class WacAMoleReaction extends Activity {
         va.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                topHalfLayout.setBackgroundColor(Color.RED);
-                bottomHalfLayout.setBackgroundColor(Color.RED);
+                topHalfLayout.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
+                bottomHalfLayout.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
                 topHalfLayout.setAlpha(0F);
                 bottomHalfLayout.setAlpha(0F);
 
@@ -403,8 +403,8 @@ public class WacAMoleReaction extends Activity {
         });
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.BLUE);
-        bottomHalf.setBackgroundColor(Color.BLUE);
+        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
         bottomHalf.setText("You beat Red " + String.valueOf(bottomScore) + " to " + String.valueOf(topScore) + ".");
         topHalf.setText("You lost to Blue " + String.valueOf(bottomScore) + " to " + String.valueOf(topScore) + ".");
     }
@@ -446,8 +446,8 @@ public class WacAMoleReaction extends Activity {
         bottomScoreText = (TextView) findViewById(blueScoreText);
         topScoreText.setTextColor(Color.WHITE);
         bottomScoreText.setTextColor(Color.WHITE);
-        topScoreText.setBackgroundColor(Color.RED);
-        bottomScoreText.setBackgroundColor(Color.BLUE);
+        topScoreText.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
+        bottomScoreText.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
         cContainer.setBackgroundColor(Color.WHITE);
         textSize = bottomScoreText.getTextSize() / 3;
 

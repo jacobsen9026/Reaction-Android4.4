@@ -3,7 +3,6 @@ package hpiz.reaction.com.reaction.miniGames.cardMatchReaction;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.constraint.ConstraintLayout;
 
 import java.lang.ref.WeakReference;
 
@@ -15,7 +14,6 @@ public class CardMatchReactionBackgroundTask extends AsyncTask<String, Integer, 
     private final String TAG = "cardmach background";
     private final CardMatchReaction gActivity;
     private final WeakReference<CardMatchReaction> gameActivity;
-    private ConstraintLayout contentContainer;
     private Handler uiHandler = new Handler(Looper.getMainLooper());
 
 
@@ -61,6 +59,9 @@ public class CardMatchReactionBackgroundTask extends AsyncTask<String, Integer, 
     }
 
     protected void onProgressUpdate(Integer progress) {
+        if (isCancelled()) {
+            return;
+        }
         if (progress == 1) {
             uiHandler.post(new Runnable() {
                 @Override

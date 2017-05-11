@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Reaction</string>
 
+    <string name="topColor">#BB3500</string>
+    <color name="topColor">#BB3500</color>
+    <string name="bottomColor">#3D5B7E</string>
+    <color name="bottomColor">#3D5B7E</color>
+
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 

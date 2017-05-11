@@ -162,8 +162,8 @@ public class SurpriseNumberedReaction extends Activity {
         tImage.setOnTouchListener(null);
         bImage.setOnTouchListener(null);
         Log.v(TAG, "INVOKE TopWon");
-        topHalf.setBackgroundColor(Color.RED);
-        bottomHalf.setBackgroundColor(Color.RED);
+        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
+        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
         bottomHalf.setText("You Lost");
 
         topHalf.setText("You Won");
@@ -183,8 +183,8 @@ public class SurpriseNumberedReaction extends Activity {
         showButtons();
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.RED);
-        bottomHalf.setBackgroundColor(Color.RED);
+        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
+        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
 
         bottomHalf.setText("You lost to Red " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
         topHalf.setText("You beat Blue " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
@@ -316,14 +316,6 @@ public class SurpriseNumberedReaction extends Activity {
 
     }
 
-    public void setTopRed() {
-        topHalf.setBackgroundColor(Color.RED);
-    }
-
-
-    public void setBottomBlue() {
-        bottomHalf.setBackgroundColor(Color.BLUE);
-    }
 
     public void setTopBlack() {
         topHalf.setBackgroundColor(Color.BLACK);
@@ -338,8 +330,8 @@ public class SurpriseNumberedReaction extends Activity {
         showButtons();
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.BLUE);
-        bottomHalf.setBackgroundColor(Color.BLUE);
+        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
         bottomHalf.setText("You beat Red " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
         topHalf.setText("You lost to Blue " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
     }
@@ -352,8 +344,8 @@ public class SurpriseNumberedReaction extends Activity {
         Log.v(TAG, "INVOKE BottomWon");
         tImage.setOnTouchListener(null);
         bImage.setOnTouchListener(null);
-        bottomHalf.setBackgroundColor(Color.BLUE);
-        topHalf.setBackgroundColor(Color.BLUE);
+        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
         bottomHalf.setText("You Won");
         topHalf.setText("You Lost");
         blueScore++;
@@ -403,8 +395,8 @@ public class SurpriseNumberedReaction extends Activity {
         bottomScoreText = (TextView) findViewById(blueScoreText);
         topScoreText.setTextColor(Color.WHITE);
         bottomScoreText.setTextColor(Color.WHITE);
-        topScoreText.setBackgroundColor(Color.RED);
-        bottomScoreText.setBackgroundColor(Color.BLUE);
+        topScoreText.setBackgroundColor((Color.parseColor(getString(R.string.topColor))));
+        bottomScoreText.setBackgroundColor((Color.parseColor(getString(R.string.bottomColor))));
         cContainer.setBackgroundColor(Color.WHITE);
     }
 

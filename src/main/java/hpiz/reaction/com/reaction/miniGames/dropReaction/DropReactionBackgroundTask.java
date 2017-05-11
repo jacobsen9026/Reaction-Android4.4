@@ -5,7 +5,6 @@ import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
-import java.util.Random;
 
 /**
  * Created by cjacobsen on 5/1/2017.
@@ -70,8 +69,8 @@ public class DropReactionBackgroundTask extends AsyncTask<String, Integer, Strin
         Log.v("backgroundTask", "Setting white");
         if (result.equals("GAME:NEXTSTEP")) {
             gActivity.drop();
-            //gActivity.setTopRed();
-            //gActivity.setBottomBlue();
+            //gActivity.setTopColor();
+            //gActivity.setBottomColor();
             //gActivity.startWinningWacListeners();
         } else if (result.equals("SLEPT")) {
             gActivity.runSingleRound();

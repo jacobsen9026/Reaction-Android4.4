@@ -16,6 +16,9 @@ public class SurpriseReactionBackgroundTask extends AsyncTask<String, Integer, S
     private final SurpriseReaction gActivity;
     private final WeakReference<SurpriseReaction> gameActivity;
     private ConstraintLayout contentContainer;
+    private long waitTime = 1200;
+    private long minimumRunTime = 1000;
+    private int maximumRunTime = 6000;
 
     public SurpriseReactionBackgroundTask(SurpriseReaction a) {
         gameActivity = new WeakReference<SurpriseReaction>(a);
@@ -46,7 +49,7 @@ public class SurpriseReactionBackgroundTask extends AsyncTask<String, Integer, S
             }
             Log.v("backgroundTask", "Running background sleep");
             try {
-                Thread.sleep(500);
+                Thread.sleep(waitTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -60,7 +63,7 @@ public class SurpriseReactionBackgroundTask extends AsyncTask<String, Integer, S
                 return "CANCEL";
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(minimumRunTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -71,7 +74,7 @@ public class SurpriseReactionBackgroundTask extends AsyncTask<String, Integer, S
 
             // nextInt is normally exclusive of the top value,
             // so add 1 to make it inclusive
-            long randomTime = rand.nextInt((5000 - 1) + 1) + 1;
+            long randomTime = rand.nextInt((int) (((maximumRunTime - minimumRunTime) - 1) + 1)) + 1;
             try {
                 Thread.sleep(randomTime);
             } catch (InterruptedException e) {
@@ -92,8 +95,8 @@ public class SurpriseReactionBackgroundTask extends AsyncTask<String, Integer, S
 
         Log.v("backgroundTask", "Setting white");
         if (result.equals("GAME:NEXTSTEP")) {
-            gActivity.setTopRed();
-            gActivity.setBottomBlue();
+            gActivity.setTopColor();
+            gActivity.setBottomColor();
             gActivity.startButtonListeners();
         } else if (result.equals("SLEPT")) {
             gActivity.runSingleRound();

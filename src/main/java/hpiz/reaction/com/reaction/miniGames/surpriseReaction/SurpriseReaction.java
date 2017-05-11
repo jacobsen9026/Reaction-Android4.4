@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.Random;
 
 import hpiz.reaction.com.reaction.GameActivity;
 import hpiz.reaction.com.reaction.R;
@@ -44,12 +47,24 @@ public class SurpriseReaction extends Activity {
     }
 
     @Override
+    public void onBackPressed() {
+        if (runGame != null) {
+            runGame.cancel(true);
+            runGame = null;
+        }
+        Intent i = new Intent(SurpriseReaction.this, GameActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sp = getSharedPreferences("runningPreferences", MODE_PRIVATE);
 
         run();
     }
+
 
     public void run() {
 
@@ -62,6 +77,34 @@ public class SurpriseReaction extends Activity {
         initializeButtonReactionObjects();
 
         runSingleRound();
+    }
+
+    public void runGame() {
+        setContentView(R.layout.minigame_surprisereaction);
+        Log.v(TAG, " setting game layout");
+        hide();
+        initializeButtonReactionObjects();
+        runSingleRound();
+
+    }
+
+
+    protected void runSingleRound() {
+        if (redScore < winningScore) {
+            if (blueScore < winningScore) {
+                updateScores();
+                clearScreen();
+
+                setEarlyListeners();
+                runGame = new SurpriseReactionBackgroundTask(this);
+                runGame.execute("RUN");
+            } else {
+                blueWonGame();
+            }
+        } else {
+            redWonGame();
+        }
+
     }
 
     public void hide() {
@@ -82,24 +125,6 @@ public class SurpriseReaction extends Activity {
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-
-    }
-
-    protected void runSingleRound() {
-        if (redScore < winningScore) {
-            if (blueScore < winningScore) {
-                updateScores();
-                clearScreen();
-
-                setEarlyListeners();
-                runGame = new SurpriseReactionBackgroundTask(this);
-                runGame.execute("RUN");
-            } else {
-                blueWonGame();
-            }
-        } else {
-            redWonGame();
-        }
 
     }
 
@@ -137,15 +162,58 @@ public class SurpriseReaction extends Activity {
         });
     }
 
+    public void startButtonListeners() {
+        topHalf.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                topWon();
+                if (bottomHalf.hasOnClickListeners()) {
+                    bottomHalf.setOnClickListener(null);
+                }
+                nextRound();
+            }
+        });
+        bottomHalf.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                bottomWon();
+                if (topHalf.hasOnClickListeners()) {
+                    topHalf.setOnClickListener(null);
+                }
+                nextRound();
+            }
+        });
+    }
 
     private void topWon() {
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        bottomHalf.setBackgroundColor(Color.RED);
-        bottomHalf.setText("You Lost");
+        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
+        bottomHalf.setText(getLoseText());
 
-        topHalf.setText("You Won");
+        topHalf.setText(getWinText());
         redScore++;
+        runGame.cancel(true);
+        updateScores();
+        if (redScore > (winningScore - 1)) {
+            redWonGame();
+        }
+        if (blueScore > (winningScore - 1)) {
+            blueWonGame();
+        }
+        Log.v(TAG, "Blue Score: " + String.valueOf(blueScore));
+        Log.v(TAG, "Red Score: " + String.valueOf(redScore));
+    }
+
+    private void bottomWon() {
+        topHalf.setOnClickListener(null);
+        bottomHalf.setOnClickListener(null);
+        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+        bottomHalf.setText(getWinText());
+        topHalf.setText(getLoseText());
+        blueScore++;
         runGame.cancel(true);
         updateScores();
         if (redScore > (winningScore - 1)) {
@@ -179,74 +247,11 @@ public class SurpriseReaction extends Activity {
         });
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.RED);
-        bottomHalf.setBackgroundColor(Color.RED);
+        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
+        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
         bottomHalf.setText("You lost to Red " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
         topHalf.setText("You beat Blue " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
     }
-
-    @Override
-    public void onBackPressed() {
-        if (runGame != null) {
-            runGame.cancel(true);
-            runGame = null;
-        }
-        Intent i = new Intent(SurpriseReaction.this, GameActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
-    }
-
-    public void startButtonListeners() {
-        topHalf.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                topWon();
-                if (bottomHalf.hasOnClickListeners()) {
-                    bottomHalf.setOnClickListener(null);
-                }
-                nextRound();
-            }
-        });
-        bottomHalf.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                bottomWon();
-                if (topHalf.hasOnClickListeners()) {
-                    topHalf.setOnClickListener(null);
-                }
-                nextRound();
-            }
-        });
-    }
-
-    public void runGame() {
-        setContentView(R.layout.minigame_surprisereaction);
-        Log.v(TAG, " setting game layout");
-        hide();
-        initializeButtonReactionObjects();
-        runSingleRound();
-
-    }
-
-    public void setTopRed() {
-        topHalf.setBackgroundColor(Color.RED);
-    }
-
-
-    public void setBottomBlue() {
-        bottomHalf.setBackgroundColor(Color.BLUE);
-    }
-
-    public void setTopBlack() {
-        topHalf.setBackgroundColor(Color.BLACK);
-    }
-
-    public void setBottomBlack() {
-        bottomHalf.setBackgroundColor(Color.BLACK);
-    }
-
 
     public void blueWonGame() {
         runGame.cancel(true);
@@ -268,30 +273,33 @@ public class SurpriseReaction extends Activity {
         });
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.BLUE);
-        bottomHalf.setBackgroundColor(Color.BLUE);
+        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
         bottomHalf.setText("You beat Red " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
         topHalf.setText("You lost to Blue " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
     }
 
-    private void bottomWon() {
-        topHalf.setOnClickListener(null);
-        bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.BLUE);
-        bottomHalf.setText("You Won");
-        topHalf.setText("You Lost");
-        blueScore++;
-        runGame.cancel(true);
-        updateScores();
-        if (redScore > (winningScore - 1)) {
-            redWonGame();
-        }
-        if (blueScore > (winningScore - 1)) {
-            blueWonGame();
-        }
-        Log.v(TAG, "Blue Score: " + String.valueOf(blueScore));
-        Log.v(TAG, "Red Score: " + String.valueOf(redScore));
+
+    public void setTopColor() {
+        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
     }
+
+
+    public void setBottomColor() {
+        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+    }
+
+    public void setTopBlack() {
+        topHalf.setBackgroundColor(Color.BLACK);
+    }
+
+    public void setBottomBlack() {
+        bottomHalf.setBackgroundColor(Color.BLACK);
+    }
+
+
+
+
 
     private void updateScores() {
         rScoreText.setText("Red Score: " + String.valueOf(redScore));
@@ -316,8 +324,8 @@ public class SurpriseReaction extends Activity {
         bScoreText = (TextView) findViewById(blueScoreText);
         rScoreText.setTextColor(Color.WHITE);
         bScoreText.setTextColor(Color.WHITE);
-        rScoreText.setBackgroundColor(Color.RED);
-        bScoreText.setBackgroundColor(Color.BLUE);
+        rScoreText.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
+        bScoreText.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
     }
 
     public void nextRound() {
@@ -325,5 +333,22 @@ public class SurpriseReaction extends Activity {
         runGame.execute("SLEEP:1000");
     }
 
+    private String getWinText() {
+        Random rand = new Random();
+        Resources res = getResources();
+        String[] winnerStrings = res.getStringArray(R.array.winners_messages);
+        int r = rand.nextInt(winnerStrings.length - 1);
+        return winnerStrings[r];
+    }
+
+    private String getLoseText() {
+        Random rand = new Random();
+        Resources res = getResources();
+        String[] loserStrings = res.getStringArray(R.array.losers_messages);
+        int r = rand.nextInt(loserStrings.length - 1);
+        return loserStrings[r];
+
+
+    }
 
 }

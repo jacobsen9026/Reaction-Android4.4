@@ -277,7 +277,7 @@ public class CatchReaction extends Activity {
     private void topWon() {
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.RED);
+        topHalf.setBackgroundColor((Color.parseColor(getString(R.string.topColor))));
         bottomHalf.setText("You Lost");
 
         topHalf.setText("You Won");
@@ -358,12 +358,12 @@ public class CatchReaction extends Activity {
 
 
     public void setTopRed() {
-        topHalf.setBackgroundColor(Color.RED);
+        topHalf.setBackgroundColor((Color.parseColor(getString(R.string.topColor))));
     }
 
 
     public void setBottomBlue() {
-        bottomHalf.setBackgroundColor(Color.BLUE);
+        bottomHalf.setBackgroundColor((Color.parseColor(getString(R.string.bottomColor))));
     }
 
 
@@ -396,7 +396,7 @@ public class CatchReaction extends Activity {
     private void bottomWon() {
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        bottomHalf.setBackgroundColor(Color.BLUE);
+        bottomHalf.setBackgroundColor((Color.parseColor(getString(R.string.bottomColor))));
         bottomHalf.setText("You Won");
         topHalf.setText("You Lost");
         blueScore++;
@@ -437,8 +437,8 @@ public class CatchReaction extends Activity {
         bScoreText = (TextView) findViewById(R.id.blueScoreText);
         rScoreText.setTextColor(Color.WHITE);
         bScoreText.setTextColor(Color.WHITE);
-        rScoreText.setBackgroundColor(Color.RED);
-        bScoreText.setBackgroundColor(Color.BLUE);
+        rScoreText.setBackgroundColor((Color.parseColor(getString(R.string.topColor))));
+        bScoreText.setBackgroundColor((Color.parseColor(getString(R.string.bottomColor))));
     }
 
     public void nextRound() {
