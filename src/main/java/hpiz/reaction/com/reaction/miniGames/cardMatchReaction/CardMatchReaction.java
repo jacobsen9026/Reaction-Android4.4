@@ -163,10 +163,10 @@ public class CardMatchReaction extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (runGame != null) {
+
             runGame.cancel(true);
-            runGame = null;
-        }
+
+
         Intent i = new Intent(CardMatchReaction.this, GameActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
