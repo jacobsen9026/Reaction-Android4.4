@@ -1,80 +1,133 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/contentContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0099cc"
-    tools:context="hpiz.reaction.com.reaction.SettingsActivity">
+    android:clipChildren="false"
+    tools:context="hpiz.reaction.com.reaction.MainMenuActivity">
+
+
+    <ImageView
+        android:id="@+id/main_menu_background_image_animate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="false"
+        android:cropToPadding="false"
+        android:scaleType="fitXY"
+        android:src="@drawable/main_menu_background_animate" />
+
+    <ImageView
+        android:id="@+id/main_menu_background_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/main_menu_background" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/contentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save"
-        app:layout_constraintBottom_toBottomOf="@id/contentContainer"
-        app:layout_constraintEnd_toEndOf="@id/contentContainer"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintTop_creator="1" />
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="1135dp"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="413dp">
 
-    <Button
-        android:id="@+id/discardButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Discard"
-        app:layout_constraintBottom_toBottomOf="@id/contentContainer"
-        app:layout_constraintStart_toStartOf="@id/contentContainer" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/fullscreen_content"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:keepScreenOn="true"
-        android:text="@string/dummy_content"
-        android:textColor="#33b5e5"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_constraintBottom_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintTop_creator="1" />
+                <Switch
+                    android:id="@+id/switch2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Switch" />
 
-    <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
+                <Switch
+                    android:id="@+id/switch1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Switch" />
 
+                <RadioButton
+                    android:id="@+id/radioButton2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="RadioButton" />
 
-    <LinearLayout
-        android:id="@+id/fullscreen_content_controls"
-        style="?metaButtonBarStyle"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/black_overlay"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toRightOf="@+id/fullscreen_content"
-        app:layout_constraintRight_toRightOf="@+id/fullscreen_content"
-        app:layout_constraintTop_toBottomOf="@+id/fullscreen_content"
-        tools:ignore="UselessParent"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1">
+                <RadioButton
+                    android:id="@+id/radioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="RadioButton" />
 
-        <Button
-            android:id="@+id/dummy_button"
-            style="?metaButtonBarButtonStyle"
+                <CheckBox
+                    android:id="@+id/checkBox2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CheckBox" />
+
+                <CheckBox
+                    android:id="@+id/checkBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CheckBox" />
+            </LinearLayout>
+        </ScrollView>
+
+        <FrameLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/dummy_button" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/contentContainer"
+            app:layout_constraintRight_toRightOf="@id/contentContainer"
+            tools:layout_editor_absoluteX="8dp">
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/discardButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Discard"
+                    app:layout_constraintBottom_toBottomOf="@+id/parent"
+                    app:layout_constraintStart_toStartOf="@+id/parent"
+                    tools:layout_editor_absoluteX="0dp" />
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                </FrameLayout>
+
+                <Button
+                    android:id="@+id/saveButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Save"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/parent"
+                    tools:layout_editor_absoluteX="736dp" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <!-- This FrameLayout insets its children based on system windows using
+             android:fitsSystemWindows. -->
 
 
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+</RelativeLayout>
