@@ -1,5 +1,7 @@
 package hpiz.reaction.com.reaction;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
@@ -7,8 +9,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -17,9 +25,19 @@ import android.widget.Button;
 public class MainMenuActivity extends Activity {
     private Button startGameButton;
     private Button settingsButton;
+    private TextView mainMenuTitle;
+    private ImageView backgroundImage;
+    private ImageView backgroundImageHidden;
     private Button quitGameButton;
     private ConstraintLayout contentContainer;
+    private int screenWidth;
+    private int screenHeight;
     private SharedPreferences sp;
+    private ValueAnimator buttonAnimator;
+    private Button discardButton;
+    private Button saveButton;
+    private ValueAnimator backgroundAnimator;
+    private ValueAnimator backgroundAnimator2;
 
 
     /**
@@ -28,10 +46,26 @@ public class MainMenuActivity extends Activity {
      * while interacting with activity UI.
      */
 
+
     @Override
     public void onResume() {
+        Log.v("MAINMenu", "onResume");
         super.onResume();
         hide();
+        refreshBackground();
+    }
+
+    private void refreshBackground() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        screenHeight = (int) (displayMetrics.heightPixels * 1.1);
+        screenWidth = displayMetrics.widthPixels;
+
+        backgroundImage.setMinimumWidth(screenWidth);
+        backgroundImageHidden.setMinimumWidth(screenWidth);
+        backgroundImage.setMinimumHeight(screenHeight);
+        backgroundImageHidden.setMinimumHeight(screenHeight);
+
     }
 
     @Override
@@ -39,13 +73,18 @@ public class MainMenuActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main_menu_activity);
+        hide();
         initializeObjects();
         configureObjects();
-        hide();
+
 
     }
 
     private void configureObjects() {
+        backgroundImage.setMinimumWidth(screenWidth);
+        backgroundImageHidden.setMinimumWidth(screenWidth);
+        backgroundImage.setMinimumHeight(screenHeight);
+        backgroundImageHidden.setMinimumHeight(screenHeight);
         quitGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,25 +94,292 @@ public class MainMenuActivity extends Activity {
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainMenuActivity.this, SettingsActivity.class);
-                startActivity(i);
+
+                buttonAnimator = ValueAnimator.ofFloat(0, 4000);
+                buttonAnimator.setDuration(500);
+                buttonAnimator.setInterpolator(new AccelerateInterpolator());
+
+                buttonAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+
+
+                        float value = (float) animation.getAnimatedValue();
+                        settingsButton.setTranslationX(value);
+                        startGameButton.setTranslationX(-value);
+                        quitGameButton.setTranslationY(value);
+                        mainMenuTitle.setTranslationY(-value);
+
+                    }
+                });
+                buttonAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                        settingsButton.bringToFront();
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        //Intent i = new Intent(MainMenuActivity.this, SettingsActivity.class);
+                        //startActivity(i);
+                        setContentView(R.layout.activity_settings);
+                        hide();
+                        initializeSettingsObjects();
+                        configureSettingsObjects();
+                        animateShowSettings();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                buttonAnimator.start();
+
             }
         });
         startGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sp.edit().putInt("gameProgress", 0).apply();
-                Intent i = new Intent(MainMenuActivity.this, GameActivity.class);
-                startActivity(i);
+
+                buttonAnimator = ValueAnimator.ofFloat(0, 4000);
+                buttonAnimator.setDuration(500);
+                buttonAnimator.setInterpolator(new AccelerateInterpolator());
+
+                buttonAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+
+
+                        float value = (float) animation.getAnimatedValue();
+                        settingsButton.setTranslationX(value);
+                        startGameButton.setTranslationX(-value);
+                        quitGameButton.setTranslationY(value);
+                        mainMenuTitle.setTranslationY(-value);
+                        backgroundImage.setAlpha((4000 - value) / 4000);
+                        backgroundImageHidden.setAlpha((4000 - value) / 4000);
+
+                    }
+                });
+                buttonAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                        settingsButton.bringToFront();
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        //Intent i = new Intent(MainMenuActivity.this, SettingsActivity.class);
+                        //startActivity(i);
+                        sp.edit().putInt("gameProgress", 0).apply();
+                        Intent i = new Intent(MainMenuActivity.this, GameActivity.class);
+                        startActivity(i);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                buttonAnimator.start();
+
             }
         });
+    }
+
+    private void animateExitSettings() {
+        ValueAnimator settingsAnimator = ValueAnimator.ofFloat(1, 0);
+        settingsAnimator.setDuration(300);
+        settingsAnimator.setInterpolator(new DecelerateInterpolator());
+
+        settingsAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+
+                float value = (float) animation.getAnimatedValue();
+                contentContainer.setAlpha(value);
+
+
+            }
+        });
+        settingsAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                //Intent i = new Intent(MainMenuActivity.this, SettingsActivity.class);
+                //startActivity(i);
+
+                setContentView(R.layout.main_menu_activity);
+                hide();
+                initializeObjects();
+                configureObjects();
+                buttonAnimator = ValueAnimator.ofFloat(4000, 0);
+                buttonAnimator.setDuration(400);
+                buttonAnimator.setInterpolator(new DecelerateInterpolator());
+
+                buttonAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+
+
+                        float value = (float) animation.getAnimatedValue();
+                        settingsButton.setTranslationX(value);
+                        startGameButton.setTranslationX(-value);
+                        quitGameButton.setTranslationY(value);
+                        mainMenuTitle.setTranslationY(-value);
+
+                    }
+                });
+                buttonAnimator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        //Intent i = new Intent(MainMenuActivity.this, SettingsActivity.class);
+                        //startActivity(i);
+
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                buttonAnimator.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        settingsAnimator.start();
+    }
+
+
+    private void animateShowSettings() {
+        ValueAnimator settingsAnimator = ValueAnimator.ofFloat(0, 1);
+        settingsAnimator.setDuration(300);
+        settingsAnimator.setInterpolator(new DecelerateInterpolator());
+
+        settingsAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+
+                float value = (float) animation.getAnimatedValue();
+                contentContainer.setAlpha(value);
+
+
+            }
+        });
+        settingsAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                //Intent i = new Intent(MainMenuActivity.this, SettingsActivity.class);
+                //startActivity(i);
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        settingsAnimator.start();
+    }
+
+    private void configureSettingsObjects() {
+        contentContainer.setAlpha(0);
+        backgroundImage.setMinimumWidth(screenWidth);
+        backgroundImageHidden.setMinimumWidth(screenWidth);
+        backgroundImage.setMinimumHeight(screenHeight);
+        backgroundImageHidden.setMinimumHeight(screenHeight);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animateExitSettings();
+            }
+        });
+        discardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animateExitSettings();
+            }
+        });
+
+    }
+
+    private void initializeSettingsObjects() {
+        saveButton = (Button) findViewById(R.id.saveButton);
+        discardButton = (Button) findViewById(R.id.discardButton);
+        backgroundImage = (ImageView) findViewById(R.id.main_menu_background_image);
+        backgroundImageHidden = (ImageView) findViewById(R.id.main_menu_background_image_animate);
+        contentContainer = (ConstraintLayout) findViewById(R.id.contentContainer);
     }
 
     private void initializeObjects() {
         startGameButton = (Button) findViewById(R.id.startGameButton);
         settingsButton = (Button) findViewById(R.id.settingsButton);
         quitGameButton = (Button) findViewById(R.id.quitGameButton);
+        mainMenuTitle = (TextView) findViewById(R.id.main_menu_title);
+        backgroundImage = (ImageView) findViewById(R.id.main_menu_background_image);
+        backgroundImageHidden = (ImageView) findViewById(R.id.main_menu_background_image_animate);
         sp = getSharedPreferences("runningPreferences", Context.MODE_PRIVATE);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        screenHeight = (int) (displayMetrics.heightPixels * 1.1);
+        screenWidth = displayMetrics.widthPixels;
+
     }
 
     @Override
