@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
+    android:background="@drawable/main_menu_background"
     android:clipChildren="false"
     tools:context="hpiz.reaction.com.reaction.MainMenuActivity">
 
@@ -15,14 +15,16 @@
         android:adjustViewBounds="false"
         android:cropToPadding="false"
         android:scaleType="fitXY"
-        android:src="@drawable/main_menu_background_animate" />
+        android:src="@drawable/main_menu_background_animate"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/main_menu_background_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
-        android:src="@drawable/main_menu_background" />
+        android:src="@drawable/main_menu_background"
+        android:visibility="gone" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/contentContainer"
@@ -30,7 +32,7 @@
         android:layout_height="match_parent"
         android:clipChildren="false">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
+        <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
         <ScrollView
