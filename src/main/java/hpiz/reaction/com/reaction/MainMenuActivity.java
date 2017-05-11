@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -46,27 +44,15 @@ public class MainMenuActivity extends Activity {
      * while interacting with activity UI.
      */
 
-
+/*
     @Override
     public void onResume() {
         Log.v("MAINMenu", "onResume");
         super.onResume();
-        hide();
-        refreshBackground();
-    }
-
-    private void refreshBackground() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        screenHeight = (int) (displayMetrics.heightPixels * 1.1);
-        screenWidth = displayMetrics.widthPixels;
-
-        backgroundImage.setMinimumWidth(screenWidth);
-        backgroundImageHidden.setMinimumWidth(screenWidth);
-        backgroundImage.setMinimumHeight(screenHeight);
-        backgroundImageHidden.setMinimumHeight(screenHeight);
 
     }
+
+*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +74,7 @@ public class MainMenuActivity extends Activity {
         quitGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.exit(0);
+                animateExitGame();
             }
         });
         settingsButton.setOnClickListener(new View.OnClickListener() {
@@ -202,8 +188,8 @@ public class MainMenuActivity extends Activity {
     }
 
     private void animateExitSettings() {
-        ValueAnimator settingsAnimator = ValueAnimator.ofFloat(1, 0);
-        settingsAnimator.setDuration(300);
+        ValueAnimator settingsAnimator = ValueAnimator.ofFloat(0, 4000);
+        settingsAnimator.setDuration(400);
         settingsAnimator.setInterpolator(new DecelerateInterpolator());
 
         settingsAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -213,7 +199,7 @@ public class MainMenuActivity extends Activity {
 
 
                 float value = (float) animation.getAnimatedValue();
-                contentContainer.setAlpha(value);
+                contentContainer.setTranslationY(value);
 
 
             }
@@ -294,8 +280,8 @@ public class MainMenuActivity extends Activity {
 
 
     private void animateShowSettings() {
-        ValueAnimator settingsAnimator = ValueAnimator.ofFloat(0, 1);
-        settingsAnimator.setDuration(300);
+        ValueAnimator settingsAnimator = ValueAnimator.ofFloat(4000, 0);
+        settingsAnimator.setDuration(400);
         settingsAnimator.setInterpolator(new DecelerateInterpolator());
 
         settingsAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -305,7 +291,7 @@ public class MainMenuActivity extends Activity {
 
 
                 float value = (float) animation.getAnimatedValue();
-                contentContainer.setAlpha(value);
+                contentContainer.setTranslationY(value);
 
 
             }
@@ -337,8 +323,52 @@ public class MainMenuActivity extends Activity {
         settingsAnimator.start();
     }
 
+    private void animateExitGame() {
+        ValueAnimator settingsAnimator = ValueAnimator.ofFloat(1, 0);
+        settingsAnimator.setDuration(300);
+        settingsAnimator.setInterpolator(new AccelerateInterpolator());
+
+        settingsAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+
+                float value = (float) animation.getAnimatedValue();
+                contentContainer.setAlpha(value);
+
+
+            }
+        });
+        settingsAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                //Intent i = new Intent(MainMenuActivity.this, SettingsActivity.class);
+                //startActivity(i);
+                System.exit(0);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        settingsAnimator.start();
+    }
+
     private void configureSettingsObjects() {
-        contentContainer.setAlpha(0);
+        //contentContainer.setAlpha(0);
         backgroundImage.setMinimumWidth(screenWidth);
         backgroundImageHidden.setMinimumWidth(screenWidth);
         backgroundImage.setMinimumHeight(screenHeight);
@@ -374,11 +404,7 @@ public class MainMenuActivity extends Activity {
         backgroundImage = (ImageView) findViewById(R.id.main_menu_background_image);
         backgroundImageHidden = (ImageView) findViewById(R.id.main_menu_background_image_animate);
         sp = getSharedPreferences("runningPreferences", Context.MODE_PRIVATE);
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        screenHeight = (int) (displayMetrics.heightPixels * 1.1);
-        screenWidth = displayMetrics.widthPixels;
+//refreshBackground();
 
     }
 
