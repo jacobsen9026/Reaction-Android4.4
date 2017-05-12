@@ -85,6 +85,8 @@ public class CardMatchReaction extends Activity {
     private ImageView bGlow;
     private ValueAnimator showGameWinLoseTextAnimator;
     private boolean cancelBackgroundTask;
+    private String topColor;
+    private String bottomColor;
 
     public CardMatchReaction() {
 
@@ -94,10 +96,14 @@ public class CardMatchReaction extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sp = getSharedPreferences("runningPreferences", MODE_PRIVATE);
-
+        loadSettings();
         run();
     }
 
+    private void loadSettings() {
+        topColor = sp.getString("topColor", "#BB3500");
+        bottomColor = sp.getString("bottomColor", "#3D5B7E");
+    }
     public void run() {
 
         setContentView(R.layout.minigame_cardmatchreaction);
@@ -258,8 +264,8 @@ public class CardMatchReaction extends Activity {
         bScoreText = (TextView) findViewById(blueScoreText);
         rScoreText.setTextColor(Color.WHITE);
         bScoreText.setTextColor(Color.WHITE);
-        rScoreText.setBackgroundColor((Color.parseColor(getString(R.string.topColor))));
-        bScoreText.setBackgroundColor((Color.parseColor(getString(R.string.bottomColor))));
+        rScoreText.setBackgroundColor((Color.parseColor(topColor)));
+        bScoreText.setBackgroundColor((Color.parseColor(bottomColor)));
         lCard = (ImageView) findViewById(R.id.leftCard);
         rCard = (ImageView) findViewById(R.id.rightCard);
         lCardPlaceHolder = (ImageView) findViewById(R.id.rightCardPlaceHolder);
@@ -287,7 +293,7 @@ public class CardMatchReaction extends Activity {
     private void topWon() {
         //topHalf.setOnClickListener(null);
         //bottomHalf.setOnClickListener(null);
-        //bottomHalf.setBackgroundColor((Color.parseColor(getString(R.string.topColor))));
+        //bottomHalf.setBackgroundColor((Color.parseColor(topColor)));
         bottomHalf.setText(getLoseText());
 
         topHalf.setText(getWinText());
@@ -302,7 +308,7 @@ public class CardMatchReaction extends Activity {
     private void bottomWon() {
         //topHalf.setOnClickListener(null);
         //bottomHalf.setOnClickListener(null);
-        //bottomHalf.setBackgroundColor((Color.parseColor(getString(R.string.topColor))));
+        //bottomHalf.setBackgroundColor((Color.parseColor(topColor)));
         bottomHalf.setText(getWinText());
 
         topHalf.setText(getLoseText());
@@ -360,8 +366,8 @@ public class CardMatchReaction extends Activity {
         });
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor((Color.parseColor(getString(R.string.topColor))));
-        bottomHalf.setBackgroundColor((Color.parseColor(getString(R.string.topColor))));
+        topHalf.setBackgroundColor((Color.parseColor(topColor)));
+        bottomHalf.setBackgroundColor((Color.parseColor(topColor)));
         bottomHalf.setText("You lost to Red " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
         topHalf.setText("You beat Blue " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
         showGameWinLoseText();
@@ -388,8 +394,8 @@ public class CardMatchReaction extends Activity {
         });
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor((Color.parseColor(getString(R.string.bottomColor))));
-        bottomHalf.setBackgroundColor((Color.parseColor(getString(R.string.bottomColor))));
+        topHalf.setBackgroundColor((Color.parseColor(bottomColor)));
+        bottomHalf.setBackgroundColor((Color.parseColor(bottomColor)));
         bottomHalf.setText("You beat Red " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
         topHalf.setText("You lost to Blue " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
         showGameWinLoseText();
