@@ -74,7 +74,7 @@ public class CardMatchReaction extends Activity {
     private boolean rightCardAnimatorCanceled;
     private boolean leftCardAnimatorCanceled;
     private ValueAnimator delayedHideWinLoseTextAnimator;
-    private long flyInDuration = 300;
+    private long flyInDuration = 2000;
     private long cardHistoryExpansionTime = 1000;
     private long cardHistoryContractionTime = 1000;
     private long hideWinLoseTextDelayTime = 500;
@@ -455,15 +455,15 @@ public class CardMatchReaction extends Activity {
             newPlayingCard = new PlayingCard();
         }
 
-        Log.v(TAG, String.valueOf(valueHistory[0]) + " of " + suiteHistory[0]);
-        Log.v(TAG, String.valueOf(valueHistory[1]) + " of " + suiteHistory[1]);
-        Log.v(TAG, String.valueOf(valueHistory[2]) + " of " + suiteHistory[2]);
+        //Log.v(TAG, String.valueOf(valueHistory[0]) + " of " + suiteHistory[0]);
+        //Log.v(TAG, String.valueOf(valueHistory[1]) + " of " + suiteHistory[1]);
+        //Log.v(TAG, String.valueOf(valueHistory[2]) + " of " + suiteHistory[2]);
 /*
         Log.d(TAG, "History addition=" + String.valueOf(valueHistory[0]));
         Log.d(TAG, "History addition=" + String.valueOf(suiteHistory[0]));
 */
-        Log.d(TAG, "newPlayingCard objects Image Resource=" + String.valueOf(newPlayingCard.getImageResource()));
-        Log.d(TAG, "newPlayingCard value=" + String.valueOf(newPlayingCard.getValue()) + " of " + newPlayingCard.getSuite());
+        //Log.d(TAG, "newPlayingCard objects Image Resource=" + String.valueOf(newPlayingCard.getImageResource()));
+        //Log.d(TAG, "newPlayingCard value=" + String.valueOf(newPlayingCard.getValue()) + " of " + newPlayingCard.getSuite());
         if (left) {
 
             animateLeftCardIn(newPlayingCard.getImageResource());
@@ -799,10 +799,9 @@ public class CardMatchReaction extends Activity {
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
+                Log.v(TAG, "Moving right card to=" + animation.getAnimatedValue());
 
-
-                float value = (float) animation.getAnimatedValue();
-                rCard.setTranslationX(value);
+                rCard.setTranslationX((float) animation.getAnimatedValue());
 
             }
         });
@@ -825,7 +824,7 @@ public class CardMatchReaction extends Activity {
 
                     updateHistory();
                 }
-
+                rightCardAnimatorCanceled = true;
             }
 
             @Override
@@ -845,25 +844,17 @@ public class CardMatchReaction extends Activity {
 
         leftCardAnimator = ValueAnimator.ofFloat(2000, 0);
         leftCardAnimator.setDuration(flyInDuration);
-        leftCardAnimator.setInterpolator(new DecelerateInterpolator(1.5F));
-        // leftCardAnimator.setInterpolator(new AccelerateInterpolator());
-        /*
-        leftCardAnimator.setInterpolator(new TimeInterpolator() {
-            @Override
-            public float getInterpolation(float input) {
-                return (float) (0.098*input*input);
-            }
-        });
-        */
+        //leftCardAnimator.setInterpolator(new DecelerateInterpolator(1.5F));
+        leftCardAnimator.setInterpolator(new DecelerateInterpolator());
         leftCardAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                //Log.v(TAG, "Moving ruler to y=" + animation.getAnimatedValue());
+                Log.v(TAG, "Moving left card to=" + animation.getAnimatedValue());
                 //Log.v(TAG, "Bottom Position=" + String.valueOf(bottomPosition));
                 //Log.v(TAG, "bVel=" + String.valueOf(bVel));
-                float value = (float) animation.getAnimatedValue();
-                lCard.setTranslationX(-value);
+                //float value = (float) animation.getAnimatedValue();
+                lCard.setTranslationX(-(float) animation.getAnimatedValue());
 
             }
         });
