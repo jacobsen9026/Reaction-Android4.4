@@ -26,76 +26,26 @@
         android:src="@drawable/main_menu_background"
         android:visibility="gone" />
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/contentContainer"
+    <ScrollView
+        android:id="@+id/contentContainer2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipChildren="false">
+        app:layout_constraintLeft_toLeftOf="@+id/parent"
+        app:layout_constraintTop_toTopOf="@+id/parent"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="413dp">
 
-        <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
-        <ScrollView
-            android:layout_width="0dp"
-            android:layout_height="1135dp"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="413dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <Switch
-                    android:id="@+id/switch2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Switch" />
-
-                <Switch
-                    android:id="@+id/switch1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Switch" />
-
-                <RadioButton
-                    android:id="@+id/radioButton2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="RadioButton" />
-
-                <RadioButton
-                    android:id="@+id/radioButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="RadioButton" />
-
-                <CheckBox
-                    android:id="@+id/checkBox2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="CheckBox" />
-
-                <CheckBox
-                    android:id="@+id/checkBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="CheckBox" />
-            </LinearLayout>
-        </ScrollView>
-
-        <FrameLayout
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="@id/contentContainer"
-            app:layout_constraintRight_toRightOf="@id/contentContainer"
-            tools:layout_editor_absoluteX="8dp">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="73dp">
 
                 <Button
                     android:id="@+id/discardButton"
@@ -125,11 +75,53 @@
 
             </LinearLayout>
 
-        </FrameLayout>
+            <Switch
+                android:id="@+id/switch2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Switch" />
 
-        <!-- This FrameLayout insets its children based on system windows using
-             android:fitsSystemWindows. -->
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Switch" />
 
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="RadioButton" />
 
-    </android.support.constraint.ConstraintLayout>
+            <RadioButton
+                android:id="@+id/radioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="RadioButton" />
+
+            <CheckBox
+                android:id="@+id/checkBox2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CheckBox" />
+
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CheckBox" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="45dp" />
+
+            <Spinner
+                android:id="@+id/spinner2"
+                android:layout_width="match_parent"
+                android:layout_height="45dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
 </RelativeLayout>
