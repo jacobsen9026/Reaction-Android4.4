@@ -242,21 +242,26 @@ public class CardMatchReaction extends Activity {
                 topHalf.setOnClickListener(null);
                 runGame.cancel(true);
                 redGlowAnimation();
-                if (valueHistory[0] == valueHistory[1]) {
-                    topWon();
-                    if (redScore > (winningScore - 1)) {
-                        redWonGame();
-                    } else if (blueScore > (winningScore - 1)) {
-                        blueWonGame();
+                if (valueHistory[1] != 0) {
+                    if (valueHistory[0] == valueHistory[1]) {
+                        topWon();
+                        if (redScore > (winningScore - 1)) {
+                            redWonGame();
+                        } else if (blueScore > (winningScore - 1)) {
+                            blueWonGame();
+                        } else {
+                            animateCardHistoryExpand();
+                        }
                     } else {
+                        bottomWon();
                         animateCardHistoryExpand();
                     }
-                } else {
-                    animateCardHistoryExpand();
-                }
 
-                if (bottomHalf.hasOnClickListeners()) {
-                    bottomHalf.setOnClickListener(null);
+                    if (bottomHalf.hasOnClickListeners()) {
+                        bottomHalf.setOnClickListener(null);
+                    }
+                } else {
+                    bottomWon();
                 }
                 //nextRound();
             }
@@ -268,23 +273,28 @@ public class CardMatchReaction extends Activity {
                 bottomHalf.setOnClickListener(null);
                 runGame.cancel(true);
                 blueGlowAnimation();
-                if (valueHistory[0] == valueHistory[1]) {
+                if (valueHistory[1] != 0) {
+                    if (valueHistory[0] == valueHistory[1]) {
 
 
-                    bottomWon();
-                    if (redScore > (winningScore - 1)) {
-                        redWonGame();
-                    } else if (blueScore > (winningScore - 1)) {
-                        blueWonGame();
+                        bottomWon();
+                        if (redScore > (winningScore - 1)) {
+                            redWonGame();
+                        } else if (blueScore > (winningScore - 1)) {
+                            blueWonGame();
+                        } else {
+                            animateCardHistoryExpand();
+                        }
                     } else {
+                        topWon();
                         animateCardHistoryExpand();
                     }
-                } else {
-                    animateCardHistoryExpand();
-                }
 
-                if (topHalf.hasOnClickListeners()) {
-                    topHalf.setOnClickListener(null);
+                    if (topHalf.hasOnClickListeners()) {
+                        topHalf.setOnClickListener(null);
+                    }
+                } else {
+                    topWon();
                 }
                 // nextRound();
             }
