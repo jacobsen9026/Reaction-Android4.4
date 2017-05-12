@@ -57,6 +57,7 @@ public class SettingsActivity extends Activity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saveSettings();
                 animateExitSettings();
             }
         });
@@ -134,7 +135,7 @@ public class SettingsActivity extends Activity {
     }
 
     private void animateExitSettings() {
-        saveSettings();
+
         ValueAnimator settingsAnimator = ValueAnimator.ofFloat(0, 4000);
         settingsAnimator.setDuration(400);
         settingsAnimator.setInterpolator(new DecelerateInterpolator());
