@@ -41,6 +41,8 @@ public class SurpriseReaction extends Activity {
     private TextView bScoreText;
     private TextView rScoreText;
     private int winningScore = 10;
+    private String topColor;
+    private String bottomColor;
 
     public SurpriseReaction() {
 
@@ -61,13 +63,7 @@ public class SurpriseReaction extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sp = getSharedPreferences("runningPreferences", MODE_PRIVATE);
-
-        run();
-    }
-
-
-    public void run() {
-
+        loadSettings();
         setContentView(R.layout.minigame_surprisereaction);
 
         Log.v(TAG, " setting game layout");
@@ -78,6 +74,7 @@ public class SurpriseReaction extends Activity {
 
         runSingleRound();
     }
+
 
     public void runGame() {
         setContentView(R.layout.minigame_surprisereaction);
@@ -324,8 +321,13 @@ public class SurpriseReaction extends Activity {
         bScoreText = (TextView) findViewById(blueScoreText);
         rScoreText.setTextColor(Color.WHITE);
         bScoreText.setTextColor(Color.WHITE);
-        rScoreText.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
-        bScoreText.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+        rScoreText.setBackgroundColor((Color.parseColor(topColor)));
+        bScoreText.setBackgroundColor((Color.parseColor(bottomColor)));
+    }
+
+    private void loadSettings() {
+        topColor = sp.getString("topColor", "#BB3500");
+        bottomColor = sp.getString("bottomColor", "#3D5B7E");
     }
 
     public void nextRound() {

@@ -3,6 +3,7 @@ package hpiz.reaction.com.reaction.miniGames.surpriseNumberedReaction;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -45,6 +46,9 @@ public class SurpriseNumberedReaction extends Activity {
 
     private int askingFor;
     private int askingForImage;
+    private SharedPreferences sp;
+    private String topColor;
+    private String bottomColor;
 
     public SurpriseNumberedReaction() {
 
@@ -53,7 +57,8 @@ public class SurpriseNumberedReaction extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        sp = getSharedPreferences("runningPreferences", MODE_PRIVATE);
+        loadSettings();
         setContentView(R.layout.minigame_surprisenumberedreaction);
 
         Log.v(TAG, " setting game layout");
@@ -69,9 +74,15 @@ public class SurpriseNumberedReaction extends Activity {
     private void configureObjects() {
         topScoreText.setTextColor(Color.WHITE);
         bottomScoreText.setTextColor(Color.WHITE);
-        topScoreText.setBackgroundColor((Color.parseColor(getString(R.string.topColor))));
-        bottomScoreText.setBackgroundColor((Color.parseColor(getString(R.string.bottomColor))));
+        topScoreText.setBackgroundColor((Color.parseColor(topColor)));
+        bottomScoreText.setBackgroundColor((Color.parseColor(bottomColor)));
         cContainer.setBackgroundColor(Color.WHITE);
+    }
+
+
+    private void loadSettings() {
+        topColor = sp.getString("topColor", "#BB3500");
+        bottomColor = sp.getString("bottomColor", "#3D5B7E");
     }
 
     private void initializeObjects() {
@@ -84,6 +95,7 @@ public class SurpriseNumberedReaction extends Activity {
         tImage = (ImageView) findViewById(R.id.topImage);
         bImage = (ImageView) findViewById(R.id.bottomImage);
         bToMainMenuButton = (Button) findViewById(backToMainMenuButton);
+
 
         bToMainMenuButton.setVisibility(View.GONE);
         bToMainMenuButton.setOnClickListener(null);
