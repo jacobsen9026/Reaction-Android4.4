@@ -59,6 +59,8 @@ public class DropReaction extends Activity {
     private TextView tTextView;
     private TextView bTextView;
     private boolean cancelBackgroundTask;
+    private String topColor;
+    private String bottomColor;
 
     public DropReaction() {
 
@@ -68,7 +70,7 @@ public class DropReaction extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sp = getSharedPreferences("runningPreferences", MODE_PRIVATE);
-
+        loadSettings();
         run();
     }
 
@@ -167,8 +169,8 @@ public class DropReaction extends Activity {
     private void topWon() {
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
-        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
+        topHalf.setBackgroundColor(Color.parseColor(topColor));
+        bottomHalf.setBackgroundColor(Color.parseColor(topColor));
         //bottomHalf.setText("You Lost");
         tTextView.setText(String.valueOf(travelDistance));
         //topHalf.setText("You Won");
@@ -263,21 +265,15 @@ public class DropReaction extends Activity {
     }
 
     public void setTopRed() {
-        topHalf.setBackgroundColor((Color.parseColor(getString(R.string.topColor))));
+        topHalf.setBackgroundColor(Color.parseColor(topColor));
     }
 
 
     public void setBottomBlue() {
-        bottomHalf.setBackgroundColor((Color.parseColor(getString(R.string.bottomColor))));
+        bottomHalf.setBackgroundColor(Color.parseColor(bottomColor));
     }
 
-    public void setTopBlack() {
-        topHalf.setBackgroundColor(Color.BLACK);
-    }
 
-    public void setBottomBlack() {
-        bottomHalf.setBackgroundColor(Color.BLACK);
-    }
 
 
     public void blueWonGame() {
@@ -309,8 +305,8 @@ public class DropReaction extends Activity {
     private void bottomWon() {
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
-        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+        bottomHalf.setBackgroundColor(Color.parseColor(bottomColor));
+        topHalf.setBackgroundColor(Color.parseColor(bottomColor));
         //bottomHalf.setText("You Won");
         //topHalf.setText("You Lost");
 
@@ -353,8 +349,8 @@ public class DropReaction extends Activity {
         bScoreText = (TextView) findViewById(blueScoreText);
         rScoreText.setTextColor(Color.WHITE);
         bScoreText.setTextColor(Color.WHITE);
-        rScoreText.setBackgroundColor((Color.parseColor(getString(R.string.topColor))));
-        bScoreText.setBackgroundColor((Color.parseColor(getString(R.string.bottomColor))));
+        rScoreText.setBackgroundColor(Color.parseColor(topColor));
+        bScoreText.setBackgroundColor(Color.parseColor(bottomColor));
         //topRulerImage.bringToFront();
         //bottomRulerImage.bringToFront();
     }
@@ -365,6 +361,11 @@ public class DropReaction extends Activity {
             DropReactionBackgroundTask runGame = new DropReactionBackgroundTask(this);
             runGame.execute("SLEEP:1000");
         }
+    }
+
+    private void loadSettings() {
+        topColor = sp.getString("topColor", "#BB3500");
+        bottomColor = sp.getString("bottomColor", "#3D5B7E");
     }
 
     public void drop() {
