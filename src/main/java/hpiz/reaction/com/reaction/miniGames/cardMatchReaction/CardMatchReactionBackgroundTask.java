@@ -14,8 +14,8 @@ public class CardMatchReactionBackgroundTask extends AsyncTask<String, Integer, 
     private final String TAG = "cardmach background";
     private final CardMatchReaction gActivity;
     private final WeakReference<CardMatchReaction> gameActivity;
-    private Handler uiHandler = new Handler(Looper.getMainLooper());
-    private long cardDrawInterval = 600;
+
+    private long cardDrawInterval = 3000;
 
 
     public CardMatchReactionBackgroundTask(CardMatchReaction a) {
@@ -65,7 +65,7 @@ public class CardMatchReactionBackgroundTask extends AsyncTask<String, Integer, 
             return;
         }
         if (progress == 1) {
-            uiHandler.post(new Runnable() {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
                     gActivity.showACard();
