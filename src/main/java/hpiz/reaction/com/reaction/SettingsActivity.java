@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ScrollView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 /**
@@ -25,12 +25,13 @@ public class SettingsActivity extends Activity {
     private final String TAG = "com.reaction.hpiz.SettingsActivity";
     private Button discardButton;
     private Button saveButton;
-    private ScrollView contentContainer;
+    private LinearLayout contentContainer;
     private SharedPreferences sp;
     private String topColor;
     private String bottomColor;
     private Spinner spinner;
     private Spinner spin2;
+    private LinearLayout gameOrderContainer1;
 
 
     /**
@@ -68,6 +69,48 @@ public class SettingsActivity extends Activity {
             }
         });
 
+        gameOrderContainer1.setOnTouchListener(new View.OnTouchListener() {
+            boolean firstTrigger = true;
+            float initX;
+            float posX;
+            float posY;
+            float initY;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                Log.v("Settings", "Touching box1");
+                int action = event.getAction() & MotionEvent.ACTION_MASK;
+                if (action == MotionEvent.ACTION_DOWN) {
+                    if (event.getX() > v.getWidth() / 7) {
+                        return false;
+                    }
+                    Log.v("settings", "action down");
+
+                    Log.v("Settings", "Initial X Position:" + String.valueOf(event.getRawX()));
+                    posX = v.getX();
+                    posY = v.getY();
+                    initX = event.getRawX();
+                    initY = event.getRawY();
+
+                }
+                if (action == MotionEvent.ACTION_UP) {
+                    Log.v("Settins", "action up");
+                    //newPosX=
+                    gameOrderContainer1.setTranslationX(0);
+                    gameOrderContainer1.setTranslationY(0);
+                } else {
+                    //Log.v("settings", String.valueOf((initX - event.getRawX())));
+                    Log.v("Settings", "raw:" + String.valueOf(event.getRawX()));
+                    Log.v("Settings", "relative:" + String.valueOf(event.getX()));
+                    Log.v("Settings", "Difference:" + String.valueOf(event.getRawX() - initX));
+                    gameOrderContainer1.setTranslationX(event.getRawX() - initX);
+                    gameOrderContainer1.setTranslationY(event.getRawY() - initY);
+                }
+                return true;
+            }
+        });
+
     }
 
     private void initializeObjects() {
@@ -76,6 +119,7 @@ public class SettingsActivity extends Activity {
         sp = getSharedPreferences("runningPreferences", Context.MODE_PRIVATE);
         spin2 = (Spinner) findViewById(R.id.spinner2);
         spinner = (Spinner) findViewById(R.id.spinner);
+        gameOrderContainer1 = (LinearLayout) findViewById(R.id.gameOrder1);
     }
 
     @Override
@@ -271,7 +315,7 @@ public class SettingsActivity extends Activity {
             actionBar.hide();
         }
         // Schedule a runnable to remove the status and navigation bar after a delay
-        contentContainer = (ScrollView) findViewById(R.id.contentContainer2);
+        contentContainer = (LinearLayout) findViewById(R.id.contentContainer2);
         /*
         contentContainer.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
 
