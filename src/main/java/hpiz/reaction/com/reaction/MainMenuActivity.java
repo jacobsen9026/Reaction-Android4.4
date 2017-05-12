@@ -17,6 +17,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 
+
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
@@ -144,6 +145,8 @@ public class MainMenuActivity extends Activity {
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Intent i = new Intent(MainMenuActivity.this, DragNDropListActivity.class);
+                //startActivity(i);
                 animateHideMainMenu();
             }
         });
