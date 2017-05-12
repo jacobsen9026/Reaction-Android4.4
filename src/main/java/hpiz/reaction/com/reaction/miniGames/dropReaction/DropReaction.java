@@ -61,6 +61,8 @@ public class DropReaction extends Activity {
     private boolean cancelBackgroundTask;
     private String topColor;
     private String bottomColor;
+    private double zeroMark;
+    private double oneInch;
 
     public DropReaction() {
 
@@ -134,9 +136,7 @@ public class DropReaction extends Activity {
 
     }
 
-    private void clearScreen() {
 
-    }
 
     public void setEarlyListeners() {
         topHalf.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +172,8 @@ public class DropReaction extends Activity {
         topHalf.setBackgroundColor(Color.parseColor(topColor));
         bottomHalf.setBackgroundColor(Color.parseColor(topColor));
         //bottomHalf.setText("You Lost");
-        tTextView.setText(String.valueOf(travelDistance));
+        double dropInches = (travelDistance - zeroMark) / oneInch;
+        tTextView.setText(String.valueOf(dropInches));
         //topHalf.setText("You Won");
         redScore++;
         runGame.cancel(true);
@@ -309,8 +310,8 @@ public class DropReaction extends Activity {
         topHalf.setBackgroundColor(Color.parseColor(bottomColor));
         //bottomHalf.setText("You Won");
         //topHalf.setText("You Lost");
-
-        bTextView.setText(String.valueOf(travelDistance));
+        double dropInches = (travelDistance - zeroMark) / oneInch;
+        bTextView.setText(String.valueOf(dropInches));
         blueScore++;
         runGame.cancel(true);
         updateScores();
@@ -437,15 +438,18 @@ public class DropReaction extends Activity {
     public void InitializeDrop() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
+        double zeroMarkRatio = 24.0 / 1134.0;
+        Log.v("Ruler Drop", "Zero Mark Ratio:" + String.valueOf(zeroMarkRatio));
+        double oneInchRatio = 93.0 / 1134.0;
+        Log.v("Ruler Drop", "One Inch Ratio:" + String.valueOf(oneInchRatio));
         screenHeight = displayMetrics.heightPixels;
-        int width = displayMetrics.widthPixels;
-        bFloor = 0;
-        tFloor = screenHeight;
-        bCursor = screenHeight / 2;
-        tCursor = screenHeight / 2;
-        tVel = 0;
-        bVel = 0;
+        Log.v("Ruler Drop", "Ruler Height:" + String.valueOf(topRulerImage.getHeight()));
+        zeroMark = topRulerImage.getHeight() * zeroMarkRatio;
+        oneInch = topRulerImage.getHeight() * oneInchRatio;
+        Log.v("Ruler Drop", "Zero Mark:" + String.valueOf(zeroMark));
+        Log.v("Ruler Drop", "One Inch:" + String.valueOf(oneInch));
+
+
 
         //ObjectAnimator oa = ObjectAnimator.ofInt(topRulerImage,"y",screenHeight);
         //oa.setDuration(1000);
