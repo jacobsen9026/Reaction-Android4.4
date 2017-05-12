@@ -39,13 +39,18 @@ public class DropReactionBackgroundTask extends AsyncTask<String, Integer, Strin
             return "";
         }
 */
-
+        if (isCancelled()) {
+            return null;
+        }
         if (params[0].equals("SLEEP:1000")) {
             Log.v("DropBackgroundTask", "Running background sleep");
             try {
                 Thread.sleep(1500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            }
+            if (isCancelled()) {
+                return null;
             }
             return "SLEPT";
         } else {
@@ -55,7 +60,9 @@ public class DropReactionBackgroundTask extends AsyncTask<String, Integer, Strin
                 e.printStackTrace();
             }
 
-
+            if (isCancelled()) {
+                return null;
+            }
             return "GAME:NEXTSTEP";
         }
     }
@@ -65,20 +72,21 @@ public class DropReactionBackgroundTask extends AsyncTask<String, Integer, Strin
     }
 
     protected void onPostExecute(String result) {
+        if (!isCancelled()) {
+            Log.v("backgroundTask", "dropping ruler");
+            if (result.equals("GAME:NEXTSTEP")) {
+                gActivity.drop();
+                //gActivity.setTopColor();
+                //gActivity.setBottomColor();
+                //gActivity.startWinningWacListeners();
+            } else if (result.equals("SLEPT")) {
+                gActivity.runSingleRound();
 
-        Log.v("backgroundTask", "Setting white");
-        if (result.equals("GAME:NEXTSTEP")) {
-            gActivity.drop();
-            //gActivity.setTopColor();
-            //gActivity.setBottomColor();
-            //gActivity.startWinningWacListeners();
-        } else if (result.equals("SLEPT")) {
-            gActivity.runSingleRound();
+            }
+            // topHalf.setBackgroundColor(Color.WHITE);
 
+            //gActivity.runSimonSaysGame();
         }
-        // topHalf.setBackgroundColor(Color.WHITE);
-
-        //gActivity.runSimonSaysGame();
     }
 
 
