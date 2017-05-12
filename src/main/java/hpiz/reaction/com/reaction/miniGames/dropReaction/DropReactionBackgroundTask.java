@@ -22,8 +22,9 @@ public class DropReactionBackgroundTask extends AsyncTask<String, Integer, Strin
     }
 
     protected void onPreExecute() {
-        gActivity.InitializeDrop();
-
+        if (!isCancelled()) {
+            gActivity.InitializeDrop();
+        }
     }
 
     @Override
