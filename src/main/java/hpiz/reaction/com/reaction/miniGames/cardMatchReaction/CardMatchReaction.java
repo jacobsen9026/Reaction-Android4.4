@@ -97,32 +97,85 @@ public class CardMatchReaction extends Activity {
         super.onCreate(savedInstanceState);
         sp = getSharedPreferences("runningPreferences", MODE_PRIVATE);
         loadSettings();
-        run();
-    }
-
-    private void loadSettings() {
-        topColor = sp.getString("topColor", "#BB3500");
-        bottomColor = sp.getString("bottomColor", "#3D5B7E");
-    }
-    public void run() {
-
         setContentView(R.layout.minigame_cardmatchreaction);
 
         Log.v(TAG, " setting game layout");
 
         hide();
 
-        initializeButtonReactionObjects();
+        initializeObjects();
+        configureObjects();
         startButtonListeners();
 
         runSingleCard();
+    }
+
+    private void loadSettings() {
+        topColor = sp.getString("topColor", "#BB3500");
+        bottomColor = sp.getString("bottomColor", "#3D5B7E");
+    }
+
+    private void initializeObjects() {
+        cancelBackgroundTask = false;
+        left = true;
+        redScore = 0;
+        blueScore = 0;
+        pAgainButton = (Button) super.findViewById(playAgainButton);
+        pAgainButton.setVisibility(View.GONE);
+        pAgainButton.setOnClickListener(null);
+
+        bToMainMenuButton = (Button) findViewById(backToMainMenuButton);
+
+        bToMainMenuButton.setVisibility(View.GONE);
+        bToMainMenuButton.setOnClickListener(null);
+        topHalf = (TextView) findViewById(R.id.topHalf);
+        bottomHalf = (TextView) findViewById(R.id.bottomHalf);
+        rScoreText = (TextView) findViewById(redScoreText);
+        rCardText_Top = (TextView) findViewById(rightCardText_Top);
+        rCardText_Bottom = (TextView) findViewById(rightCardText_Bottom);
+        lCardText_Bottom = (TextView) findViewById(leftCardText_Bottom);
+        lCardText_Top = (TextView) findViewById(leftCardText_Top);
+        cCardText_Top = (TextView) findViewById(centerCardText_Top);
+        cCardText_Bottom = (TextView) findViewById(centerCardText_Bottom);
+        bScoreText = (TextView) findViewById(blueScoreText);
+
+        lCard = (ImageView) findViewById(R.id.leftCard);
+        rCard = (ImageView) findViewById(R.id.rightCard);
+        lCardPlaceHolder = (ImageView) findViewById(R.id.rightCardPlaceHolder);
+        rCardPlaceHolder = (ImageView) findViewById(R.id.leftCardPlaceHolder);
+        cCard = (ImageView) findViewById(R.id.centerCard);
+        rGlow = (ImageView) findViewById(R.id.redGlow);
+        bGlow = (ImageView) findViewById(R.id.blueGlow);
+
+
+        // lCard.setVisibility(View.INVISIBLE);
+        //  rCard.setVisibility(View.INVISIBLE);
+    }
+
+    private void configureObjects() {
+
+        rScoreText.setTextColor(Color.WHITE);
+        bScoreText.setTextColor(Color.WHITE);
+        rScoreText.setBackgroundColor((Color.parseColor(topColor)));
+        bScoreText.setBackgroundColor((Color.parseColor(bottomColor)));
+        lCard.setTranslationX(9000);
+        //rCard.setTranslationX(9000);
+        cCard.setTranslationX(9000);
+        lCardText_Bottom.setAlpha(0);
+        lCardText_Top.setAlpha(0);
+        rCardText_Bottom.setAlpha(0);
+        rCardText_Top.setAlpha(0);
+        cCardText_Bottom.setAlpha(0);
+        cCardText_Top.setAlpha(0);
+        bottomHalf.setAlpha(0);
+        topHalf.setAlpha(0);
     }
 
     public void runGame() {
         setContentView(R.layout.minigame_surprisereaction);
         Log.v(TAG, " setting game layout");
         hide();
-        initializeButtonReactionObjects();
+        initializeObjects();
         runSingleCard();
 
     }
@@ -236,57 +289,6 @@ public class CardMatchReaction extends Activity {
                 // nextRound();
             }
         });
-    }
-
-
-    private void initializeButtonReactionObjects() {
-        cancelBackgroundTask = false;
-        left = true;
-        redScore = 0;
-        blueScore = 0;
-        pAgainButton = (Button) super.findViewById(playAgainButton);
-        pAgainButton.setVisibility(View.GONE);
-        pAgainButton.setOnClickListener(null);
-
-        bToMainMenuButton = (Button) findViewById(backToMainMenuButton);
-
-        bToMainMenuButton.setVisibility(View.GONE);
-        bToMainMenuButton.setOnClickListener(null);
-        topHalf = (TextView) findViewById(R.id.topHalf);
-        bottomHalf = (TextView) findViewById(R.id.bottomHalf);
-        rScoreText = (TextView) findViewById(redScoreText);
-        rCardText_Top = (TextView) findViewById(rightCardText_Top);
-        rCardText_Bottom = (TextView) findViewById(rightCardText_Bottom);
-        lCardText_Bottom = (TextView) findViewById(leftCardText_Bottom);
-        lCardText_Top = (TextView) findViewById(leftCardText_Top);
-        cCardText_Top = (TextView) findViewById(centerCardText_Top);
-        cCardText_Bottom = (TextView) findViewById(centerCardText_Bottom);
-        bScoreText = (TextView) findViewById(blueScoreText);
-        rScoreText.setTextColor(Color.WHITE);
-        bScoreText.setTextColor(Color.WHITE);
-        rScoreText.setBackgroundColor((Color.parseColor(topColor)));
-        bScoreText.setBackgroundColor((Color.parseColor(bottomColor)));
-        lCard = (ImageView) findViewById(R.id.leftCard);
-        rCard = (ImageView) findViewById(R.id.rightCard);
-        lCardPlaceHolder = (ImageView) findViewById(R.id.rightCardPlaceHolder);
-        rCardPlaceHolder = (ImageView) findViewById(R.id.leftCardPlaceHolder);
-        cCard = (ImageView) findViewById(R.id.centerCard);
-        rGlow = (ImageView) findViewById(R.id.redGlow);
-        bGlow = (ImageView) findViewById(R.id.blueGlow);
-        lCard.setTranslationX(9000);
-        //rCard.setTranslationX(9000);
-        cCard.setTranslationX(9000);
-        lCardText_Bottom.setAlpha(0);
-        lCardText_Top.setAlpha(0);
-        rCardText_Bottom.setAlpha(0);
-        rCardText_Top.setAlpha(0);
-        cCardText_Bottom.setAlpha(0);
-        cCardText_Top.setAlpha(0);
-        bottomHalf.setAlpha(0);
-        topHalf.setAlpha(0);
-
-        // lCard.setVisibility(View.INVISIBLE);
-        //  rCard.setVisibility(View.INVISIBLE);
     }
 
 

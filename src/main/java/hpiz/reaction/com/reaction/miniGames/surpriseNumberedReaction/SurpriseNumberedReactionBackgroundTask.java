@@ -5,7 +5,6 @@ import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
-import java.util.Random;
 
 /**
  * Created by cjacobsen on 5/1/2017.
@@ -85,8 +84,7 @@ public class SurpriseNumberedReactionBackgroundTask extends AsyncTask<String, In
         Log.v(TAG, "Setting white");
         if (result.equals("GAME:NEXTSTEP")) {
             gActivity.pickNumber();
-            gActivity.setTop();
-            gActivity.setBottom();
+            gActivity.setImages();
             gActivity.startButtonListeners();
         } else if (result.equals("SLEPT")) {
             gActivity.runSingleRound();

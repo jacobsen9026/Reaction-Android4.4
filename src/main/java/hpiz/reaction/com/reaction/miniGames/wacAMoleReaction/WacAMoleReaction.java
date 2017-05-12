@@ -44,15 +44,11 @@ public class WacAMoleReaction extends Activity {
     private Button bToMainMenuButton;
     private TextView bottomScoreText;
     private TextView topScoreText;
-    private ImageView tImage;
-    private ImageView bImage;
     private ConstraintLayout cContainer;
-    private int randomMole;
-    private int topsMoleImageView;
+    private int topSelectedMole;
     private int bottomsSelectedMole;
     private ImageView topMole;
     private ImageView bottomMole;
-    private float textSize;
     private RelativeLayout bottomHalfLayout;
     private RelativeLayout topHalfLayout;
     private long backgroundFlashSpeed = 160;
@@ -66,20 +62,57 @@ public class WacAMoleReaction extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        start();
-    }
-
-    public void start() {
-
         setContentView(R.layout.minigame_wacamolereaction);
 
         Log.v(TAG, " setting game layout");
 
         hide();
 
-        initializeButtonReactionObjects();
+        initializeObjects();
+
+        configureObjects();
 
         runSingleRound();
+    }
+
+    private void configureObjects() {
+        topScoreText.setTextColor(Color.WHITE);
+        bottomScoreText.setTextColor(Color.WHITE);
+        topScoreText.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
+        bottomScoreText.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+        cContainer.setBackgroundColor(Color.WHITE);
+
+    }
+
+    private void initializeObjects() {
+        cContainer = (ConstraintLayout) findViewById(R.id.contentContainer);
+        topScore = 0;
+        bottomScore = 0;
+        pAgainButton = (Button) super.findViewById(playAgainButton);
+        pAgainButton.setVisibility(View.GONE);
+        pAgainButton.setOnClickListener(null);
+        bToMainMenuButton = (Button) findViewById(backToMainMenuButton);
+        bottomHalfLayout = (RelativeLayout) findViewById(R.id.bottomHalfRelativeLayout);
+        topHalfLayout = (RelativeLayout) findViewById(R.id.topHalfRelativeLayout);
+        bToMainMenuButton.setVisibility(View.GONE);
+        bToMainMenuButton.setOnClickListener(null);
+        topHalf = (TextView) findViewById(R.id.topHalf);
+        bottomHalf = (TextView) findViewById(R.id.bottomHalf);
+        topScoreText = (TextView) findViewById(redScoreText);
+        bottomScoreText = (TextView) findViewById(blueScoreText);
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (runGame != null) {
+            runGame.cancel(true);
+            runGame = null;
+        }
+        Intent i = new Intent(WacAMoleReaction.this, GameActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
     }
 
     public void hide() {
@@ -102,6 +135,11 @@ public class WacAMoleReaction extends Activity {
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
+    }
+
+    private void updateScores() {
+        topScoreText.setText("Red Score: " + String.valueOf(topScore));
+        bottomScoreText.setText("Blue Score: " + String.valueOf(bottomScore));
     }
 
     protected void runSingleRound() {
@@ -130,6 +168,17 @@ public class WacAMoleReaction extends Activity {
 
     }
 
+    public void runGameAgain() {
+        setContentView(R.layout.minigame_wacamolereaction);
+        Log.v(TAG, " setting game layout");
+        hide();
+        initializeObjects();
+        runSingleRound();
+
+    }
+
+
+
 
     public void redWonGame() {
         pAgainButton.setVisibility(View.VISIBLE);
@@ -153,6 +202,31 @@ public class WacAMoleReaction extends Activity {
 
         bottomHalf.setText("You lost to Red " + String.valueOf(topScore) + " to " + String.valueOf(bottomScore) + ".");
         topHalf.setText("You beat Blue " + String.valueOf(topScore) + " to " + String.valueOf(bottomScore) + ".");
+    }
+
+    public void blueWonGame() {
+        pAgainButton.setVisibility(View.VISIBLE);
+        pAgainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                runGameAgain();
+            }
+        });
+        bToMainMenuButton.setVisibility(View.VISIBLE);
+        bToMainMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(WacAMoleReaction.this, GameActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+            }
+        });
+        topHalf.setOnClickListener(null);
+        bottomHalf.setOnClickListener(null);
+        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+        bottomHalf.setText("You beat Red " + String.valueOf(bottomScore) + " to " + String.valueOf(topScore) + ".");
+        topHalf.setText("You lost to Blue " + String.valueOf(bottomScore) + " to " + String.valueOf(topScore) + ".");
     }
 
     public void startWinningWacListeners() {
@@ -196,6 +270,11 @@ public class WacAMoleReaction extends Activity {
             }
         });
 
+    }
+
+    public void killWinListeners() {
+        topMole.setOnTouchListener(null);
+        bottomMole.setOnTouchListener(null);
     }
 
     private void bottomPoint() {
@@ -374,84 +453,6 @@ public class WacAMoleReaction extends Activity {
         killWinListeners();
     }
 
-    public void runGameAgain() {
-        setContentView(R.layout.minigame_wacamolereaction);
-        Log.v(TAG, " setting game layout");
-        hide();
-        initializeButtonReactionObjects();
-        runSingleRound();
-
-    }
-
-
-    public void blueWonGame() {
-        pAgainButton.setVisibility(View.VISIBLE);
-        pAgainButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                runGameAgain();
-            }
-        });
-        bToMainMenuButton.setVisibility(View.VISIBLE);
-        bToMainMenuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(WacAMoleReaction.this, GameActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-            }
-        });
-        topHalf.setOnClickListener(null);
-        bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
-        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
-        bottomHalf.setText("You beat Red " + String.valueOf(bottomScore) + " to " + String.valueOf(topScore) + ".");
-        topHalf.setText("You lost to Blue " + String.valueOf(bottomScore) + " to " + String.valueOf(topScore) + ".");
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        if (runGame != null) {
-            runGame.cancel(true);
-            runGame = null;
-        }
-        Intent i = new Intent(WacAMoleReaction.this, GameActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
-    }
-
-    private void updateScores() {
-        topScoreText.setText("Red Score: " + String.valueOf(topScore));
-        bottomScoreText.setText("Blue Score: " + String.valueOf(bottomScore));
-    }
-
-    private void initializeButtonReactionObjects() {
-        cContainer = (ConstraintLayout) findViewById(R.id.contentContainer);
-        topScore = 0;
-        bottomScore = 0;
-        pAgainButton = (Button) super.findViewById(playAgainButton);
-        pAgainButton.setVisibility(View.GONE);
-        pAgainButton.setOnClickListener(null);
-        tImage = (ImageView) findViewById(R.id.topImage);
-        bImage = (ImageView) findViewById(R.id.bottomImage);
-        bToMainMenuButton = (Button) findViewById(backToMainMenuButton);
-        bottomHalfLayout = (RelativeLayout) findViewById(R.id.bottomHalfRelativeLayout);
-        topHalfLayout = (RelativeLayout) findViewById(R.id.topHalfRelativeLayout);
-        bToMainMenuButton.setVisibility(View.GONE);
-        bToMainMenuButton.setOnClickListener(null);
-        topHalf = (TextView) findViewById(R.id.topHalf);
-        bottomHalf = (TextView) findViewById(R.id.bottomHalf);
-        topScoreText = (TextView) findViewById(redScoreText);
-        bottomScoreText = (TextView) findViewById(blueScoreText);
-        topScoreText.setTextColor(Color.WHITE);
-        bottomScoreText.setTextColor(Color.WHITE);
-        topScoreText.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
-        bottomScoreText.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
-        cContainer.setBackgroundColor(Color.WHITE);
-        textSize = bottomScoreText.getTextSize() / 3;
-
-    }
 
     public void hideSelectedMoles() {
         killWinListeners();
@@ -461,7 +462,7 @@ public class WacAMoleReaction extends Activity {
                 @Override
                 public void run() {
                     Log.v(TAG, "Run delayed thread");
-                    topMole = (ImageView) findViewById(topsMoleImageView);
+                    topMole = (ImageView) findViewById(topSelectedMole);
                     bottomMole = (ImageView) findViewById(bottomsSelectedMole);
                     topMole.setImageResource(R.drawable.mole);
 
@@ -477,7 +478,7 @@ public class WacAMoleReaction extends Activity {
                 @Override
                 public void run() {
                     Log.v(TAG, "Run delayed thread");
-                    topMole = (ImageView) findViewById(topsMoleImageView);
+                    topMole = (ImageView) findViewById(topSelectedMole);
                     bottomMole = (ImageView) findViewById(bottomsSelectedMole);
                     topMole.setImageResource(R.drawable.mole);
 
@@ -496,10 +497,7 @@ public class WacAMoleReaction extends Activity {
         }
     }
 
-    public void killWinListeners() {
-        topMole.setOnTouchListener(null);
-        bottomMole.setOnTouchListener(null);
-    }
+
 
     public void waitForWin() {
         bottomMole.setVisibility(View.VISIBLE);
@@ -520,38 +518,38 @@ public class WacAMoleReaction extends Activity {
 
         // nextInt is normally exclusive of the top value,
         // so add 1 to make it inclusive
-        randomMole = rand.nextInt((6 - 1) + 1) + 1;
+        int randomMole = rand.nextInt((6 - 1) + 1) + 1;
 
 
         switch (randomMole) {
             case 1:
-                topsMoleImageView = R.id.topMole1;
+                topSelectedMole = R.id.topMole1;
                 bottomsSelectedMole = R.id.bottomMole1;
                 break;
             case 2:
-                topsMoleImageView = R.id.topMole2;
+                topSelectedMole = R.id.topMole2;
                 bottomsSelectedMole = R.id.bottomMole2;
                 break;
             case 3:
-                topsMoleImageView = R.id.topMole3;
+                topSelectedMole = R.id.topMole3;
                 bottomsSelectedMole = R.id.bottomMole3;
                 break;
             case 4:
-                topsMoleImageView = R.id.topMole4;
+                topSelectedMole = R.id.topMole4;
                 bottomsSelectedMole = R.id.bottomMole4;
                 break;
             case 5:
-                topsMoleImageView = R.id.topMole5;
+                topSelectedMole = R.id.topMole5;
                 bottomsSelectedMole = R.id.bottomMole5;
                 break;
             case 6:
-                topsMoleImageView = R.id.topMole6;
+                topSelectedMole = R.id.topMole6;
                 bottomsSelectedMole = R.id.bottomMole6;
                 break;
         }
 
 
-        topMole = (ImageView) findViewById(topsMoleImageView);
+        topMole = (ImageView) findViewById(topSelectedMole);
         bottomMole = (ImageView) findViewById(bottomsSelectedMole);
         topMole.setImageResource(R.drawable.mole);
 

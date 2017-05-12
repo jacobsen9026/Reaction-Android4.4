@@ -42,7 +42,7 @@ public class GameActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.v(TAG, "Invoke onCreate()");
+        //Log.v(TAG, "Invoke onCreate()");
         super.onCreate(savedInstanceState);
         sp = getSharedPreferences("runningPreferences", Context.MODE_PRIVATE);
         gameProgress = sp.getInt("gameProgress", 0);

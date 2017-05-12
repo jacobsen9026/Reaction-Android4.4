@@ -53,10 +53,6 @@ public class SurpriseNumberedReaction extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        run();
-    }
-
-    public void run() {
 
         setContentView(R.layout.minigame_surprisenumberedreaction);
 
@@ -64,10 +60,40 @@ public class SurpriseNumberedReaction extends Activity {
 
         hide();
 
-        initializeButtonReactionObjects();
+        initializeObjects();
+        configureObjects();
 
         runSingleRound();
     }
+
+    private void configureObjects() {
+        topScoreText.setTextColor(Color.WHITE);
+        bottomScoreText.setTextColor(Color.WHITE);
+        topScoreText.setBackgroundColor((Color.parseColor(getString(R.string.topColor))));
+        bottomScoreText.setBackgroundColor((Color.parseColor(getString(R.string.bottomColor))));
+        cContainer.setBackgroundColor(Color.WHITE);
+    }
+
+    private void initializeObjects() {
+        cContainer = (ConstraintLayout) findViewById(R.id.contentContainer);
+        redScore = 0;
+        blueScore = 0;
+        pAgainButton = (Button) super.findViewById(playAgainButton);
+        pAgainButton.setVisibility(View.GONE);
+        pAgainButton.setOnClickListener(null);
+        tImage = (ImageView) findViewById(R.id.topImage);
+        bImage = (ImageView) findViewById(R.id.bottomImage);
+        bToMainMenuButton = (Button) findViewById(backToMainMenuButton);
+
+        bToMainMenuButton.setVisibility(View.GONE);
+        bToMainMenuButton.setOnClickListener(null);
+        topHalf = (TextView) findViewById(R.id.topHalf);
+        bottomHalf = (TextView) findViewById(R.id.bottomHalf);
+        topScoreText = (TextView) findViewById(redScoreText);
+        bottomScoreText = (TextView) findViewById(blueScoreText);
+
+    }
+
 
     public void hide() {
         ActionBar actionBar = getActionBar();
@@ -87,6 +113,15 @@ public class SurpriseNumberedReaction extends Activity {
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
+    }
+
+    public void runGame() {
+        setContentView(R.layout.minigame_surprisenumberedreaction);
+        Log.v(TAG, " setting game layout");
+        hide();
+        initializeObjects();
+        runSingleRound();
 
     }
 
@@ -117,8 +152,8 @@ public class SurpriseNumberedReaction extends Activity {
     }
 
     private void clearScreen() {
-        setTopBlack();
-        setBottomBlack();
+        topHalf.setBackgroundColor(Color.BLACK);
+        bottomHalf.setBackgroundColor(Color.BLACK);
         topHalf.setText("");
         bottomHalf.setText("");
     }
@@ -188,6 +223,16 @@ public class SurpriseNumberedReaction extends Activity {
 
         bottomHalf.setText("You lost to Red " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
         topHalf.setText("You beat Blue " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
+    }
+
+    public void blueWonGame() {
+        showButtons();
+        topHalf.setOnClickListener(null);
+        bottomHalf.setOnClickListener(null);
+        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+        bottomHalf.setText("You beat Red " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
+        topHalf.setText("You lost to Blue " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
     }
 
     private void showButtons() {
@@ -307,34 +352,11 @@ public class SurpriseNumberedReaction extends Activity {
         });
     }
 
-    public void runGame() {
-        setContentView(R.layout.minigame_surprisenumberedreaction);
-        Log.v(TAG, " setting game layout");
-        hide();
-        initializeButtonReactionObjects();
-        runSingleRound();
-
-    }
 
 
-    public void setTopBlack() {
-        topHalf.setBackgroundColor(Color.BLACK);
-    }
-
-    public void setBottomBlack() {
-        bottomHalf.setBackgroundColor(Color.BLACK);
-    }
 
 
-    public void blueWonGame() {
-        showButtons();
-        topHalf.setOnClickListener(null);
-        bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
-        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
-        bottomHalf.setText("You beat Red " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
-        topHalf.setText("You lost to Blue " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
-    }
+
 
     private void bottomWon() {
         tImage.setVisibility(View.GONE);
@@ -376,29 +398,7 @@ public class SurpriseNumberedReaction extends Activity {
         bottomScoreText.setText("Blue Score: " + String.valueOf(blueScore));
     }
 
-    private void initializeButtonReactionObjects() {
-        cContainer = (ConstraintLayout) findViewById(R.id.contentContainer);
-        redScore = 0;
-        blueScore = 0;
-        pAgainButton = (Button) super.findViewById(playAgainButton);
-        pAgainButton.setVisibility(View.GONE);
-        pAgainButton.setOnClickListener(null);
-        tImage = (ImageView) findViewById(R.id.topImage);
-        bImage = (ImageView) findViewById(R.id.bottomImage);
-        bToMainMenuButton = (Button) findViewById(backToMainMenuButton);
 
-        bToMainMenuButton.setVisibility(View.GONE);
-        bToMainMenuButton.setOnClickListener(null);
-        topHalf = (TextView) findViewById(R.id.topHalf);
-        bottomHalf = (TextView) findViewById(R.id.bottomHalf);
-        topScoreText = (TextView) findViewById(redScoreText);
-        bottomScoreText = (TextView) findViewById(blueScoreText);
-        topScoreText.setTextColor(Color.WHITE);
-        bottomScoreText.setTextColor(Color.WHITE);
-        topScoreText.setBackgroundColor((Color.parseColor(getString(R.string.topColor))));
-        bottomScoreText.setBackgroundColor((Color.parseColor(getString(R.string.bottomColor))));
-        cContainer.setBackgroundColor(Color.WHITE);
-    }
 
     public void nextRound() {
         if (topHalf.hasOnClickListeners()) {
@@ -437,17 +437,11 @@ public class SurpriseNumberedReaction extends Activity {
     }
 
 
-    public void setBottom() {
-
-        //bottomHalf.setText(String.valueOf(askingFor));
-
+    public void setImages() {
         bImage.setImageResource(askingForImage);
         bImage.setVisibility(View.VISIBLE);
         bottomHalf.setVisibility(View.GONE);
         bottomHalf.setBackgroundColor(Color.GRAY);
-    }
-
-    public void setTop() {
         topHalf.setText(String.valueOf(askingFor));
         tImage.setImageResource(askingForImage);
         tImage.setVisibility(View.VISIBLE);
