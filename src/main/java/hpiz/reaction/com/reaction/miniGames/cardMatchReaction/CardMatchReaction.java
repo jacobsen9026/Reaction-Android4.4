@@ -54,7 +54,6 @@ public class CardMatchReaction extends Activity {
     private TextView rScoreText;
     private int winningScore = 10;
     private PlayingCard newPlayingCard;
-    private PlayingCard lastPlayingCard;
     private ImageView lCard;
     private ImageView rCard;
     private ImageView lCardPlaceHolder;
@@ -64,11 +63,9 @@ public class CardMatchReaction extends Activity {
     private TextView cCardText_Bottom;
     private TextView rCardText_Bottom;
     private TextView lCardText_Bottom;
-    private ImageView rCardPlaceHolder;
     private ImageView cCard;
-    private ValueAnimator motionAnimator;
+    private ValueAnimator leftCardAnimator;
     private boolean left;
-    private long flyInDuration = 300;
     private int[] valueHistory = new int[3];
     private String[] suiteHistory = new String[3];
     private String TAG = "CardMatchReaction";
@@ -77,16 +74,17 @@ public class CardMatchReaction extends Activity {
     private boolean rightCardAnimatorCanceled;
     private boolean leftCardAnimatorCanceled;
     private ValueAnimator delayedHideWinLoseTextAnimator;
+    private long flyInDuration = 300;
     private long cardHistoryExpansionTime = 1000;
     private long cardHistoryContractionTime = 1000;
     private long hideWinLoseTextDelayTime = 500;
-
     private ImageView rGlow;
     private ImageView bGlow;
     private ValueAnimator showGameWinLoseTextAnimator;
     private boolean cancelBackgroundTask;
     private String topColor;
     private String bottomColor;
+    private int counter;
 
     public CardMatchReaction() {
 
@@ -118,6 +116,7 @@ public class CardMatchReaction extends Activity {
     private void initializeObjects() {
         cancelBackgroundTask = false;
         left = true;
+        counter = 0;
         redScore = 0;
         blueScore = 0;
         pAgainButton = (Button) super.findViewById(playAgainButton);
@@ -142,7 +141,6 @@ public class CardMatchReaction extends Activity {
         lCard = (ImageView) findViewById(R.id.leftCard);
         rCard = (ImageView) findViewById(R.id.rightCard);
         lCardPlaceHolder = (ImageView) findViewById(R.id.rightCardPlaceHolder);
-        rCardPlaceHolder = (ImageView) findViewById(R.id.leftCardPlaceHolder);
         cCard = (ImageView) findViewById(R.id.centerCard);
         rGlow = (ImageView) findViewById(R.id.redGlow);
         bGlow = (ImageView) findViewById(R.id.blueGlow);
@@ -441,12 +439,14 @@ public class CardMatchReaction extends Activity {
 
             // nextInt is normally exclusive of the top value,
             // so add 1 to make it inclusive
-            int randomNumber = rand.nextInt((20 - 1) + 1) + 1;
+            int randomNumber = rand.nextInt((50 - 1) + 1) + 1;
             int randomSuite = rand.nextInt((4 - 1) + 1) + 1;
-            if (randomNumber == 1) {
+            if (randomNumber < counter + 1) {
                 PlayingCard holder = newPlayingCard;
                 newPlayingCard = new PlayingCard(holder.getValue(), randomSuite);
+                counter = 1;
             } else {
+                counter++;
                 newPlayingCard = new PlayingCard();
 
             }
@@ -464,7 +464,6 @@ public class CardMatchReaction extends Activity {
 */
         Log.d(TAG, "newPlayingCard objects Image Resource=" + String.valueOf(newPlayingCard.getImageResource()));
         Log.d(TAG, "newPlayingCard value=" + String.valueOf(newPlayingCard.getValue()) + " of " + newPlayingCard.getSuite());
-
         if (left) {
 
             animateLeftCardIn(newPlayingCard.getImageResource());
@@ -499,9 +498,15 @@ public class CardMatchReaction extends Activity {
     }
 
     private void animateCardHistoryExpand() {
+        rightCardAnimatorCanceled = true;
+        leftCardAnimatorCanceled = true;
         if (rightCardAnimator != null) {
             rightCardAnimator.cancel();
         }
+        if (leftCardAnimator != null) {
+            leftCardAnimator.cancel();
+        }
+
         Log.v(TAG, "Invoke animateCardHistoryExpand");
         Log.v(TAG, "cCard Position:" + String.valueOf(cCard.getWidth()));
         Log.v(TAG, "lCardPlaceHolder Position:" + String.valueOf(lCardPlaceHolder.getX()));
@@ -559,11 +564,11 @@ public class CardMatchReaction extends Activity {
         });
 
 
-        motionAnimator = ValueAnimator.ofFloat(0, translationDistance);
-        motionAnimator.setDuration(1000);
-        motionAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        leftCardAnimator = ValueAnimator.ofFloat(0, translationDistance);
+        leftCardAnimator.setDuration(1000);
+        leftCardAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
-        motionAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        leftCardAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -581,7 +586,7 @@ public class CardMatchReaction extends Activity {
 
             }
         });
-        motionAnimator.addListener(new Animator.AnimatorListener() {
+        leftCardAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
                 lCard.setTranslationX(10000);
@@ -658,7 +663,7 @@ public class CardMatchReaction extends Activity {
 
             }
         });
-        motionAnimator.start();
+        leftCardAnimator.start();
         alphaAnimator.start();
 
     }
@@ -725,11 +730,11 @@ public class CardMatchReaction extends Activity {
         });
 
 
-        motionAnimator = ValueAnimator.ofFloat(translationDistance, 0);
-        motionAnimator.setDuration(1000);
-        motionAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        leftCardAnimator = ValueAnimator.ofFloat(translationDistance, 0);
+        leftCardAnimator.setDuration(1000);
+        leftCardAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
-        motionAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        leftCardAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -747,7 +752,7 @@ public class CardMatchReaction extends Activity {
 
             }
         });
-        motionAnimator.addListener(new Animator.AnimatorListener() {
+        leftCardAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 
@@ -768,7 +773,7 @@ public class CardMatchReaction extends Activity {
 
             }
         });
-        motionAnimator.start();
+        leftCardAnimator.start();
         alphaAnimator.start();
         if (delayedHideWinLoseTextAnimator != null) {
             delayedHideWinLoseTextAnimator.cancel();
@@ -838,19 +843,19 @@ public class CardMatchReaction extends Activity {
 
     private void animateLeftCardIn(int imageResource) {
 
-        motionAnimator = ValueAnimator.ofFloat(2000, 0);
-        motionAnimator.setDuration(flyInDuration);
-        motionAnimator.setInterpolator(new DecelerateInterpolator(1.5F));
-        // motionAnimator.setInterpolator(new AccelerateInterpolator());
+        leftCardAnimator = ValueAnimator.ofFloat(2000, 0);
+        leftCardAnimator.setDuration(flyInDuration);
+        leftCardAnimator.setInterpolator(new DecelerateInterpolator(1.5F));
+        // leftCardAnimator.setInterpolator(new AccelerateInterpolator());
         /*
-        motionAnimator.setInterpolator(new TimeInterpolator() {
+        leftCardAnimator.setInterpolator(new TimeInterpolator() {
             @Override
             public float getInterpolation(float input) {
                 return (float) (0.098*input*input);
             }
         });
         */
-        motionAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        leftCardAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -862,7 +867,7 @@ public class CardMatchReaction extends Activity {
 
             }
         });
-        motionAnimator.addListener(new Animator.AnimatorListener() {
+        leftCardAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
                 lCard.setTranslationX(10000);
@@ -906,7 +911,7 @@ public class CardMatchReaction extends Activity {
 
             }
         });
-        motionAnimator.start();
+        leftCardAnimator.start();
     }
 
     private void redGlowAnimation() {
