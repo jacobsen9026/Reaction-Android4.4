@@ -311,7 +311,9 @@ public class DropReaction extends Activity {
         //bottomHalf.setText("You Won");
         //topHalf.setText("You Lost");
         double dropInches = (travelDistance - zeroMark) / oneInch;
-        bTextView.setText(String.valueOf(dropInches));
+        String dropInchesStr = String.valueOf(dropInches);
+        String drop = dropInchesStr.substring(0, dropInchesStr.indexOf(".") + 2);
+        bTextView.setText(drop);
         blueScore++;
         runGame.cancel(true);
         updateScores();
@@ -440,7 +442,7 @@ public class DropReaction extends Activity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         double zeroMarkRatio = 24.0 / 1134.0;
         Log.v("Ruler Drop", "Zero Mark Ratio:" + String.valueOf(zeroMarkRatio));
-        double oneInchRatio = 93.0 / 1134.0;
+        double oneInchRatio = 90.083333 / 1134.0;
         Log.v("Ruler Drop", "One Inch Ratio:" + String.valueOf(oneInchRatio));
         screenHeight = displayMetrics.heightPixels;
         Log.v("Ruler Drop", "Ruler Height:" + String.valueOf(topRulerImage.getHeight()));
