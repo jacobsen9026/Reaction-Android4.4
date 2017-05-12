@@ -53,16 +53,18 @@
         <item>Not quick enough.</item>
     </string-array>
 
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
+    <string-array name="topColors">
+        <item>#903934</item>
+        <item>#9F4442</item>
+        <item>#9D373C</item>
+        <item>#BB3500</item>
     </string-array>
 
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
+    <string-array name="bottomColors">
+        <item>#015F97</item>
+        <item>#0192C6</item>
+        <item>#01B0BB</item>
+        <item>#3D5B7E</item>
     </string-array>
 
     <string-array name="multi_select_list_preference_default_value" />
