@@ -262,6 +262,7 @@ public class CardMatchReaction extends Activity {
                     }
                 } else {
                     bottomWon();
+                    animateCardHistoryExpand();
                 }
                 //nextRound();
             }
@@ -295,6 +296,7 @@ public class CardMatchReaction extends Activity {
                     }
                 } else {
                     topWon();
+                    animateCardHistoryExpand();
                 }
                 // nextRound();
             }
