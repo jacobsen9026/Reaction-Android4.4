@@ -8,13 +8,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import hpiz.reaction.com.reaction.GameActivity;
@@ -34,11 +35,11 @@ public class DropReaction extends Activity {
     private int redScore;
     private DropReactionBackgroundTask runGame;
     private int blueScore;
-    private TextView topHalf;
-    private TextView bottomHalf;
+    private FrameLayout topHalf;
+    private FrameLayout bottomHalf;
     private Button pAgainButton;
     private SharedPreferences sp;
-    private ConstraintLayout contentContainer;
+    private RelativeLayout contentContainer;
     private Button bToMainMenuButton;
     private TextView bScoreText;
     private TextView rScoreText;
@@ -53,6 +54,10 @@ public class DropReaction extends Activity {
     private int screenHeight;
     private ImageView bottomRulerImage;
     private ValueAnimator va;
+    private long dropDuration = 1000;
+    private Float travelDistance;
+    private TextView tTextView;
+    private TextView bTextView;
 
     public DropReaction() {
 
@@ -88,7 +93,7 @@ public class DropReaction extends Activity {
             actionBar.hide();
         }
         // Schedule a runnable to remove the status and navigation bar after a delay
-        contentContainer = (ConstraintLayout) findViewById(R.id.contentContainer);
+        contentContainer = (RelativeLayout) findViewById(R.id.contentContainer);
         contentContainer.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
 
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -100,7 +105,8 @@ public class DropReaction extends Activity {
     }
 
     protected void runSingleRound() {
-
+        topHalf.setBackgroundColor(Color.TRANSPARENT);
+        bottomHalf.setBackgroundColor(Color.TRANSPARENT);
         if (redScore < winningScore) {
             if (blueScore < winningScore) {
                 updateScores();
@@ -157,10 +163,11 @@ public class DropReaction extends Activity {
     private void topWon() {
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor((Color.parseColor(getString(R.string.topColor))));
-        bottomHalf.setText("You Lost");
-
-        topHalf.setText("You Won");
+        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
+        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
+        //bottomHalf.setText("You Lost");
+        tTextView.setText(String.valueOf(travelDistance));
+        //topHalf.setText("You Won");
         redScore++;
         runGame.cancel(true);
         updateScores();
@@ -197,8 +204,8 @@ public class DropReaction extends Activity {
         bottomHalf.setOnClickListener(null);
         setBottomBlue();
         setTopRed();
-        bottomHalf.setText("You lost to Red " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
-        topHalf.setText("You beat Blue " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
+        //bottomHalf.setText("You lost to Red " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
+        //topHalf.setText("You beat Blue " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
     }
 
     @Override
@@ -207,7 +214,7 @@ public class DropReaction extends Activity {
             runGame.cancel(true);
             runGame = null;
         }
-        if(va!=null){
+        if (va != null) {
             va.cancel();
         }
         Intent i = new Intent(DropReaction.this, GameActivity.class);
@@ -220,6 +227,7 @@ public class DropReaction extends Activity {
 
             @Override
             public void onClick(View v) {
+                va.cancel();
                 topWon();
                 if (bottomHalf.hasOnClickListeners()) {
                     bottomHalf.setOnClickListener(null);
@@ -231,6 +239,8 @@ public class DropReaction extends Activity {
 
             @Override
             public void onClick(View v) {
+                va.cancel();
+
                 bottomWon();
                 if (topHalf.hasOnClickListeners()) {
                     topHalf.setOnClickListener(null);
@@ -289,16 +299,19 @@ public class DropReaction extends Activity {
         bottomHalf.setOnClickListener(null);
         setBottomBlue();
         setTopRed();
-        bottomHalf.setText("You beat Red " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
-        topHalf.setText("You lost to Blue " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
+        //bottomHalf.setText("You beat Red " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
+        //topHalf.setText("You lost to Blue " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
     }
 
     private void bottomWon() {
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        bottomHalf.setBackgroundColor((Color.parseColor(getString(R.string.bottomColor))));
-        bottomHalf.setText("You Won");
-        topHalf.setText("You Lost");
+        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+        //bottomHalf.setText("You Won");
+        //topHalf.setText("You Lost");
+
+        bTextView.setText(String.valueOf(travelDistance));
         blueScore++;
         runGame.cancel(true);
         updateScores();
@@ -325,9 +338,12 @@ public class DropReaction extends Activity {
         pAgainButton.setVisibility(View.GONE);
         pAgainButton.setOnClickListener(null);
         topRulerImage = (ImageView) findViewById(R.id.topsRuler);
+        bTextView = (TextView) findViewById(R.id.bottomMessageBox);
+        tTextView = (TextView) findViewById(R.id.topMessageBox);
         bottomRulerImage = (ImageView) findViewById(R.id.bottomsRuler);
         bToMainMenuButton = (Button) findViewById(backToMainMenuButton);
-
+        topHalf = (FrameLayout) findViewById(R.id.topTriggerZone);
+        bottomHalf = (FrameLayout) findViewById(R.id.bottomTriggerZone);
         bToMainMenuButton.setVisibility(View.GONE);
         bToMainMenuButton.setOnClickListener(null);
         rScoreText = (TextView) findViewById(redScoreText);
@@ -336,6 +352,8 @@ public class DropReaction extends Activity {
         bScoreText.setTextColor(Color.WHITE);
         rScoreText.setBackgroundColor((Color.parseColor(getString(R.string.topColor))));
         bScoreText.setBackgroundColor((Color.parseColor(getString(R.string.bottomColor))));
+        //topRulerImage.bringToFront();
+        //bottomRulerImage.bringToFront();
     }
 
     public void nextRound() {
@@ -345,7 +363,7 @@ public class DropReaction extends Activity {
 
     public void drop() {
         va = ValueAnimator.ofFloat(0, screenHeight + 150);
-        va.setDuration(5000);
+        va.setDuration(dropDuration);
         va.setInterpolator(new AccelerateInterpolator(1.99999F));
         /*
         va.setInterpolator(new TimeInterpolator() {
@@ -360,14 +378,16 @@ public class DropReaction extends Activity {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 //Log.v(TAG, "Moving ruler to y=" + animation.getAnimatedValue());
-                topRulerImage.setTranslationY(-(Float) animation.getAnimatedValue());
-                bottomRulerImage.setTranslationY((Float) animation.getAnimatedValue());
+                travelDistance = (Float) animation.getAnimatedValue();
+                topRulerImage.setTranslationY(-travelDistance);
+                bottomRulerImage.setTranslationY(travelDistance);
+                //bottomRulerImage.bringToFront();
             }
         });
         va.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
+                startButtonListeners();
             }
 
             @Override
@@ -385,6 +405,7 @@ public class DropReaction extends Activity {
 
             }
         });
+
         va.start();
     }
 
