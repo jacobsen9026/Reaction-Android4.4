@@ -58,6 +58,7 @@ public class DropReaction extends Activity {
     private Float travelDistance;
     private TextView tTextView;
     private TextView bTextView;
+    private boolean cancelBackgroundTask;
 
     public DropReaction() {
 
@@ -114,11 +115,14 @@ public class DropReaction extends Activity {
                 bottomRulerImage.setTranslationY(0);
 
                 //setEarlyListeners();
+
                 if (runGame != null) {
                     runGame.cancel(true);
                 }
-                runGame = new DropReactionBackgroundTask(this);
-                runGame.execute("RUN");
+                if (!cancelBackgroundTask) {
+                    runGame = new DropReactionBackgroundTask(this);
+                    runGame.execute("RUN");
+                }
             } else {
                 blueWonGame();
             }
@@ -210,10 +214,9 @@ public class DropReaction extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (runGame != null) {
+        cancelBackgroundTask = true;
             runGame.cancel(true);
-            runGame = null;
-        }
+
         if (va != null) {
             va.cancel();
         }
@@ -331,7 +334,7 @@ public class DropReaction extends Activity {
     }
 
     private void initializeButtonReactionObjects() {
-
+        cancelBackgroundTask = false;
         redScore = 0;
         blueScore = 0;
         pAgainButton = (Button) super.findViewById(playAgainButton);
@@ -357,8 +360,11 @@ public class DropReaction extends Activity {
     }
 
     public void nextRound() {
-        DropReactionBackgroundTask runGame = new DropReactionBackgroundTask(this);
-        runGame.execute("SLEEP:1000");
+        if (!cancelBackgroundTask) {
+            Log.v(TAG, "Creating background task");
+            DropReactionBackgroundTask runGame = new DropReactionBackgroundTask(this);
+            runGame.execute("SLEEP:1000");
+        }
     }
 
     public void drop() {
