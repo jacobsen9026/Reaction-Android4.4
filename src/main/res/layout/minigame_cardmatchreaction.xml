@@ -246,7 +246,8 @@
             android:gravity="top|left"
             android:rotation="180"
             android:text="Red Score: "
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/topHalf"
@@ -305,7 +306,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="top|left"
-            android:text="Blue Score: " />
+            android:text="Blue Score: "
+            android:textSize="18sp" />
 
     </LinearLayout>
 
