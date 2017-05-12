@@ -242,8 +242,18 @@ public class CardMatchReaction extends Activity {
                 topHalf.setOnClickListener(null);
                 runGame.cancel(true);
                 redGlowAnimation();
-                if (valueHistory[1] != 0) {
-                    if (valueHistory[0] == valueHistory[1]) {
+
+
+                if (valueHistory[0] == valueHistory[1]) {
+                    if (valueHistory[1] != 0) {
+                    } else {
+                        bottomWon();
+                        animateCardHistoryExpand();
+                        if (bottomHalf.hasOnClickListeners()) {
+                            bottomHalf.setOnClickListener(null);
+                        }
+                        return;
+                    }
                         topWon();
                         if (redScore > (winningScore - 1)) {
                             redWonGame();
@@ -260,10 +270,7 @@ public class CardMatchReaction extends Activity {
                     if (bottomHalf.hasOnClickListeners()) {
                         bottomHalf.setOnClickListener(null);
                     }
-                } else {
-                    bottomWon();
-                    animateCardHistoryExpand();
-                }
+
                 //nextRound();
             }
         });
@@ -274,9 +281,17 @@ public class CardMatchReaction extends Activity {
                 bottomHalf.setOnClickListener(null);
                 runGame.cancel(true);
                 blueGlowAnimation();
-                if (valueHistory[1] != 0) {
-                    if (valueHistory[0] == valueHistory[1]) {
 
+                if (valueHistory[0] == valueHistory[1]) {
+                    if (valueHistory[1] != 0) {
+                    } else {
+                        topWon();
+                        animateCardHistoryExpand();
+                        if (topHalf.hasOnClickListeners()) {
+                            topHalf.setOnClickListener(null);
+                        }
+                        return;
+                    }
 
                         bottomWon();
                         if (redScore > (winningScore - 1)) {
@@ -294,10 +309,7 @@ public class CardMatchReaction extends Activity {
                     if (topHalf.hasOnClickListeners()) {
                         topHalf.setOnClickListener(null);
                     }
-                } else {
-                    topWon();
-                    animateCardHistoryExpand();
-                }
+
                 // nextRound();
             }
         });
