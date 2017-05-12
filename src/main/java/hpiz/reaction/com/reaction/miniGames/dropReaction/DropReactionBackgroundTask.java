@@ -5,6 +5,7 @@ import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
+import java.util.Random;
 
 /**
  * Created by cjacobsen on 5/1/2017.
@@ -15,6 +16,8 @@ public class DropReactionBackgroundTask extends AsyncTask<String, Integer, Strin
     private final DropReaction gActivity;
     private final WeakReference<DropReaction> gameActivity;
     private ConstraintLayout contentContainer;
+    private long minimumRunTime = 1000;
+    private long maximumRunTime = 4000;
 
     public DropReactionBackgroundTask(DropReaction a) {
         gameActivity = new WeakReference<DropReaction>(a);
@@ -56,7 +59,17 @@ public class DropReactionBackgroundTask extends AsyncTask<String, Integer, Strin
             return "SLEPT";
         } else {
             try {
-                Thread.sleep(2000);
+                Thread.sleep(minimumRunTime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Random rand = new Random();
+
+            // nextInt is normally exclusive of the top value,
+            // so add 1 to make it inclusive
+            long randomTime = rand.nextInt((int) (((maximumRunTime - minimumRunTime) - 1) + 1)) + 1;
+            try {
+                Thread.sleep(randomTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
