@@ -15,6 +15,7 @@ public class CardMatchReactionBackgroundTask extends AsyncTask<String, Integer, 
     private final CardMatchReaction gActivity;
     private final WeakReference<CardMatchReaction> gameActivity;
     private Handler uiHandler = new Handler(Looper.getMainLooper());
+    private long cardDrawInterval = 600;
 
 
     public CardMatchReactionBackgroundTask(CardMatchReaction a) {
@@ -32,7 +33,7 @@ public class CardMatchReactionBackgroundTask extends AsyncTask<String, Integer, 
         }
         while (!isCancelled()) {
             try {
-                Thread.sleep(800);
+                Thread.sleep(cardDrawInterval);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -41,12 +42,13 @@ public class CardMatchReactionBackgroundTask extends AsyncTask<String, Integer, 
             } else {
                 onProgressUpdate(1);
                 //gActivity.showACard();
-            }
+            }/*
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            */
             if (isCancelled()) {
                 return null;
             } else {
