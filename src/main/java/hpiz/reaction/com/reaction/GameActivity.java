@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 
 import hpiz.reaction.com.reaction.miniGames.cardMatchReaction.CardMatchReaction;
+import hpiz.reaction.com.reaction.miniGames.dropReaction.DropReaction;
 import hpiz.reaction.com.reaction.miniGames.surpriseNumberedReaction.SurpriseNumberedReaction;
 import hpiz.reaction.com.reaction.miniGames.surpriseReaction.SurpriseReaction;
 import hpiz.reaction.com.reaction.miniGames.wacAMoleReaction.WacAMoleReaction;
@@ -52,42 +53,42 @@ public class GameActivity extends Activity {
         Intent i;
         Log.v(TAG, "GameProgress=" + String.valueOf(gameProgress));
         switch (gameProgress) {
-            case 3:
+            case 4:
                 i = new Intent(GameActivity.this, SurpriseReaction.class);
                 gameProgress++;
                 Log.v(TAG, "GameProgress=" + String.valueOf(gameProgress));
                 //sp.edit().putInt("gameProgress",gameProgress).commit();
                 startActivity(i);
                 break;
-            case 2:
+            case 3:
                 i = new Intent(GameActivity.this, SurpriseNumberedReaction.class);
                 gameProgress++;
                 //sp.edit().putInt("gameProgress",gameProgress).commit();
                 startActivity(i);
                 break;
 
-            case 1:
+            case 2:
                 i = new Intent(GameActivity.this, WacAMoleReaction.class);
                 gameProgress++;
                 //sp.edit().putInt("gameProgress",gameProgress).commit();
                 startActivity(i);
                 break;
-/*
+
             case 0:
-                i = new Intent(GameActivity.this, CatchReaction.class);
+                i = new Intent(GameActivity.this, DropReaction.class);
                 gameProgress++;
                 //sp.edit().putInt("gameProgress",gameProgress).commit();
                 startActivity(i);
                 break;
-                */
-            case 0:
+
+            case 1:
                 i = new Intent(GameActivity.this, CardMatchReaction.class);
                 gameProgress++;
                 Log.v(TAG, "GameProgress=" + String.valueOf(gameProgress));
                 //sp.edit().putInt("gameProgress",gameProgress).commit();
                 startActivity(i);
                 break;
-            case 4:
+            case 5:
                 i = new Intent(GameActivity.this, MainMenuActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 //sp.edit().putInt("gameProgress",gameProgress).commit();
