@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -17,6 +18,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.Random;
 
 import hpiz.reaction.com.reaction.GameActivity;
 import hpiz.reaction.com.reaction.R;
@@ -144,7 +147,7 @@ public class DropReaction extends Activity {
             @Override
             public void onClick(View v) {
                 //setBottomWhite();
-                bottomWon();
+                bottomWon(true);
 
 
                 runGame.cancel(true);
@@ -156,7 +159,7 @@ public class DropReaction extends Activity {
             @Override
             public void onClick(View v) {
                 //setTopWhite();
-                topWon();
+                topWon(true);
 
 
                 runGame.cancel(true);
@@ -166,14 +169,18 @@ public class DropReaction extends Activity {
     }
 
 
-    private void topWon() {
+    private void topWon(boolean byEarly) {
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
         topHalf.setBackgroundColor(Color.parseColor(topColor));
         bottomHalf.setBackgroundColor(Color.parseColor(topColor));
         //bottomHalf.setText("You Lost");
         double dropInches = (travelDistance - zeroMark) / oneInch;
-        tTextView.setText(String.valueOf(dropInches));
+        if (byEarly) {
+            tTextView.setText(getTooSoonLoseText());
+        } else {
+            tTextView.setText(String.valueOf(dropInches));
+        }
         //topHalf.setText("You Won");
         redScore++;
         runGame.cancel(true);
@@ -234,7 +241,7 @@ public class DropReaction extends Activity {
             @Override
             public void onClick(View v) {
                 va.cancel();
-                topWon();
+                topWon(false);
                 if (bottomHalf.hasOnClickListeners()) {
                     bottomHalf.setOnClickListener(null);
                 }
@@ -247,7 +254,7 @@ public class DropReaction extends Activity {
             public void onClick(View v) {
                 va.cancel();
 
-                bottomWon();
+                bottomWon(false);
                 if (topHalf.hasOnClickListeners()) {
                     topHalf.setOnClickListener(null);
                 }
@@ -303,7 +310,7 @@ public class DropReaction extends Activity {
         //topHalf.setText("You lost to Blue " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
     }
 
-    private void bottomWon() {
+    private void bottomWon(boolean byEarly) {
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
         bottomHalf.setBackgroundColor(Color.parseColor(bottomColor));
@@ -313,7 +320,12 @@ public class DropReaction extends Activity {
         double dropInches = (travelDistance - zeroMark) / oneInch;
         String dropInchesStr = String.valueOf(dropInches);
         String drop = dropInchesStr.substring(0, dropInchesStr.indexOf(".") + 2);
-        bTextView.setText(drop);
+        if (byEarly) {
+            bTextView.setText(getTooSoonLoseText());
+        } else {
+            bTextView.setText(drop);
+        }
+
         blueScore++;
         runGame.cancel(true);
         updateScores();
@@ -425,18 +437,6 @@ public class DropReaction extends Activity {
         nextRound();
     }
 
-    public void stepDrop(int x) {
-
-        /*
-        if(bCursor>bFloor) {
-            tVel = (float) (-0.0098 * x * x);
-            bVel = (float) (0.0098 * x * x);
-            tCursor = (int) (tCursor - tVel);
-            bCursor = (int) (bCursor - bVel);
-            Log.v(TAG, "Cursors: " + String.valueOf(tCursor) + " " + String.valueOf(bCursor));
-        }
-        */
-    }
 
     public void InitializeDrop() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -460,5 +460,13 @@ public class DropReaction extends Activity {
 //        topRulerImage.animate().translationY((screenHeight/2)).withLayer();
 
 
+    }
+
+    private String getTooSoonLoseText() {
+        Random rand = new Random();
+        Resources res = getResources();
+        String[] tooSoonLoseStrings = res.getStringArray(R.array.too_soon_lose_messages);
+        int r = rand.nextInt(tooSoonLoseStrings.length - 1);
+        return tooSoonLoseStrings[r];
     }
 }
