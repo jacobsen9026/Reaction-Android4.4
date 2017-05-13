@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -177,7 +178,7 @@ public class SurpriseNumberedReaction extends Activity {
             public void onClick(View v) {
                 //setBottomWhite();
                 Log.v(TAG, "Top was early");
-                bottomWon();
+                bottomWon(true);
                 if (bottomHalf.hasOnClickListeners()) {
                     bottomHalf.setOnClickListener(null);
                 }
@@ -190,7 +191,7 @@ public class SurpriseNumberedReaction extends Activity {
             @Override
             public void onClick(View v) {
                 //setTopWhite();
-                topWon();
+                topWon(true);
                 if (topHalf.hasOnClickListeners()) {
                     topHalf.setOnClickListener(null);
                 }
@@ -201,7 +202,7 @@ public class SurpriseNumberedReaction extends Activity {
     }
 
 
-    private void topWon() {
+    private void topWon(boolean byEarly) {
         tImage.setVisibility(View.GONE);
         bImage.setVisibility(View.GONE);
         topHalf.setVisibility(View.VISIBLE);
@@ -209,11 +210,15 @@ public class SurpriseNumberedReaction extends Activity {
         tImage.setOnTouchListener(null);
         bImage.setOnTouchListener(null);
         Log.v(TAG, "INVOKE TopWon");
-        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
-        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
-        bottomHalf.setText("You Lost");
+        topHalf.setBackgroundColor((Color.parseColor(topColor)));
+        bottomHalf.setBackgroundColor((Color.parseColor(topColor)));
+        if (byEarly) {
+            bottomHalf.setText(getTooSoonLoseText());
+        } else {
+            bottomHalf.setText(getLoseText());
 
-        topHalf.setText("You Won");
+            topHalf.setText(getWinText());
+        }
         redScore++;
         updateScores();
         if (redScore > 9) {
@@ -230,8 +235,8 @@ public class SurpriseNumberedReaction extends Activity {
         showButtons();
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
-        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
+        topHalf.setBackgroundColor((Color.parseColor(topColor)));
+        bottomHalf.setBackgroundColor((Color.parseColor(topColor)));
 
         bottomHalf.setText("You lost to Red " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
         topHalf.setText("You beat Blue " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
@@ -241,8 +246,8 @@ public class SurpriseNumberedReaction extends Activity {
         showButtons();
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
-        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+        topHalf.setBackgroundColor((Color.parseColor(bottomColor)));
+        bottomHalf.setBackgroundColor((Color.parseColor(bottomColor)));
         bottomHalf.setText("You beat Red " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
         topHalf.setText("You lost to Blue " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
     }
@@ -284,21 +289,21 @@ public class SurpriseNumberedReaction extends Activity {
                     Log.v(TAG, "Asking for: " + String.valueOf(askingFor));
                     Log.v(TAG, "Have: " + String.valueOf(event.getPointerCount()));
                     if (event.getPointerCount() == askingFor) {
-                        topWon();
+                        topWon(false);
                         nextRound();
                         return true;
                     } else {
-                        bottomWon();
+                        bottomWon(false);
                         nextRound();
                         return true;
                     }
                 } else if (action == MotionEvent.ACTION_UP) {
                     if (event.getPointerCount() == askingFor) {
-                        topWon();
+                        topWon(false);
                         nextRound();
                         return true;
                     } else {
-                        bottomWon();
+                        bottomWon(false);
                         nextRound();
                         return true;
                     }
@@ -340,21 +345,21 @@ public class SurpriseNumberedReaction extends Activity {
                     Log.v(TAG, "Asking for: " + String.valueOf(askingFor));
                     Log.v(TAG, "Have: " + String.valueOf(event.getPointerCount()));
                     if (event.getPointerCount() == askingFor) {
-                        bottomWon();
+                        bottomWon(false);
                         nextRound();
                         return true;
                     } else {
-                        topWon();
+                        topWon(false);
                         nextRound();
                         return true;
                     }
                 } else if (action == MotionEvent.ACTION_UP) {
                     if (event.getPointerCount() == askingFor) {
-                        bottomWon();
+                        bottomWon(false);
                         nextRound();
                         return true;
                     } else {
-                        topWon();
+                        topWon(false);
                         nextRound();
                         return true;
                     }
@@ -365,12 +370,7 @@ public class SurpriseNumberedReaction extends Activity {
     }
 
 
-
-
-
-
-
-    private void bottomWon() {
+    private void bottomWon(boolean byEarly) {
         tImage.setVisibility(View.GONE);
         bImage.setVisibility(View.GONE);
         topHalf.setVisibility(View.VISIBLE);
@@ -378,10 +378,14 @@ public class SurpriseNumberedReaction extends Activity {
         Log.v(TAG, "INVOKE BottomWon");
         tImage.setOnTouchListener(null);
         bImage.setOnTouchListener(null);
-        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
-        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
-        bottomHalf.setText("You Won");
-        topHalf.setText("You Lost");
+        topHalf.setBackgroundColor((Color.parseColor(bottomColor)));
+        bottomHalf.setBackgroundColor((Color.parseColor(bottomColor)));
+        if (byEarly) {
+            topHalf.setText(getTooSoonLoseText());
+        } else {
+            bottomHalf.setText(getWinText());
+            topHalf.setText(getLoseText());
+        }
         blueScore++;
         updateScores();
         if (redScore > 9) {
@@ -409,7 +413,6 @@ public class SurpriseNumberedReaction extends Activity {
         topScoreText.setText("Red Score: " + String.valueOf(redScore));
         bottomScoreText.setText("Blue Score: " + String.valueOf(blueScore));
     }
-
 
 
     public void nextRound() {
@@ -459,6 +462,32 @@ public class SurpriseNumberedReaction extends Activity {
         tImage.setVisibility(View.VISIBLE);
         topHalf.setVisibility(View.GONE);
         topHalf.setBackgroundColor(Color.GRAY);
+
+    }
+
+    private String getWinText() {
+        Random rand = new Random();
+        Resources res = getResources();
+        String[] winnerStrings = res.getStringArray(R.array.winners_messages);
+        int r = rand.nextInt(winnerStrings.length - 1);
+        return winnerStrings[r];
+    }
+
+    private String getTooSoonLoseText() {
+        Random rand = new Random();
+        Resources res = getResources();
+        String[] tooSoonLoseStrings = res.getStringArray(R.array.too_soon_lose_messages);
+        int r = rand.nextInt(tooSoonLoseStrings.length - 1);
+        return tooSoonLoseStrings[r];
+    }
+
+    private String getLoseText() {
+        Random rand = new Random();
+        Resources res = getResources();
+        String[] loserStrings = res.getStringArray(R.array.losers_messages);
+        int r = rand.nextInt(loserStrings.length - 1);
+        return loserStrings[r];
+
 
     }
 }
