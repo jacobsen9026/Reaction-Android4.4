@@ -32,6 +32,7 @@ public class SettingsActivity extends Activity {
     private Spinner spinner;
     private Spinner spin2;
     private LinearLayout gameOrderContainer1;
+    private int[] gameOrder;
 
 
     /**
@@ -48,13 +49,77 @@ public class SettingsActivity extends Activity {
         setContentView(R.layout.activity_settings);
 
         initializeObjects();
+        loadSettings();
         configureObjects();
+        // setupDragAndDropList();
         hide();
         animateShowSettings();
 
     }
 
+    /*
+        private void setupDragAndDropList(){
+            ListView lv = (ListView) findViewById(R.id.gameList);
+
+            List<String> items = new ArrayList<>();
+            for (int i = 0; i < 20; i++) {
+                items.add(Integer.toString(i));
+            }
+
+            lv.setAdapter(new MyAdapter(items));
+
+            lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    //
+                    // start dragging
+                    //
+                    MyAdapter.ViewHolder vh = (MyAdapter.ViewHolder) view.getTag();
+
+                    final int touchedX = (int) (vh.lastTouchedX + 0.5f);
+                    final int touchedY = (int) (vh.lastTouchedY + 0.5f);
+
+                    view.startDrag(null, new View.DragShadowBuilder(view) {
+                        @Override
+                        public void onProvideShadowMetrics(Point shadowSize, Point shadowTouchPoint) {
+                            super.onProvideShadowMetrics(shadowSize, shadowTouchPoint);
+                            shadowTouchPoint.x = touchedX;
+                            shadowTouchPoint.y = touchedY;
+                        }
+
+                        @Override
+                        public void onDrawShadow(Canvas canvas) {
+                            super.onDrawShadow(canvas);
+                        }
+                    }, view, 0);
+
+                    view.setVisibility(View.INVISIBLE);
+
+                    return true;
+                }
+            });
+
+            lv.setOnDragListener(new View.OnDragListener() {
+                @Override
+                public boolean onDrag(View v, DragEvent event) {
+                    if (event.getAction() == DragEvent.ACTION_DROP) {
+                        //
+                        // finish dragging
+                        //
+                        View view = (View) event.getLocalState();
+                        view.setVisibility(View.VISIBLE);
+                    }
+                    return true;
+                }
+            });
+        }
+    */
     private void configureObjects() {
+        gameOrder = new int[5];
+        for (int i = 1; i < 5; i++) {
+            gameOrder[i] = i;
+        }
+        setupColorPickers();
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +134,7 @@ public class SettingsActivity extends Activity {
             }
         });
 
+
         gameOrderContainer1.setOnTouchListener(new View.OnTouchListener() {
             boolean firstTrigger = true;
             float initX;
@@ -79,7 +145,7 @@ public class SettingsActivity extends Activity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                Log.v("Settings", "Touching box1");
+                //Log.v("Settings", "Touching box1");
                 int action = event.getAction() & MotionEvent.ACTION_MASK;
                 if (action == MotionEvent.ACTION_DOWN) {
                     if (event.getX() > v.getWidth() / 7) {
@@ -97,13 +163,18 @@ public class SettingsActivity extends Activity {
                 if (action == MotionEvent.ACTION_UP) {
                     Log.v("Settins", "action up");
                     //newPosX=
-                    gameOrderContainer1.setTranslationX(0);
-                    gameOrderContainer1.setTranslationY(0);
+
+
+                    if ((int) ((event.getRawY() - initY) / (v.getHeight() / 2)) == 1) {
+                        moveGame(1, 2);
+                        gameOrderContainer1.setTranslationX(0);
+                        gameOrderContainer1.setTranslationY(0);
+                    }
                 } else {
                     //Log.v("settings", String.valueOf((initX - event.getRawX())));
-                    Log.v("Settings", "raw:" + String.valueOf(event.getRawX()));
-                    Log.v("Settings", "relative:" + String.valueOf(event.getX()));
-                    Log.v("Settings", "Difference:" + String.valueOf(event.getRawX() - initX));
+                    //Log.v("Settings", "raw:" + String.valueOf(event.getRawX()));
+                    //Log.v("Settings", "relative:" + String.valueOf(event.getX()));
+                    Log.v("Settings", "Difference:" + String.valueOf((int) ((event.getRawY() - initY) / (v.getHeight() / 2))));
                     gameOrderContainer1.setTranslationX(event.getRawX() - initX);
                     gameOrderContainer1.setTranslationY(event.getRawY() - initY);
                 }
@@ -111,6 +182,14 @@ public class SettingsActivity extends Activity {
             }
         });
 
+    }
+
+    private void moveGame(int from, int to) {
+        if (Math.abs(from - to) == 1) {
+            int temp = gameOrder[from];
+            gameOrder[from] = to;
+            gameOrder[to] = temp;
+        }
     }
 
     private void initializeObjects() {
@@ -133,8 +212,8 @@ public class SettingsActivity extends Activity {
     }
 
     private void animateShowSettings() {
-        setupColorPickers();
-        loadSettings();
+
+
         ValueAnimator settingsAnimator = ValueAnimator.ofFloat(4000, 0);
         settingsAnimator.setDuration(400);
         settingsAnimator.setInterpolator(new DecelerateInterpolator());
