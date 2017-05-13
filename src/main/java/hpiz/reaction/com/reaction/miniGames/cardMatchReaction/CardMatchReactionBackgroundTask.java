@@ -15,7 +15,7 @@ public class CardMatchReactionBackgroundTask extends AsyncTask<String, Integer, 
     private final CardMatchReaction gActivity;
     private final WeakReference<CardMatchReaction> gameActivity;
 
-    private long cardDrawInterval = 3000;
+    private long cardDrawInterval = 700;
 
 
     public CardMatchReactionBackgroundTask(CardMatchReaction a) {
