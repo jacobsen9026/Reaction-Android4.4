@@ -138,7 +138,7 @@ public class SurpriseReaction extends Activity {
             @Override
             public void onClick(View v) {
                 //setBottomWhite();
-                bottomWon();
+                bottomWon(true);
 
 
                 runGame.cancel(true);
@@ -150,7 +150,7 @@ public class SurpriseReaction extends Activity {
             @Override
             public void onClick(View v) {
                 //setTopWhite();
-                topWon();
+                topWon(true);
 
 
                 runGame.cancel(true);
@@ -164,7 +164,7 @@ public class SurpriseReaction extends Activity {
 
             @Override
             public void onClick(View v) {
-                topWon();
+                topWon(false);
                 if (bottomHalf.hasOnClickListeners()) {
                     bottomHalf.setOnClickListener(null);
                 }
@@ -175,7 +175,7 @@ public class SurpriseReaction extends Activity {
 
             @Override
             public void onClick(View v) {
-                bottomWon();
+                bottomWon(false);
                 if (topHalf.hasOnClickListeners()) {
                     topHalf.setOnClickListener(null);
                 }
@@ -184,10 +184,16 @@ public class SurpriseReaction extends Activity {
         });
     }
 
-    private void topWon() {
+    private void topWon(boolean byEarly) {
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
+        bottomHalf.setBackgroundColor((Color.parseColor(topColor)));
+        if (byEarly) {
+            bottomHalf.setText(getTooSoonLoseText());
+        } else {
+            bottomHalf.setText(getLoseText());
+            topHalf.setText(getWinText());
+        }
         bottomHalf.setText(getLoseText());
 
         topHalf.setText(getWinText());
@@ -204,12 +210,16 @@ public class SurpriseReaction extends Activity {
         Log.v(TAG, "Red Score: " + String.valueOf(redScore));
     }
 
-    private void bottomWon() {
+    private void bottomWon(boolean byEarly) {
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
-        bottomHalf.setText(getWinText());
-        topHalf.setText(getLoseText());
+        topHalf.setBackgroundColor((Color.parseColor(bottomColor)));
+        if (byEarly) {
+            topHalf.setText(getTooSoonLoseText());
+        } else {
+            bottomHalf.setText(getWinText());
+            topHalf.setText(getLoseText());
+        }
         blueScore++;
         runGame.cancel(true);
         updateScores();
@@ -244,8 +254,8 @@ public class SurpriseReaction extends Activity {
         });
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
-        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
+        topHalf.setBackgroundColor((Color.parseColor(topColor)));
+        bottomHalf.setBackgroundColor((Color.parseColor(topColor)));
         bottomHalf.setText("You lost to Red " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
         topHalf.setText("You beat Blue " + String.valueOf(redScore) + " to " + String.valueOf(blueScore) + ".");
     }
@@ -270,20 +280,20 @@ public class SurpriseReaction extends Activity {
         });
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
-        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+        topHalf.setBackgroundColor((Color.parseColor(bottomColor)));
+        bottomHalf.setBackgroundColor((Color.parseColor(bottomColor)));
         bottomHalf.setText("You beat Red " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
         topHalf.setText("You lost to Blue " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
     }
 
 
     public void setTopColor() {
-        topHalf.setBackgroundColor(Color.parseColor(getString(R.string.topColor)));
+        topHalf.setBackgroundColor((Color.parseColor(topColor)));
     }
 
 
     public void setBottomColor() {
-        bottomHalf.setBackgroundColor(Color.parseColor(getString(R.string.bottomColor)));
+        bottomHalf.setBackgroundColor((Color.parseColor(bottomColor)));
     }
 
     public void setTopBlack() {
@@ -341,6 +351,14 @@ public class SurpriseReaction extends Activity {
         String[] winnerStrings = res.getStringArray(R.array.winners_messages);
         int r = rand.nextInt(winnerStrings.length - 1);
         return winnerStrings[r];
+    }
+
+    private String getTooSoonLoseText() {
+        Random rand = new Random();
+        Resources res = getResources();
+        String[] tooSoonLoseStrings = res.getStringArray(R.array.too_soon_lose_messages);
+        int r = rand.nextInt(tooSoonLoseStrings.length - 1);
+        return tooSoonLoseStrings[r];
     }
 
     private String getLoseText() {
