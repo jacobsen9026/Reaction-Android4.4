@@ -74,9 +74,9 @@ public class CardMatchReaction extends Activity {
     private boolean rightCardAnimatorCanceled;
     private boolean leftCardAnimatorCanceled;
     private ValueAnimator delayedHideWinLoseTextAnimator;
-    private long flyInDuration = 2000;
-    private long cardHistoryExpansionTime = 1000;
-    private long cardHistoryContractionTime = 1000;
+    private long flyInDuration = 200;
+    private long cardHistoryExpansionTime = 400;
+    private long cardHistoryContractionTime = 400;
     private long hideWinLoseTextDelayTime = 500;
     private ImageView rGlow;
     private ImageView bGlow;
@@ -85,6 +85,8 @@ public class CardMatchReaction extends Activity {
     private String topColor;
     private String bottomColor;
     private int counter;
+    private Random rand;
+    private long contractionAnimationDelay = 1500;
 
     public CardMatchReaction() {
 
@@ -115,8 +117,9 @@ public class CardMatchReaction extends Activity {
 
     private void initializeObjects() {
         cancelBackgroundTask = false;
+        rand = new Random();
         left = true;
-        counter = 0;
+        counter = 1;
         redScore = 0;
         blueScore = 0;
         pAgainButton = (Button) super.findViewById(playAgainButton);
@@ -435,13 +438,13 @@ public class CardMatchReaction extends Activity {
 
     public void showACard() {
         if (newPlayingCard != null) {
-            Random rand = new Random();
+
 
             // nextInt is normally exclusive of the top value,
             // so add 1 to make it inclusive
             int randomNumber = rand.nextInt((50 - 1) + 1) + 1;
             int randomSuite = rand.nextInt((4 - 1) + 1) + 1;
-            if (randomNumber < counter + 1) {
+            if (counter > randomNumber) {
                 PlayingCard holder = newPlayingCard;
                 newPlayingCard = new PlayingCard(holder.getValue(), randomSuite);
                 counter = 1;
@@ -549,7 +552,7 @@ public class CardMatchReaction extends Activity {
                     public void run() {
                         animateCardHistoryContract();
                     }
-                }, 1000);
+                }, contractionAnimationDelay);
             }
 
             @Override
@@ -565,7 +568,7 @@ public class CardMatchReaction extends Activity {
 
 
         leftCardAnimator = ValueAnimator.ofFloat(0, translationDistance);
-        leftCardAnimator.setDuration(1000);
+        leftCardAnimator.setDuration(cardHistoryExpansionTime);
         leftCardAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
         leftCardAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -731,7 +734,7 @@ public class CardMatchReaction extends Activity {
 
 
         leftCardAnimator = ValueAnimator.ofFloat(translationDistance, 0);
-        leftCardAnimator.setDuration(1000);
+        leftCardAnimator.setDuration(cardHistoryContractionTime);
         leftCardAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
         leftCardAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

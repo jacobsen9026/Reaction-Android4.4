@@ -118,7 +118,7 @@ public class DropReaction extends Activity {
                 topRulerImage.setTranslationY(0);
                 bottomRulerImage.setTranslationY(0);
 
-                //setEarlyListeners();
+                setEarlyListeners();
 
                 if (runGame != null) {
                     runGame.cancel(true);
@@ -336,6 +336,7 @@ public class DropReaction extends Activity {
         cancelBackgroundTask = false;
         redScore = 0;
         blueScore = 0;
+        travelDistance = 0F;
         pAgainButton = (Button) super.findViewById(playAgainButton);
         pAgainButton.setVisibility(View.GONE);
         pAgainButton.setOnClickListener(null);
