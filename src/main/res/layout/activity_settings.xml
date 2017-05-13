@@ -147,7 +147,7 @@
                         android:src="@drawable/icmpmove" />
 
                     <TextView
-                        android:id="@+id/gameOrder1Text"
+                        android:id="@+id/gameOrder1TextView"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="6"

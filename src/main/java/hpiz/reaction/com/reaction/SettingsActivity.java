@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -32,6 +33,7 @@ public class SettingsActivity extends Activity {
     private Spinner spinner;
     private Spinner spin2;
     private LinearLayout gameOrderContainer1;
+    private TextView gameOrder1Text;
     private int[] gameOrder;
 
 
@@ -175,8 +177,8 @@ public class SettingsActivity extends Activity {
                     //Log.v("Settings", "raw:" + String.valueOf(event.getRawX()));
                     //Log.v("Settings", "relative:" + String.valueOf(event.getX()));
                     Log.v("Settings", "Difference:" + String.valueOf((int) ((event.getRawY() - initY) / (v.getHeight() / 2))));
-                    gameOrderContainer1.setTranslationX(event.getRawX() - initX);
-                    gameOrderContainer1.setTranslationY(event.getRawY() - initY);
+                    //gameOrderContainer1.setX(posX+event.getRawX() - initX);
+                    gameOrderContainer1.setY(posY + event.getRawY() - initY);
                 }
                 return true;
             }
@@ -189,6 +191,8 @@ public class SettingsActivity extends Activity {
             int temp = gameOrder[from];
             gameOrder[from] = to;
             gameOrder[to] = temp;
+            gameOrder1Text.setText(to);
+
         }
     }
 
@@ -199,6 +203,7 @@ public class SettingsActivity extends Activity {
         spin2 = (Spinner) findViewById(R.id.spinner2);
         spinner = (Spinner) findViewById(R.id.spinner);
         gameOrderContainer1 = (LinearLayout) findViewById(R.id.gameOrder1);
+        gameOrder1Text = (TextView) findViewById(R.id.gameOrder1TextView);
     }
 
     @Override
