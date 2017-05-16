@@ -163,20 +163,64 @@ public class SettingsActivity extends Activity {
 
                 }
                 if (action == MotionEvent.ACTION_UP) {
-                    Log.v("Settins", "action up");
+                    int distance = ((int) ((event.getRawY() - initY) / (v.getHeight() / 2)));
+                    if (distance % 2 != 0) {
+                        distance++;
+                    }
+                    distance = distance / 2;
+                    Log.v("Settins", "action up" + String.valueOf(distance / 2));
+                    Log.v("Settings", "Difference:" + String.valueOf((int) ((event.getRawY() - initY) / (v.getHeight() / 2))));
                     //newPosX=
+                    moveGame(0, distance);
+                    gameOrderContainer1.setTranslationX(0);
+                    gameOrderContainer1.setTranslationY(0);
+/*
+                    if (distance == 1) {
 
-
-                    if ((int) ((event.getRawY() - initY) / (v.getHeight() / 2)) == 1) {
-                        moveGame(1, 2);
                         gameOrderContainer1.setTranslationX(0);
                         gameOrderContainer1.setTranslationY(0);
+
+                    }else if ((int) ((event.getRawY() - initY) / (v.getHeight() / 2)) == 2) {
+                        moveGame(0, 1);
+                        gameOrderContainer1.setTranslationX(0);
+                        gameOrderContainer1.setTranslationY(0);
+
+                    }else if ((int) ((event.getRawY() - initY) / (v.getHeight() / 2)) == 3) {
+                        moveGame(0, 1);
+                        gameOrderContainer1.setTranslationX(0);
+                        gameOrderContainer1.setTranslationY(0);
+
+                    }else if ((int) ((event.getRawY() - initY) / (v.getHeight() / 2)) == 4) {
+                        moveGame(0, 1);
+                        gameOrderContainer1.setTranslationX(0);
+                        gameOrderContainer1.setTranslationY(0);
+
+                    }else if ((int) ((event.getRawY() - initY) / (v.getHeight() / 2)) == 5) {
+                        moveGame(0, 1);
+                        gameOrderContainer1.setTranslationX(0);
+                        gameOrderContainer1.setTranslationY(0);
+
+                    }else if ((int) ((event.getRawY() - initY) / (v.getHeight() / 2)) == 6) {
+                        moveGame(0, 1);
+                        gameOrderContainer1.setTranslationX(0);
+                        gameOrderContainer1.setTranslationY(0);
+
+                    }else if ((int) ((event.getRawY() - initY) / (v.getHeight() / 2)) == 7) {
+                        moveGame(0, 1);
+                        gameOrderContainer1.setTranslationX(0);
+                        gameOrderContainer1.setTranslationY(0);
+
                     }
+
+
+*/
+
+
                 } else {
                     //Log.v("settings", String.valueOf((initX - event.getRawX())));
                     //Log.v("Settings", "raw:" + String.valueOf(event.getRawX()));
                     //Log.v("Settings", "relative:" + String.valueOf(event.getX()));
-                    Log.v("Settings", "Difference:" + String.valueOf((int) ((event.getRawY() - initY) / (v.getHeight() / 2))));
+                    //Log.v("Settings", "Difference:" + String.valueOf((int) ((event.getRawY() - initY) / (v.getHeight() / 2))));
                     //gameOrderContainer1.setX(posX+event.getRawX() - initX);
                     gameOrderContainer1.setY(posY + event.getRawY() - initY);
                 }
@@ -186,14 +230,53 @@ public class SettingsActivity extends Activity {
 
     }
 
-    private void moveGame(int from, int to) {
-        if (Math.abs(from - to) == 1) {
-            int temp = gameOrder[from];
-            gameOrder[from] = to;
-            gameOrder[to] = temp;
-            gameOrder1Text.setText(to);
+    private void updateOrder() {
+        gameOrder1Text.setText(String.valueOf(gameOrder[0] + 1));
+    }
 
+    private void moveGame(int from, int to) {
+        Log.v("Settings", "From:" + String.valueOf(from) + " To:" + String.valueOf(to));
+        Log.v("Settings", "Before moveGame");
+        for (int i = 0; i < gameOrder.length; i++) {
+            Log.v("Settings", String.valueOf(i) + ":" + gameOrder[i]);
         }
+
+
+        int[] tempArray = new int[gameOrder.length];
+
+        if (from < to) {
+            if (from == 0) {
+                int x = 0;
+                for (int i = 1; i <= to; i++) {
+                    Log.v("Settings", "Adding " + gameOrder[i] + " to the temp array");
+
+                    tempArray[x] = gameOrder[i];
+                    x++;
+                }
+                Log.v("Settings", "skip section");
+
+                tempArray[x] = gameOrder[from];
+                x++;
+                for (int i = to + 1; i < gameOrder.length; i++) {
+                    Log.v("Settings", "Adding " + gameOrder[i] + " to the temp array");
+
+
+                    tempArray[x] = gameOrder[i];
+                    x++;
+                }
+                gameOrder = tempArray;
+            } else {
+
+            }
+        }
+
+
+        Log.v("Settings", "After moveGame");
+
+        for (int i = 0; i < gameOrder.length; i++) {
+            Log.v("Settings", String.valueOf(i) + ":" + gameOrder[i]);
+        }
+        updateOrder();
     }
 
     private void initializeObjects() {
@@ -211,6 +294,7 @@ public class SettingsActivity extends Activity {
         super.onPause();
         overridePendingTransition(0, 0);
     }
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
