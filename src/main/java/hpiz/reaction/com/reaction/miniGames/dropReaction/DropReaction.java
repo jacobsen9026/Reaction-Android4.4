@@ -177,7 +177,7 @@ public class DropReaction extends Activity {
         //bottomHalf.setText("You Lost");
         double dropInches = (travelDistance - zeroMark) / oneInch;
         if (byEarly) {
-            tTextView.setText(getTooSoonLoseText());
+            bTextView.setText(getTooSoonLoseText());
         } else {
             tTextView.setText(String.valueOf(dropInches));
         }
@@ -321,7 +321,7 @@ public class DropReaction extends Activity {
         String dropInchesStr = String.valueOf(dropInches);
         String drop = dropInchesStr.substring(0, dropInchesStr.indexOf(".") + 2);
         if (byEarly) {
-            bTextView.setText(getTooSoonLoseText());
+            tTextView.setText(getTooSoonLoseText());
         } else {
             bTextView.setText(drop);
         }
