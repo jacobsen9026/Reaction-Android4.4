@@ -53,10 +53,22 @@
         <item>Not quick enough.</item>
     </string-array>
 
+    <string-array name="too_soon_lose_messages">
+        <item>Easy there buddy.</item>
+        <item>Probably too much coffee!</item>
+        <item>Too soon!</item>
+        <item>Slow it down a little.</item>
+    </string-array>
+
+
     <string-array name="topColors">
-        <item>#903934</item>
-        <item>#9F4442</item>
-        <item>#9D373C</item>
+        <item>#AD2C34</item>
+        <item>#BF2D32</item>
+        <item>#A82E33</item>
+        <item>#AB3C51</item>
+        <item>#CC617F</item>
+        <item>#B54D7F</item>
+        <item>#A42E41</item>
         <item>#BB3500</item>
     </string-array>
 
@@ -64,6 +76,10 @@
         <item>#015F97</item>
         <item>#0192C6</item>
         <item>#01B0BB</item>
+        <item>#017680</item>
+        <item>#019196</item>
+        <item>#019187</item>
+        <item>#019D6E</item>
         <item>#3D5B7E</item>
     </string-array>
 
