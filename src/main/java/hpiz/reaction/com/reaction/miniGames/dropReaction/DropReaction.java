@@ -115,6 +115,8 @@ public class DropReaction extends Activity {
     protected void runSingleRound() {
         topHalf.setBackgroundColor(Color.TRANSPARENT);
         bottomHalf.setBackgroundColor(Color.TRANSPARENT);
+        bTextView.setText("");
+        tTextView.setText("");
         if (redScore < winningScore) {
             if (blueScore < winningScore) {
                 updateScores();
@@ -169,31 +171,7 @@ public class DropReaction extends Activity {
     }
 
 
-    private void topWon(boolean byEarly) {
-        topHalf.setOnClickListener(null);
-        bottomHalf.setOnClickListener(null);
-        topHalf.setBackgroundColor(Color.parseColor(topColor));
-        bottomHalf.setBackgroundColor(Color.parseColor(topColor));
-        //bottomHalf.setText("You Lost");
-        double dropInches = (travelDistance - zeroMark) / oneInch;
-        if (byEarly) {
-            bTextView.setText(getTooSoonLoseText());
-        } else {
-            tTextView.setText(String.valueOf(dropInches));
-        }
-        //topHalf.setText("You Won");
-        redScore++;
-        runGame.cancel(true);
-        updateScores();
-        if (redScore > (winningScore - 1)) {
-            redWonGame();
-        }
-        if (blueScore > (winningScore - 1)) {
-            blueWonGame();
-        }
-        Log.v(TAG, "Blue Score: " + String.valueOf(blueScore));
-        Log.v(TAG, "Red Score: " + String.valueOf(redScore));
-    }
+
 
     public void redWonGame() {
         runGame.cancel(true);
@@ -310,6 +288,34 @@ public class DropReaction extends Activity {
         //topHalf.setText("You lost to Blue " + String.valueOf(blueScore) + " to " + String.valueOf(redScore) + ".");
     }
 
+    private void topWon(boolean byEarly) {
+        topHalf.setOnClickListener(null);
+        bottomHalf.setOnClickListener(null);
+        topHalf.setBackgroundColor(Color.parseColor(topColor));
+        bottomHalf.setBackgroundColor(Color.parseColor(topColor));
+        //bottomHalf.setText("You Lost");
+        double dropInches = (travelDistance - zeroMark) / oneInch;
+        String dropInchesStr = String.valueOf(dropInches);
+        String drop = dropInchesStr.substring(0, dropInchesStr.indexOf(".") + 2);
+        if (byEarly) {
+            bTextView.setText(getTooSoonLoseText());
+        } else {
+            tTextView.setText(drop + "\"");
+        }
+        //topHalf.setText("You Won");
+        redScore++;
+        runGame.cancel(true);
+        updateScores();
+        if (redScore > (winningScore - 1)) {
+            redWonGame();
+        }
+        if (blueScore > (winningScore - 1)) {
+            blueWonGame();
+        }
+        Log.v(TAG, "Blue Score: " + String.valueOf(blueScore));
+        Log.v(TAG, "Red Score: " + String.valueOf(redScore));
+    }
+
     private void bottomWon(boolean byEarly) {
         topHalf.setOnClickListener(null);
         bottomHalf.setOnClickListener(null);
@@ -323,7 +329,7 @@ public class DropReaction extends Activity {
         if (byEarly) {
             tTextView.setText(getTooSoonLoseText());
         } else {
-            bTextView.setText(drop);
+            bTextView.setText(drop + "\"");
         }
 
         blueScore++;

@@ -65,6 +65,7 @@ public class CardMatchReactionBackgroundTask extends AsyncTask<String, Integer, 
             return;
         }
         if (progress == 1) {
+            //gActivity.showACard();
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {

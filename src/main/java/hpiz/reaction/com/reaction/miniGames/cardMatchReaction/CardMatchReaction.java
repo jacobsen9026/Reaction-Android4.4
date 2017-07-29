@@ -478,6 +478,7 @@ public class CardMatchReaction extends Activity {
         }
         //waitAndRunAgain();
         //runSingleCard();
+
     }
 
     private void updateHistory() {
@@ -802,7 +803,7 @@ public class CardMatchReaction extends Activity {
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                Log.v(TAG, "Moving right card to=" + animation.getAnimatedValue());
+                //Log.v(TAG, "Moving right card to=" + animation.getAnimatedValue());
 
                 rCard.setTranslationX((float) animation.getAnimatedValue());
 
@@ -853,7 +854,7 @@ public class CardMatchReaction extends Activity {
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                Log.v(TAG, "Moving left card to=" + animation.getAnimatedValue());
+                // Log.v(TAG, "Moving left card to=" + animation.getAnimatedValue());
                 //Log.v(TAG, "Bottom Position=" + String.valueOf(bottomPosition));
                 //Log.v(TAG, "bVel=" + String.valueOf(bVel));
                 //float value = (float) animation.getAnimatedValue();
